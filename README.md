@@ -12,3 +12,5 @@ I'm a civil engineer passionate about structures, from design to monitoring. In 
 - ⚡ Fun fact: I love solving complex problems and finding creative solutions!
 
 I'm looking forward to connecting with fellow enthusiasts in civil engineering, computer science, and OpenBIM. Together, we can build something extraordinary!
+
+![1701872890558](https://github.com/DomenicoGaudioso/DomenicoGaudioso/assets/43296235/cfe4a585-498a-4e3a-b213-7b4d0e34e525)
