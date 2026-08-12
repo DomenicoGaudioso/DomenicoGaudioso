@@ -13,6 +13,7 @@ I'm a civil engineer passionate about structures, from design to monitoring. In 
 
 * [Visita il mio sito web](https://domenicogaudioso.github.io/DomenicoGaudioso/)
 * [CivilBox — la mia suite di calcolo](https://civilbox.xyz)
+* [feagent — FEM CLI con AI](https://domenicogaudioso.github.io/DomenicoGaudioso/feagent/)
 * CV e portfolio lavori: disponibili su richiesta via email — domenicogaudioso@outlook.it
 
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
