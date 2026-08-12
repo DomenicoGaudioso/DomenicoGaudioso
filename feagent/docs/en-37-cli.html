@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>37 - Command-Line Interface (CLI) — feagent · Documentazione</title>
+<meta name="description" content="feagent — documentazione della libreria FEM per travi 3D: installazione, quick start, carichi, sezioni, precompressione, analisi modale, casi di studio.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f8f9d'/%3E%3Cpath d='M10 44h44' stroke='%23ffffff' stroke-width='4.5' stroke-linecap='round'/%3E%3Cpath d='M14 44v-6a18 18 0 0 1 36 0v6' stroke='%23ffd43b' stroke-width='4.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M22 44v-8M32 44v-11M42 44v-8' stroke='%23ffffff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--brand:#2f8f9d;--brand7:#227080;--brand1:#d9eef1;--brand0:#f0f9fa;
+ --ink:#111827;--sub:#4b5563;--muted:#9ca3af;--ring:#e5e7eb;--ring2:#d1d5db;
+ --code-bg:#0d1117;--code-ink:#e6edf3;--surface:#f7f8fa;--r:12px;
+ --font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','SF Mono',Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#fff;color:var(--ink);font-family:var(--font);font-size:15.5px;line-height:1.7}
+a{color:var(--brand7);text-decoration:none}
+a:hover{color:var(--brand)}
+.layout{display:flex;align-items:flex-start}
+aside.side{width:308px;flex:none;position:sticky;top:0;height:100vh;overflow-y:auto;
+ background:var(--surface);border-right:1px solid var(--ring);padding:18px 14px 40px}
+.side-brand{display:flex;align-items:center;gap:10px;padding:2px 8px 14px;border-bottom:1px solid var(--ring);margin-bottom:12px}
+.side-brand b{font-size:14.5px;letter-spacing:-.01em}
+.side-brand small{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.logo-dot{width:34px;height:34px;flex:none;background:var(--brand0);border:2px solid var(--ink);border-radius:10px;display:grid;place-items:center;font-size:15px}
+#navSearch{width:100%;margin-bottom:14px;padding:9px 12px;border:1px solid var(--ring2);border-radius:9px;
+ font-family:var(--mono);font-size:12px;background:#fff;outline:none}
+#navSearch:focus{border-color:var(--brand)}
+.nav-group{margin:2px 0 10px}
+.nav-group>a{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:9px;
+ font-size:13.5px;font-weight:700;color:var(--ink)}
+.nav-group>a:hover{background:#fff}
+.nav-group>a .caret{font-size:10px;color:var(--muted)}
+.nav-group .child{display:flex;flex-direction:column;gap:1px;margin:4px 0 4px 10px;border-left:1px solid var(--ring);padding-left:8px}
+.nav-group a.nav-item{padding:5.5px 10px;border-radius:8px;font-size:13px;color:var(--sub);line-height:1.35}
+.nav-group a.nav-item:hover{background:#fff;color:var(--brand7)}
+.nav-group a.nav-item.active{background:var(--brand1);color:var(--brand7);font-weight:600}
+.nav-group a.nav-item.grand{margin-left:12px;font-size:12.5px}
+main{flex:1;min-width:0}
+.main-in{max-width:880px;margin:0 auto;padding:26px 38px 90px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+ padding:12px 0;border-bottom:1px solid var(--ring);margin-bottom:26px;
+ font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted)}
+.topbar a{color:var(--brand7)}
+.topbar a:hover{color:var(--brand)}
+.doc-body h1{font-size:27px;letter-spacing:-.02em;margin:6px 0 18px}
+.doc-body h2{font-size:20px;margin:34px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--ring)}
+.doc-body h3{font-size:16.5px;margin:26px 0 10px}
+.doc-body p{margin:12px 0}
+.doc-body ul,.doc-body ol{margin:12px 0;padding-left:24px}
+.doc-body li{margin:5px 0}
+.doc-body blockquote{background:var(--brand0);border-left:3px solid var(--brand);border-radius:0 10px 10px 0;
+ padding:10px 16px;margin:14px 0;color:var(--sub)}
+.doc-body blockquote p{margin:4px 0}
+.doc-body code{background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:1.5px 6px;
+ font-family:var(--mono);font-size:13px;color:#c0392b}
+.doc-body pre{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:16px 18px;
+ overflow-x:auto;margin:16px 0;font-family:var(--mono);font-size:13px;line-height:1.65}
+.doc-body pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+.doc-body table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+.doc-body th{background:var(--surface);text-align:left}
+.doc-body th,.doc-body td{border:1px solid var(--ring2);padding:8px 12px}
+.doc-body img{max-width:100%;height:auto;border:1px solid var(--ring);border-radius:10px;margin:10px 0}
+.doc-body hr{border:0;border-top:1px solid var(--ring);margin:26px 0}
+.doc-body .footnote{font-size:13px;color:var(--sub)}
+.pager{display:flex;justify-content:space-between;gap:16px;margin-top:52px;padding-top:18px;border-top:1px solid var(--ring);
+ font-size:13.5px}
+.pager .next{text-align:right}
+.pager small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.doc-foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--ring);
+ font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted)}
+@media(max-width:900px){
+ .layout{flex-direction:column}
+ aside.side{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--ring)}
+ .main-in{padding:20px 20px 70px}
+}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto}}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  }
+});
+</script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+<div class="side-brand"><span class="logo-dot">F</span><div><b>feagent</b><small>documentazione</small></div></div>
+<input id="navSearch" type="text" placeholder="Cerca nella doc…">
+<div class="nav-group"><a href="index.html">Home </a>
+</div>
+<div class="nav-group"><a href="en.html">English <span class="caret">▾</span></a>
+<div class="child">
+<a class="nav-item" href="en-01-installation.html">01 - Installation</a>
+<a class="nav-item" href="en-02-quick-start.html">02 - Quick Start</a>
+<a class="nav-item" href="en-03-structural-model.html">03 - Structural Model</a>
+<a class="nav-item" href="en-04-loads.html">04 - Loads</a>
+<a class="nav-item" href="en-05-tapered-section.html">05 - Tapered Section</a>
+<a class="nav-item" href="en-06-timoshenko-releases.html">06 - Timoshenko &amp; End Releases</a>
+<a class="nav-item" href="en-07-load-cases.html">07 - Load Cases &amp; Combinations</a>
+<a class="nav-item" href="en-08-section-orientation.html">08 - Section Orientation</a>
+<a class="nav-item" href="en-09-post-processing.html">09 - Post-Processing</a>
+<a class="nav-item" href="en-10-plotly-charts.html">10 - Plotly Charts</a>
+<a class="nav-item" href="en-11-excel-io.html">11 - Excel I/O</a>
+<a class="nav-item" href="en-12-sparse-solver.html">12 - Sparse Solver</a>
+<a class="nav-item" href="en-13-conventions.html">13 - Conventions</a>
+<a class="nav-item" href="en-14-usage-examples.html">14 - Usage Examples</a>
+<div class="child">
+<a class="nav-item grand" href="en-16-case-studies-gallery.html">16 - Case Studies Gallery</a>
+<a class="nav-item grand" href="en-25-palazzo-3d.html">25 - Palazzo 3D Case Study</a>
+<a class="nav-item grand" href="en-26-advanced-case-studies.html">26 - Advanced Case Studies</a>
+<a class="nav-item grand" href="en-27-advanced-case-studies-ii.html">27 - Advanced Case Studies II</a>
+<a class="nav-item grand" href="en-30-composite-grillage-bridge.html">30 - IABSE Grillage Bridge</a>
+<a class="nav-item grand" href="en-31-shrinkage-composite-sections.html">31 - Shrinkage in Composite Sections</a>
+<a class="nav-item grand" href="en-32-twin-girder-bridge.html">32 - Twin-Girder Composite Bridge</a>
+<a class="nav-item grand" href="en-33-cables-cable-stayed-suspension.html">33 - Cables: Cable-Stayed &amp; Suspension Bridges</a>
+<a class="nav-item grand" href="en-34-cable-stayed-emerson.html">34 - Bill Emerson Cable-Stayed Bridge</a>
+<a class="nav-item grand" href="en-35-suspension-vincent-thomas.html">35 - Vincent Thomas Suspension Bridge</a>
+<a class="nav-item grand" href="en-36-strait-of-messina-bridge.html">36 - Strait of Messina Bridge</a>
+</div>
+<a class="nav-item" href="en-15-testing-validation.html">15 - Testing &amp; Validation</a>
+<a class="nav-item" href="en-17-api-reference.html">17 - API Reference</a>
+<a class="nav-item" href="en-18-illustrated-functions.html">18 - Illustrated Functions</a>
+<a class="nav-item" href="en-19-modal-analysis.html">19 - Modal Analysis</a>
+<a class="nav-item" href="en-20-shape-functions.html">20 - Shape Functions</a>
+<a class="nav-item" href="en-21-stiffness-assembly.html">21 - Stiffness Matrix Assembly</a>
+<a class="nav-item" href="en-22-saving-results.html">22 - Saving Results</a>
+<a class="nav-item" href="en-23-hdf5-format.html">23 - HDF5 Results Format</a>
+<a class="nav-item" href="en-24-external-export.html">24 - External Software Export</a>
+<a class="nav-item" href="en-28-web-ui.html">28 - Web UI (Streamlit)</a>
+<a class="nav-item" href="en-29-performance.html">29 - Performance &amp; Benchmarks</a>
+<a class="nav-item active" href="en-37-cli.html">37 - Command-Line Interface (CLI)</a>
+</div>
+</div>
+<div class="nav-group"><a href="it.html">Italiano <span class="caret">▾</span></a>
+<div class="child">
+<a class="nav-item" href="it-01-installation.html">01 - Installazione</a>
+<a class="nav-item" href="it-02-quick-start.html">02 - Quick Start</a>
+<a class="nav-item" href="it-03-structural-model.html">03 - Modello Strutturale</a>
+<a class="nav-item" href="it-04-loads.html">04 - Carichi</a>
+<a class="nav-item" href="it-05-tapered-section.html">05 - Sezione Variabile</a>
+<a class="nav-item" href="it-06-timoshenko-releases.html">06 - Timoshenko e Rilasci</a>
+<a class="nav-item" href="it-07-load-cases.html">07 - Load Case e Combinazioni</a>
+<a class="nav-item" href="it-08-section-orientation.html">08 - Orientazione della Sezione</a>
+<a class="nav-item" href="it-09-post-processing.html">09 - Post-Processing</a>
+<a class="nav-item" href="it-10-plotly-charts.html">10 - Plotly e Grafici</a>
+<a class="nav-item" href="it-11-excel-io.html">11 - Excel I/O</a>
+<a class="nav-item" href="it-12-sparse-solver.html">12 - Solver Sparso</a>
+<a class="nav-item" href="it-13-conventions.html">13 - Convenzioni</a>
+<a class="nav-item" href="it-14-usage-examples.html">14 - Esempi d&#x27;Uso</a>
+<div class="child">
+<a class="nav-item grand" href="it-16-case-studies-gallery.html">16 - Galleria degli Esempi</a>
+<a class="nav-item grand" href="it-25-palazzo-3d.html">25 - Caso Studio: Palazzo 3D</a>
+<a class="nav-item grand" href="it-26-advanced-case-studies.html">26 - Casi Studio Avanzati</a>
+<a class="nav-item grand" href="it-27-advanced-case-studies-ii.html">27 - Casi Studio Avanzati II</a>
+<a class="nav-item grand" href="it-30-ponte-graticcio-misto.html">30 - Ponte a Graticcio IABSE</a>
+<a class="nav-item grand" href="it-31-ritiro-sezioni-composte.html">31 - Ritiro nelle Sezioni Composte</a>
+<a class="nav-item grand" href="it-32-ponte-bitrave-misto.html">32 - Ponte Bitrave in Sezione Mista</a>
+<a class="nav-item grand" href="it-33-cavi-ponti-strallati-sospesi.html">33 - Cavi: Ponti Strallati e Sospesi</a>
+<a class="nav-item grand" href="it-34-ponte-strallato-emerson.html">34 - Ponte Strallato Bill Emerson</a>
+<a class="nav-item grand" href="it-35-ponte-sospeso-vincent-thomas.html">35 - Ponte Sospeso Vincent Thomas</a>
+<a class="nav-item grand" href="it-36-ponte-stretto-messina.html">36 - Ponte sullo Stretto di Messina</a>
+</div>
+<a class="nav-item" href="it-15-testing-validation.html">15 - Testing e Validazione</a>
+<a class="nav-item" href="it-17-api-reference.html">17 - API Reference</a>
+<a class="nav-item" href="it-18-illustrated-functions.html">18 - Funzioni Illustrate</a>
+<a class="nav-item" href="it-19-modal-analysis.html">19 - Analisi Modale</a>
+<a class="nav-item" href="it-20-shape-functions.html">20 - Funzioni di Forma</a>
+<a class="nav-item" href="it-21-stiffness-assembly.html">21 - Assemblaggio della Rigidezza</a>
+<a class="nav-item" href="it-22-saving-results.html">22 - Salvataggio dei Risultati</a>
+<a class="nav-item" href="it-23-hdf5-format.html">23 - Formato HDF5</a>
+<a class="nav-item" href="it-24-external-export.html">24 - Export Software Esterni</a>
+<a class="nav-item" href="it-28-web-ui.html">28 - Interfaccia Streamlit (UI)</a>
+<a class="nav-item" href="it-29-performance.html">29 - Prestazioni e Benchmark</a>
+<a class="nav-item" href="it-37-cli.html">37 - Interfaccia a riga di comando (CLI)</a>
+</div>
+</div>
+</aside>
+<main>
+  <div class="main-in">
+    <div class="topbar">
+      <a href="../">← feagent · landing</a>
+      <span>DOCUMENTAZIONE FEAGENT</span>
+      <a href="https://github.com/DomenicoGaudioso/feagent" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <div class="doc-body">
+<h1 id="37-command-line-interface-cli">37 - Command-Line Interface (CLI)</h1>
+<p>Installing the package registers a <strong>command-line interface</strong> so you can build,
+analyze, visualize and export models straight from the terminal — no Python code
+required. Two equivalent commands are installed: <code>beamfeapy</code> and its short alias
+<code>bfp</code> (you can also run <code>python -m beamfeapy</code>).</p>
+<div align="center">
+  <img src="images/cli_snake_anim.gif" alt="animated beamfeapy CLI logo" width="440">
+</div>
+
+<p>The CLI is dependency-free at its core: colours use native ANSI sequences (with
+Virtual-Terminal support on Windows), and the commands that need optional
+dependencies (pandas/openpyxl, matplotlib, plotly, python-docx) print a clear
+message if a package is missing.</p>
+<pre><code class="language-bash">beamfeapy                 # logo + command list
+beamfeapy --help          # full help
+beamfeapy &lt;command&gt; --help
+</code></pre>
+<h2 id="commands-at-a-glance">Commands at a glance</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>new</code></td>
+<td>build a model with a guided <strong>wizard</strong> and save it to Excel</td>
+</tr>
+<tr>
+<td><code>template</code></td>
+<td>write an editable Excel <strong>template</strong> to start from</td>
+</tr>
+<tr>
+<td><code>info</code></td>
+<td>print a <strong>summary</strong> of a model (nodes, loads, load cases)</td>
+</tr>
+<tr>
+<td><code>solve</code></td>
+<td><strong>static</strong> analysis from an Excel model</td>
+</tr>
+<tr>
+<td><code>modal</code></td>
+<td><strong>modal</strong> analysis (natural frequencies / mode shapes)</td>
+</tr>
+<tr>
+<td><code>buckling</code></td>
+<td>linear <strong>buckling</strong> analysis (critical multipliers)</td>
+</tr>
+<tr>
+<td><code>plot</code></td>
+<td><strong>visualize</strong> model, loads, deformed shape, internal forces, reactions</td>
+</tr>
+<tr>
+<td><code>export</code></td>
+<td><strong>export</strong> the model to external solvers</td>
+</tr>
+<tr>
+<td><code>report</code></td>
+<td>generate a Word <strong>calculation report</strong></td>
+</tr>
+<tr>
+<td><code>logo</code></td>
+<td>show the animated app logo</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>print the version</td>
+</tr>
+</tbody>
+</table>
+<h2 id="creating-a-model">Creating a model</h2>
+<h3 id="guided-wizard-new">Guided wizard — <code>new</code></h3>
+<p><code>beamfeapy new model.xlsx</code> starts an interactive wizard that asks for nodes,
+material, section, elements, supports and nodal loads, then writes the Excel
+model — ready to <code>solve</code> or <code>plot</code>:</p>
+<pre><code class="language-text">beamfeapy new portal.xlsx
+  ? Numero di nodi [2]: 2
+  ? Nodo 1 — X Y Z [m] [0 0 0]: 0 0 0
+  ? Nodo 2 — X Y Z [m] [0 0 0]: 6 0 0
+  ? Materiale  E [Pa] [210e9]:
+  ? Sezione  A Iy Iz J [1e-2 1e-5 1e-5 2e-5]:
+  ? Numero di elementi (travi) [1]: 1
+  ? Elemento 1 — nodo_i nodo_j [1 2]: 1 2
+  ? Vincolo: 1 111111          # 6 digits 0/1 → Dx Dy Dz Rx Ry Rz
+  ? Vincolo:                   # empty line → done
+  ? Carico: 2 0 -1000 0 0 0 0 Q   # node Fx Fy Fz Mx My Mz [Case]
+  ? Carico:
+  ✓ Modello creato — 2 nodi, 1 elementi → portal.xlsx
+</code></pre>
+<p>Press <kbd>Enter</kbd> to accept the suggested default at any prompt; leave a
+line empty to finish the supports / loads lists.</p>
+<h3 id="excel-template-template">Excel template — <code>template</code></h3>
+<p>Prefer to fill a spreadsheet? <code>beamfeapy template model.xlsx</code> writes a ready-made
+workbook (Node / Material / Section / Element / Support / Load sheets) you can
+edit in Excel, then <code>solve</code>.</p>
+<h2 id="inspecting-a-model-info">Inspecting a model — <code>info</code></h2>
+<pre><code class="language-bash">beamfeapy info model.xlsx
+</code></pre>
+<div align="center">
+  <img src="images/cli_info.png" alt="beamfeapy info" width="560">
+</div>
+
+<h2 id="running-analyses">Running analyses</h2>
+<h3 id="static-solve">Static — <code>solve</code></h3>
+<pre><code class="language-bash">beamfeapy solve model.xlsx -o results.xlsx --cases G=1.35 Q=1.5
+</code></pre>
+<div align="center">
+  <img src="images/cli_solve.png" alt="beamfeapy solve" width="620">
+</div>
+
+<p>Useful options: <code>--sparse</code> (sparse solver, recommended for large models),
+<code>--client</code> (extended client report, Excel only), <code>-o out.h5</code> (write results in
+HDF5 instead of Excel — inferred from the extension).</p>
+<h3 id="modal-modal">Modal — <code>modal</code></h3>
+<pre><code class="language-bash">beamfeapy modal model.xlsx -n 12 --mass-cases G=1.0 Q=0.3 -o modal.h5
+</code></pre>
+<div align="center">
+  <img src="images/cli_modal.png" alt="beamfeapy modal" width="620">
+</div>
+
+<p>Masses are derived from the chosen load cases, so <code>--mass-cases</code> is required.</p>
+<h3 id="buckling-buckling">Buckling — <code>buckling</code></h3>
+<pre><code class="language-bash">beamfeapy buckling model.xlsx -n 4 --cases P
+</code></pre>
+<p>Prints the critical load multipliers λ for the reference combination. The
+combination must induce axial force (<code>N ≠ 0</code>) in at least one element.</p>
+<h2 id="load-combination-syntax">Load-combination syntax</h2>
+<p>Every command that takes <code>--cases</code> / <code>--mass-cases</code> accepts:</p>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>(omitted)</em></td>
+<td>all loads, coefficient 1</td>
+</tr>
+<tr>
+<td><code>G</code></td>
+<td>a single load case</td>
+</tr>
+<tr>
+<td><code>G Q</code></td>
+<td>combination, coefficient 1 each</td>
+</tr>
+<tr>
+<td><code>G=1.35 Q=1.5</code></td>
+<td>combination with multiplicative coefficients</td>
+</tr>
+</tbody>
+</table>
+<h2 id="visualizing-plot">Visualizing — <code>plot</code></h2>
+<p><code>beamfeapy plot</code> draws the model and the results. The <code>--what</code> option chooses
+what to draw:</p>
+<table>
+<thead>
+<tr>
+<th><code>--what</code></th>
+<th>Figure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model</code></td>
+<td>geometry, nodes and supports</td>
+</tr>
+<tr>
+<td><code>loads</code></td>
+<td>applied loads for the combination</td>
+</tr>
+<tr>
+<td><code>deformed</code></td>
+<td>deflected shape (auto-scaled; override with <code>--scale</code>)</td>
+</tr>
+<tr>
+<td><code>forces</code></td>
+<td>internal-force diagrams N/V/T/M (pick one with <code>--component Mz</code>)</td>
+</tr>
+<tr>
+<td><code>reactions</code></td>
+<td>support reactions</td>
+</tr>
+<tr>
+<td><code>all</code></td>
+<td>every figure, written to a folder</td>
+</tr>
+</tbody>
+</table>
+<p>By default it writes an <strong>interactive 3D Plotly HTML</strong> and prints a clickable
+<code>file://</code> link to open in the browser; add <code>--open</code> to launch it automatically.
+Pass <code>--png</code> for a static Matplotlib image instead.</p>
+<pre><code class="language-bash"># interactive HTML (default), opened in the browser
+beamfeapy plot model.xlsx --what deformed --cases G=1.35 Q=1.5 --open
+
+# bending-moment diagram as a static PNG
+beamfeapy plot model.xlsx --what forces --component Mz --png
+
+# all figures into model_figs/
+beamfeapy plot model.xlsx --what all --cases G Q
+</code></pre>
+<div align="center">
+  <img src="images/cli_plot.png" alt="beamfeapy plot all" width="620">
+</div>
+
+<p>The static <code>--png</code> figures look like this (model, deformed shape, bending
+moment <code>Mz</code>):</p>
+<div align="center">
+  <img src="images/cli_plot_model.png" alt="model plot" width="270">
+  <img src="images/cli_plot_deformed.png" alt="deformed plot" width="270">
+  <img src="images/cli_plot_forces.png" alt="internal forces plot" width="270">
+</div>
+
+<h2 id="exporting-export">Exporting — <code>export</code></h2>
+<pre><code class="language-bash">beamfeapy export model.xlsx out.tcl     # format inferred from the extension
+beamfeapy export model.xlsx out.s2k --format sap2000
+</code></pre>
+<p>Targets: OpenSees (<code>.tcl</code> / OpenSeesPy <code>.py</code>), SAP2000 (<code>.s2k</code>), MIDAS (<code>.mct</code>),
+Robot (<code>.str</code>), Straus7 (<code>.txt</code>).</p>
+<h2 id="word-report-report">Word report — <code>report</code></h2>
+<pre><code class="language-bash">beamfeapy report model.xlsx -o report.docx --cases G=1.35 Q=1.5
+</code></pre>
+<p>Solves the model and produces a Word calculation report with Matplotlib figures.
+Use <code>--no-solve</code> for a model-only report.</p>
+<h2 id="the-animated-logo-logo">The animated logo — <code>logo</code></h2>
+<p><code>beamfeapy logo</code> plays the animated logo: a little <strong>rainbow python that
+slithers across the terminal from right to left</strong>, tongue first, with the
+<code>beamfeapy</code> wordmark shimmering below. The static logo (<code>--still</code>) is the
+<strong>python snake drawn as a simply-supported beam on two cut-trunk supports</strong>: its
+body carries the FEM stress-contour gradient (blue at the supports, red at
+midspan), so it doubles as the bending-moment diagram of a simply-supported beam.</p>
+<pre><code class="language-bash">beamfeapy logo            # animates for a few seconds
+beamfeapy logo --loop     # animate until Ctrl-C
+beamfeapy logo --still    # static frame
+beamfeapy logo --image    # the photo-realistic logo (truecolor half-blocks)
+</code></pre>
+<h2 id="colours-and-terminal">Colours and terminal</h2>
+<p>Output is colourized automatically (24-bit ANSI). To control it:</p>
+<ul>
+<li><code>--color {auto,always,never}</code> — force or disable colours.</li>
+<li><code>NO_COLOR=1</code> (environment) — disable colours; falls back to a stylized box banner.</li>
+<li><code>--no-banner</code> — hide the logo/header.</li>
+</ul>
+<p>On Windows the CLI enables Virtual-Terminal processing automatically, so colours
+work in Windows Terminal and modern PowerShell consoles. For the box-drawing and
+shape glyphs to render crisply, use a terminal font with good Unicode coverage
+such as <strong>Cascadia Code/Mono</strong> (the Windows Terminal default).</p>
+<p>{: .note }
+The animated logo and <code>plot</code> (HTML) need a real terminal and, respectively,
+<code>plotly</code> for HTML output and <code>matplotlib</code> for <code>--png</code>. Install everything with
+<code>pip install "beamfeapy[all]"</code>.</p>
+    </div>
+<nav class="pager"><div class="prev"><small>← precedente</small><a href="en-29-performance.html">29 - Performance &amp; Benchmarks</a></div><div class="next"><small>successivo →</small><a href="it.html">Italiano</a></div></nav>
+    <div class="doc-foot">feagent · documentazione tecnica — libreria FEM per travi 3D · NTC 2018 / Eurocodici</div>
+  </div>
+</main>
+</div>
+<script>
+(function(){
+  var input = document.getElementById('navSearch');
+  if(!input) return;
+  input.addEventListener('input', function(){
+    var q = input.value.trim().toLowerCase();
+    document.querySelectorAll('.nav-group').forEach(function(g){
+      var show = !q;
+      g.querySelectorAll('a.nav-item').forEach(function(a){
+        var hit = a.textContent.toLowerCase().indexOf(q) >= 0;
+        a.style.display = hit ? 'block' : 'none';
+        if(hit) show = true;
+      });
+      g.style.display = show ? 'block' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>36 - Strait of Messina Bridge — feagent · Documentazione</title>
+<meta name="description" content="feagent — documentazione della libreria FEM per travi 3D: installazione, quick start, carichi, sezioni, precompressione, analisi modale, casi di studio.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f8f9d'/%3E%3Cpath d='M10 44h44' stroke='%23ffffff' stroke-width='4.5' stroke-linecap='round'/%3E%3Cpath d='M14 44v-6a18 18 0 0 1 36 0v6' stroke='%23ffd43b' stroke-width='4.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M22 44v-8M32 44v-11M42 44v-8' stroke='%23ffffff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--brand:#2f8f9d;--brand7:#227080;--brand1:#d9eef1;--brand0:#f0f9fa;
+ --ink:#111827;--sub:#4b5563;--muted:#9ca3af;--ring:#e5e7eb;--ring2:#d1d5db;
+ --code-bg:#0d1117;--code-ink:#e6edf3;--surface:#f7f8fa;--r:12px;
+ --font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','SF Mono',Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#fff;color:var(--ink);font-family:var(--font);font-size:15.5px;line-height:1.7}
+a{color:var(--brand7);text-decoration:none}
+a:hover{color:var(--brand)}
+.layout{display:flex;align-items:flex-start}
+aside.side{width:308px;flex:none;position:sticky;top:0;height:100vh;overflow-y:auto;
+ background:var(--surface);border-right:1px solid var(--ring);padding:18px 14px 40px}
+.side-brand{display:flex;align-items:center;gap:10px;padding:2px 8px 14px;border-bottom:1px solid var(--ring);margin-bottom:12px}
+.side-brand b{font-size:14.5px;letter-spacing:-.01em}
+.side-brand small{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.logo-dot{width:34px;height:34px;flex:none;background:var(--brand0);border:2px solid var(--ink);border-radius:10px;display:grid;place-items:center;font-size:15px}
+#navSearch{width:100%;margin-bottom:14px;padding:9px 12px;border:1px solid var(--ring2);border-radius:9px;
+ font-family:var(--mono);font-size:12px;background:#fff;outline:none}
+#navSearch:focus{border-color:var(--brand)}
+.nav-group{margin:2px 0 10px}
+.nav-group>a{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:9px;
+ font-size:13.5px;font-weight:700;color:var(--ink)}
+.nav-group>a:hover{background:#fff}
+.nav-group>a .caret{font-size:10px;color:var(--muted)}
+.nav-group .child{display:flex;flex-direction:column;gap:1px;margin:4px 0 4px 10px;border-left:1px solid var(--ring);padding-left:8px}
+.nav-group a.nav-item{padding:5.5px 10px;border-radius:8px;font-size:13px;color:var(--sub);line-height:1.35}
+.nav-group a.nav-item:hover{background:#fff;color:var(--brand7)}
+.nav-group a.nav-item.active{background:var(--brand1);color:var(--brand7);font-weight:600}
+.nav-group a.nav-item.grand{margin-left:12px;font-size:12.5px}
+main{flex:1;min-width:0}
+.main-in{max-width:880px;margin:0 auto;padding:26px 38px 90px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+ padding:12px 0;border-bottom:1px solid var(--ring);margin-bottom:26px;
+ font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted)}
+.topbar a{color:var(--brand7)}
+.topbar a:hover{color:var(--brand)}
+.doc-body h1{font-size:27px;letter-spacing:-.02em;margin:6px 0 18px}
+.doc-body h2{font-size:20px;margin:34px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--ring)}
+.doc-body h3{font-size:16.5px;margin:26px 0 10px}
+.doc-body p{margin:12px 0}
+.doc-body ul,.doc-body ol{margin:12px 0;padding-left:24px}
+.doc-body li{margin:5px 0}
+.doc-body blockquote{background:var(--brand0);border-left:3px solid var(--brand);border-radius:0 10px 10px 0;
+ padding:10px 16px;margin:14px 0;color:var(--sub)}
+.doc-body blockquote p{margin:4px 0}
+.doc-body code{background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:1.5px 6px;
+ font-family:var(--mono);font-size:13px;color:#c0392b}
+.doc-body pre{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:16px 18px;
+ overflow-x:auto;margin:16px 0;font-family:var(--mono);font-size:13px;line-height:1.65}
+.doc-body pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+.doc-body table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+.doc-body th{background:var(--surface);text-align:left}
+.doc-body th,.doc-body td{border:1px solid var(--ring2);padding:8px 12px}
+.doc-body img{max-width:100%;height:auto;border:1px solid var(--ring);border-radius:10px;margin:10px 0}
+.doc-body hr{border:0;border-top:1px solid var(--ring);margin:26px 0}
+.doc-body .footnote{font-size:13px;color:var(--sub)}
+.pager{display:flex;justify-content:space-between;gap:16px;margin-top:52px;padding-top:18px;border-top:1px solid var(--ring);
+ font-size:13.5px}
+.pager .next{text-align:right}
+.pager small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.doc-foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--ring);
+ font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted)}
+@media(max-width:900px){
+ .layout{flex-direction:column}
+ aside.side{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--ring)}
+ .main-in{padding:20px 20px 70px}
+}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto}}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  }
+});
+</script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+<div class="side-brand"><span class="logo-dot">F</span><div><b>feagent</b><small>documentazione</small></div></div>
+<input id="navSearch" type="text" placeholder="Cerca nella doc…">
+<div class="nav-group"><a href="index.html">Home </a>
+</div>
+<div class="nav-group"><a href="en.html">English <span class="caret">▾</span></a>
+<div class="child">
+<a class="nav-item" href="en-01-installation.html">01 - Installation</a>
+<a class="nav-item" href="en-02-quick-start.html">02 - Quick Start</a>
+<a class="nav-item" href="en-03-structural-model.html">03 - Structural Model</a>
+<a class="nav-item" href="en-04-loads.html">04 - Loads</a>
+<a class="nav-item" href="en-05-tapered-section.html">05 - Tapered Section</a>
+<a class="nav-item" href="en-06-timoshenko-releases.html">06 - Timoshenko &amp; End Releases</a>
+<a class="nav-item" href="en-07-load-cases.html">07 - Load Cases &amp; Combinations</a>
+<a class="nav-item" href="en-08-section-orientation.html">08 - Section Orientation</a>
+<a class="nav-item" href="en-09-post-processing.html">09 - Post-Processing</a>
+<a class="nav-item" href="en-10-plotly-charts.html">10 - Plotly Charts</a>
+<a class="nav-item" href="en-11-excel-io.html">11 - Excel I/O</a>
+<a class="nav-item" href="en-12-sparse-solver.html">12 - Sparse Solver</a>
+<a class="nav-item" href="en-13-conventions.html">13 - Conventions</a>
+<a class="nav-item" href="en-14-usage-examples.html">14 - Usage Examples</a>
+<div class="child">
+<a class="nav-item grand" href="en-16-case-studies-gallery.html">16 - Case Studies Gallery</a>
+<a class="nav-item grand" href="en-25-palazzo-3d.html">25 - Palazzo 3D Case Study</a>
+<a class="nav-item grand" href="en-26-advanced-case-studies.html">26 - Advanced Case Studies</a>
+<a class="nav-item grand" href="en-27-advanced-case-studies-ii.html">27 - Advanced Case Studies II</a>
+<a class="nav-item grand" href="en-30-composite-grillage-bridge.html">30 - IABSE Grillage Bridge</a>
+<a class="nav-item grand" href="en-31-shrinkage-composite-sections.html">31 - Shrinkage in Composite Sections</a>
+<a class="nav-item grand" href="en-32-twin-girder-bridge.html">32 - Twin-Girder Composite Bridge</a>
+<a class="nav-item grand" href="en-33-cables-cable-stayed-suspension.html">33 - Cables: Cable-Stayed &amp; Suspension Bridges</a>
+<a class="nav-item grand" href="en-34-cable-stayed-emerson.html">34 - Bill Emerson Cable-Stayed Bridge</a>
+<a class="nav-item grand" href="en-35-suspension-vincent-thomas.html">35 - Vincent Thomas Suspension Bridge</a>
+<a class="nav-item active grand" href="en-36-strait-of-messina-bridge.html">36 - Strait of Messina Bridge</a>
+</div>
+<a class="nav-item" href="en-15-testing-validation.html">15 - Testing &amp; Validation</a>
+<a class="nav-item" href="en-17-api-reference.html">17 - API Reference</a>
+<a class="nav-item" href="en-18-illustrated-functions.html">18 - Illustrated Functions</a>
+<a class="nav-item" href="en-19-modal-analysis.html">19 - Modal Analysis</a>
+<a class="nav-item" href="en-20-shape-functions.html">20 - Shape Functions</a>
+<a class="nav-item" href="en-21-stiffness-assembly.html">21 - Stiffness Matrix Assembly</a>
+<a class="nav-item" href="en-22-saving-results.html">22 - Saving Results</a>
+<a class="nav-item" href="en-23-hdf5-format.html">23 - HDF5 Results Format</a>
+<a class="nav-item" href="en-24-external-export.html">24 - External Software Export</a>
+<a class="nav-item" href="en-28-web-ui.html">28 - Web UI (Streamlit)</a>
+<a class="nav-item" href="en-29-performance.html">29 - Performance &amp; Benchmarks</a>
+<a class="nav-item" href="en-37-cli.html">37 - Command-Line Interface (CLI)</a>
+</div>
+</div>
+<div class="nav-group"><a href="it.html">Italiano <span class="caret">▾</span></a>
+<div class="child">
+<a class="nav-item" href="it-01-installation.html">01 - Installazione</a>
+<a class="nav-item" href="it-02-quick-start.html">02 - Quick Start</a>
+<a class="nav-item" href="it-03-structural-model.html">03 - Modello Strutturale</a>
+<a class="nav-item" href="it-04-loads.html">04 - Carichi</a>
+<a class="nav-item" href="it-05-tapered-section.html">05 - Sezione Variabile</a>
+<a class="nav-item" href="it-06-timoshenko-releases.html">06 - Timoshenko e Rilasci</a>
+<a class="nav-item" href="it-07-load-cases.html">07 - Load Case e Combinazioni</a>
+<a class="nav-item" href="it-08-section-orientation.html">08 - Orientazione della Sezione</a>
+<a class="nav-item" href="it-09-post-processing.html">09 - Post-Processing</a>
+<a class="nav-item" href="it-10-plotly-charts.html">10 - Plotly e Grafici</a>
+<a class="nav-item" href="it-11-excel-io.html">11 - Excel I/O</a>
+<a class="nav-item" href="it-12-sparse-solver.html">12 - Solver Sparso</a>
+<a class="nav-item" href="it-13-conventions.html">13 - Convenzioni</a>
+<a class="nav-item" href="it-14-usage-examples.html">14 - Esempi d&#x27;Uso</a>
+<div class="child">
+<a class="nav-item grand" href="it-16-case-studies-gallery.html">16 - Galleria degli Esempi</a>
+<a class="nav-item grand" href="it-25-palazzo-3d.html">25 - Caso Studio: Palazzo 3D</a>
+<a class="nav-item grand" href="it-26-advanced-case-studies.html">26 - Casi Studio Avanzati</a>
+<a class="nav-item grand" href="it-27-advanced-case-studies-ii.html">27 - Casi Studio Avanzati II</a>
+<a class="nav-item grand" href="it-30-ponte-graticcio-misto.html">30 - Ponte a Graticcio IABSE</a>
+<a class="nav-item grand" href="it-31-ritiro-sezioni-composte.html">31 - Ritiro nelle Sezioni Composte</a>
+<a class="nav-item grand" href="it-32-ponte-bitrave-misto.html">32 - Ponte Bitrave in Sezione Mista</a>
+<a class="nav-item grand" href="it-33-cavi-ponti-strallati-sospesi.html">33 - Cavi: Ponti Strallati e Sospesi</a>
+<a class="nav-item grand" href="it-34-ponte-strallato-emerson.html">34 - Ponte Strallato Bill Emerson</a>
+<a class="nav-item grand" href="it-35-ponte-sospeso-vincent-thomas.html">35 - Ponte Sospeso Vincent Thomas</a>
+<a class="nav-item grand" href="it-36-ponte-stretto-messina.html">36 - Ponte sullo Stretto di Messina</a>
+</div>
+<a class="nav-item" href="it-15-testing-validation.html">15 - Testing e Validazione</a>
+<a class="nav-item" href="it-17-api-reference.html">17 - API Reference</a>
+<a class="nav-item" href="it-18-illustrated-functions.html">18 - Funzioni Illustrate</a>
+<a class="nav-item" href="it-19-modal-analysis.html">19 - Analisi Modale</a>
+<a class="nav-item" href="it-20-shape-functions.html">20 - Funzioni di Forma</a>
+<a class="nav-item" href="it-21-stiffness-assembly.html">21 - Assemblaggio della Rigidezza</a>
+<a class="nav-item" href="it-22-saving-results.html">22 - Salvataggio dei Risultati</a>
+<a class="nav-item" href="it-23-hdf5-format.html">23 - Formato HDF5</a>
+<a class="nav-item" href="it-24-external-export.html">24 - Export Software Esterni</a>
+<a class="nav-item" href="it-28-web-ui.html">28 - Interfaccia Streamlit (UI)</a>
+<a class="nav-item" href="it-29-performance.html">29 - Prestazioni e Benchmark</a>
+<a class="nav-item" href="it-37-cli.html">37 - Interfaccia a riga di comando (CLI)</a>
+</div>
+</div>
+</aside>
+<main>
+  <div class="main-in">
+    <div class="topbar">
+      <a href="../">← feagent · landing</a>
+      <span>DOCUMENTAZIONE FEAGENT</span>
+      <a href="https://github.com/DomenicoGaudioso/feagent" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <div class="doc-body">
+<h1 id="36-strait-of-messina-bridge-global-model">36 - Strait of Messina Bridge (global model)</h1>
+<p>Reconstruction of a <strong>global FEM model</strong> of the Strait of Messina Bridge — the
+future longest single-span suspension bridge in the world (3,300 m) — from the
+<strong>public data of the 2011 Final Design</strong> (Eurolink/COWI). We compute the
+self-weight equilibrium, the response under static service loads and the natural
+modes of vibration, comparing them with the official <strong>IBDAS</strong> model results
+reported in the PS0005 validation report.</p>
+<p>The model uses <a href="en-33-cables-cable-stayed-suspension.html">cable elements</a>: two
+main-cable planes, <strong>hangers</strong> in tension only (in the main span <em>and</em> in the
+suspended side spans), a <strong>three-box</strong> deck, <strong>inward-leaning</strong> towers and a
+nonlinear (Newton-Raphson) solution.</p>
+<blockquote>
+<p><strong>Study model.</strong> As-built inertias are not public, so we use representative
+values of the <strong>real IBDAS model sections</strong> (Appendix D-1 of PS0002). The
+<strong>masses</strong> come entirely from the <strong>real permanent loads</strong> (PG0022): <em>no</em>
+fictitious tuning mass was introduced.</p>
+</blockquote>
+<p><img alt="3D global model of the Strait of Messina Bridge" src="images/messina_3d.png"></p>
+<h2 id="1-design-geometry">1. Design geometry</h2>
+<p>A 3,300 m main suspended span between two ~383 m towers, with two 183 m suspended
+side spans. Four main cables on two vertical planes (52 m apart) drop from the
+saddles at the top (382.6 m) to mid-span (81.1 m): sag <strong>f = 301.5 m</strong>
+(f/L ≈ 1/10.9).</p>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main span <em>L</em></td>
+<td style="text-align: right;">3,300 m</td>
+</tr>
+<tr>
+<td>Suspended side spans</td>
+<td style="text-align: right;">183 m (×2)</td>
+</tr>
+<tr>
+<td>Total suspended length</td>
+<td style="text-align: right;">3,666 m</td>
+</tr>
+<tr>
+<td>Tower height (cable saddle)</td>
+<td style="text-align: right;">382.6 m</td>
+</tr>
+<tr>
+<td>Deck elevation (mid-span)</td>
+<td style="text-align: right;">74.34 m</td>
+</tr>
+<tr>
+<td>Cable elevation at mid-span</td>
+<td style="text-align: right;">81.1 m</td>
+</tr>
+<tr>
+<td>Cable sag <em>f</em></td>
+<td style="text-align: right;">301.5 m (f/L ≈ 1/10.9)</td>
+</tr>
+<tr>
+<td>Deck width</td>
+<td style="text-align: right;">60.4 m</td>
+</tr>
+<tr>
+<td>Cable-plane spacing</td>
+<td style="text-align: right;">52 m (z = ±26 m)</td>
+</tr>
+<tr>
+<td>Main cables</td>
+<td style="text-align: right;">4 (2 planes × 2 cables)</td>
+</tr>
+<tr>
+<td>Metallic area per cable</td>
+<td style="text-align: right;">1.015 m²</td>
+</tr>
+<tr>
+<td>Cable diameter (incl. wrapping)</td>
+<td style="text-align: right;">1.263 m</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Longitudinal elevation of the global model" src="images/messina_elevation.png"></p>
+<p>The deck has <strong>three boxes</strong>: two roadway boxes (z = ±18.72 m) and a central
+railway box (z = 0). The cross-girders extend out to z = ±26 m, where the hangers
+connect to the cable planes.</p>
+<p><img alt="Cross-section: three boxes" src="images/messina_section.png"></p>
+<p><img alt="Deck plan: 3 boxes, cross-girders and hangers at the edges" src="images/messina_deck_plan.png"></p>
+<h2 id="2-permanent-loads-pg0022-model-33f">2. Permanent loads (PG0022, model 3.3f)</h2>
+<p>Permanent loads per unit length come from document PG0022. They drive both the
+cable statics and the modal mass.</p>
+<table>
+<thead>
+<tr>
+<th>Contribution</th>
+<th style="text-align: right;">kN/m</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Roadway girders — PP (×2)</td>
+<td style="text-align: right;">97.8</td>
+</tr>
+<tr>
+<td>Railway girder — PP</td>
+<td style="text-align: right;">31.6</td>
+</tr>
+<tr>
+<td>Cross-girders — PP (T1, every 30 m)</td>
+<td style="text-align: right;">53.8</td>
+</tr>
+<tr>
+<td>Welds + paint + clamps — PP</td>
+<td style="text-align: right;">7.8</td>
+</tr>
+<tr>
+<td>Road surfacing — PN</td>
+<td style="text-align: right;">20.0</td>
+</tr>
+<tr>
+<td>Roadway equipment — PN (×2)</td>
+<td style="text-align: right;">36.2</td>
+</tr>
+<tr>
+<td>Railway equipment — PN</td>
+<td style="text-align: right;">18.1</td>
+</tr>
+<tr>
+<td><strong>Total suspended deck  g₁+g₂</strong></td>
+<td style="text-align: right;"><strong>265.3</strong></td>
+</tr>
+<tr>
+<td>Main cables — PP+PN (4 cables)</td>
+<td style="text-align: right;">324.3</td>
+</tr>
+<tr>
+<td><strong>Total vertical load  w</strong></td>
+<td style="text-align: right;"><strong>589.6</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Total vertical load on the suspension system: <strong>w = 589.6 kN/m</strong>, i.e. a mass of
+about 60.1 t/m.</p>
+<h2 id="3-structural-idealisation">3. Structural idealisation</h2>
+<p>A 3D "fish-bone" (grillage) model. Axes: X longitudinal, Y vertical, Z transverse.</p>
+<ul>
+<li><strong>Main cables</strong>: two planes (z = ±26 m), each equivalent to the 2 real cables
+  (area 2.03 m²), discretised into large-displacement cable elements.</li>
+<li><strong>Hangers</strong>: vertical tension-only cables, in the <strong>main span</strong> (from the main
+  cable) <em>and</em> in the <strong>side spans</strong> (from the back-stay cable — see §4).</li>
+<li><strong>Three-box deck</strong>: two roadway boxes (z = ±18.72 m) and one railway box
+  (z = 0), modelled as longitudinal beams connected by cross-girders extending to
+  z = ±26 m. The box spacing provides the global torsional and lateral stiffness.</li>
+<li><strong>Towers</strong>: two <strong>inward-leaning</strong> legs (from z = ±39.23 m at the base, elev.
+  18 m, to z = ±26 m at the saddle, elev. 382.6 m), with portal cross-beams;
+  fixed bases.</li>
+<li><strong>Side spans and anchorages</strong>: back-stay cable from the saddle to the anchor
+  blocks; side-span deck suspended from hangers and supported on the terminal
+  structures.</li>
+</ul>
+<p><img alt="Front view of a tower: inward-leaning legs and three-box deck" src="images/messina_tower_front.png"></p>
+<h3 id="real-ibdas-model-sections-ps0002-app-d-1">Real IBDAS model sections (PS0002, App. D-1)</h3>
+<p>Representative values (robust medians, E = 210 GPa, OCR outliers filtered). <em>Iy</em>
+= lateral bending (horizontal plane), <em>Iz</em> = vertical bending. The roadway box is
+<strong>very stiff laterally (Iy = 9 m⁴) and flexible vertically (Iz = 0.44 m⁴)</strong>: an
+aerodynamic deck.</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th style="text-align: right;">A [m²]</th>
+<th style="text-align: right;">Iy [m⁴]</th>
+<th style="text-align: right;">Iz [m⁴]</th>
+<th style="text-align: right;">J [m⁴]</th>
+<th style="text-align: right;">E [GPa]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Roadway box (×2)</td>
+<td style="text-align: right;">0.576</td>
+<td style="text-align: right;">9.00</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: right;">1.02</td>
+<td style="text-align: right;">210</td>
+</tr>
+<tr>
+<td>Railway box</td>
+<td style="text-align: right;">0.332</td>
+<td style="text-align: right;">0.68</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">1.08</td>
+<td style="text-align: right;">210</td>
+</tr>
+<tr>
+<td>Deck cross-girders</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">1.38</td>
+<td style="text-align: right;">1.67</td>
+<td style="text-align: right;">2.85</td>
+<td style="text-align: right;">210</td>
+</tr>
+<tr>
+<td>Tower legs</td>
+<td style="text-align: right;">7.21</td>
+<td style="text-align: right;">327.7</td>
+<td style="text-align: right;">108.2</td>
+<td style="text-align: right;">164</td>
+<td style="text-align: right;">210</td>
+</tr>
+<tr>
+<td>Tower cross-beams</td>
+<td style="text-align: right;">2.39</td>
+<td style="text-align: right;">63.9</td>
+<td style="text-align: right;">27.4</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">210</td>
+</tr>
+<tr>
+<td>Main cable (per plane)</td>
+<td style="text-align: right;">2.03</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">200</td>
+</tr>
+<tr>
+<td>Hangers</td>
+<td style="text-align: right;">0.018</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">200</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-restraints-and-structural-scheme">4. Restraints and structural scheme</h2>
+<p>Defining the restraints correctly is the trickiest part:</p>
+<ul>
+<li><strong>Saddles</strong>: the cable end node coincides with the saddle and is restrained in
+  translation (rigid saddle). The tower carries the vertical reaction; the
+  horizontal component is balanced by the back-stay cable.</li>
+<li><strong>Tower bases</strong>: fixed (foundation flexibility from PB0030/PB0031 is neglected).</li>
+<li><strong>Anchorages</strong>: back-stay cables fixed in the anchor blocks.</li>
+<li><strong>Suspended deck</strong>: hung from hangers along the full length (−1,833 ÷ +1,833 m),
+  supported vertically and transversely at the towers and at the <strong>terminal
+  structures</strong>, with a single longitudinal restraint at mid-span ("floating"
+  deck). The side spans are <strong>not</strong> cantilevered: they are <strong>suspended from the
+  back-stay cable</strong> (hangers cover the entire suspended length, confirmed by the
+  PS0005 charts) and supported on the terminals — with <strong>no</strong> intermediate piers.</li>
+</ul>
+<blockquote>
+<p><strong>Note on the typical mistake.</strong> An earlier attempt gave wrong frequencies
+because the deck was clamped at both ends with all rotations locked (artificial
+stiffening) and, to bring the frequencies back down, a fictitious mass of
+450,000 kN/m (~50× the real load) had been added. Here both artifices are
+removed: physical restraints and real mass.</p>
+</blockquote>
+<h2 id="5-static-analysis">5. Static analysis</h2>
+<h3 id="51-self-weight-end-of-construction-configuration">5.1 Self-weight (end-of-construction configuration)</h3>
+<p>Nonlinear solution (Newton-Raphson): converges in 5 iterations. The cable keeps
+its design parabolic shape and the deck sags only 0.44 m at mid-span. Validation
+relies on the classic parabolic-cable theory: <strong>H = w·L²/(8·f)</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th style="text-align: right;">FEM</th>
+<th style="text-align: left;">Theory / note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cable sag (deformed)</td>
+<td style="text-align: right;">301.9 m</td>
+<td style="text-align: left;">301.5 m (geometric)</td>
+</tr>
+<tr>
+<td>H — horizontal component (per plane)</td>
+<td style="text-align: right;">1,334 MN</td>
+<td style="text-align: left;">1,331 MN = w L²/8f</td>
+</tr>
+<tr>
+<td>Max cable force, per plane (at saddle)</td>
+<td style="text-align: right;">1,416 MN</td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td>Max force in a single real cable</td>
+<td style="text-align: right;">708 MN</td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td>Max cable stress</td>
+<td style="text-align: right;">698 MPa</td>
+<td style="text-align: left;">allowable ~700–840 MPa</td>
+</tr>
+<tr>
+<td>Hanger force</td>
+<td style="text-align: right;">4.0 – 7.4 MN</td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td>Deck sag at mid-span</td>
+<td style="text-align: right;">−0.44 m</td>
+<td style="text-align: left;">—</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Deformed shape under self-weight" src="images/messina_deformed.png"></p>
+<p><img alt="3D deformed shape under self-weight (undeformed shown in gray)" src="images/messina_3d_deformed.png"></p>
+<p><strong>Comparison with IBDAS (PS0005, end of construction).</strong> The model forces are of
+the same order but ~12–14% higher:</p>
+<table>
+<thead>
+<tr>
+<th>Quantity (per cable plane)</th>
+<th style="text-align: right;">beamfeapy</th>
+<th style="text-align: right;">IBDAS</th>
+<th style="text-align: right;">error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cable force at mid-span</td>
+<td style="text-align: right;">1,334 MN</td>
+<td style="text-align: right;">1,170 MN</td>
+<td style="text-align: right;">+14%</td>
+</tr>
+<tr>
+<td>Cable force at saddle</td>
+<td style="text-align: right;">1,416 MN</td>
+<td style="text-align: right;">≈1,260 MN</td>
+<td style="text-align: right;">+12%</td>
+</tr>
+<tr>
+<td>Total permanent load <em>w</em></td>
+<td style="text-align: right;">590 kN/m</td>
+<td style="text-align: right;">≈515 kN/m</td>
+<td style="text-align: right;">+15%</td>
+</tr>
+</tbody>
+</table>
+<p>The gap is explained by the permanent load: the value deduced from PG0022 is
+slightly conservative. For the same load the mechanics is exact (H = wL²/8f within
+0.2%).</p>
+<p>The official cable-force chart (ADINA/IBDAS model, PS0005) shows <strong>N ≈ 1,170 MN at
+mid-span</strong> rising to <strong>~1,260 MN at the towers</strong>, with the characteristic peak at
+the saddle: the same trend as the beamfeapy model (1,334 ÷ 1,416 MN), shifted up by
+the higher permanent load.</p>
+<p><img alt="Main cable force — official ADINA/IBDAS model (from PS0005)" src="images/messina_ibdas_cableforce.png"></p>
+<h3 id="52-service-loads-traffic-and-wind">5.2 Service loads (traffic and wind)</h3>
+<p>Besides self-weight, two reference static load cases are analysed:
+- <strong>QV</strong> — vertical traffic: 24 kN/m per roadway box + 48 kN/m on the railway box
+  (96 kN/m total) over the whole deck;
+- <strong>QT</strong> — transverse wind-type action: ~15 kN/m total on the deck.</p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th style="text-align: right;">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G — mid-span sag</td>
+<td style="text-align: right;">−0.44 m</td>
+</tr>
+<tr>
+<td>G+QV — mid-span sag</td>
+<td style="text-align: right;">−4.10 m (traffic increment −3.66 m ≈ L/900)</td>
+</tr>
+<tr>
+<td>G+QV — max bending moment in roadway boxes</td>
+<td style="text-align: right;">253 MNm</td>
+</tr>
+<tr>
+<td>G+QV — max cable force</td>
+<td style="text-align: right;">1,628 MN/plane (+211 MN)</td>
+</tr>
+<tr>
+<td>G+QT — max transverse deck displacement</td>
+<td style="text-align: right;">8.3 m</td>
+</tr>
+</tbody>
+</table>
+<p>The deck is very stiff vertically thanks to the cables (only L/900 extra sag under
+traffic), whereas the <strong>transverse</strong> response is the most sensitive: laterally the
+deck is not supported by the cables and behaves as a beam over a 3,300 m span,
+with displacements of a few metres.</p>
+<p><img alt="Static analysis: vertical deformed shape, bending moment, transverse deformed shape" src="images/messina_static.png"></p>
+<h2 id="6-modal-analysis">6. Modal analysis</h2>
+<p>The cables are linearised about the self-weight equilibrium (the cable geometric
+stiffness, proportional to the tension, provides the transverse stiffness). The
+mass comes from the real permanent loads. The first four global modes are
+compared with the IBDAS/ADINA modal parameters from PS0005 (§7.2).</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Mode type</th>
+<th style="text-align: right;">IBDAS</th>
+<th style="text-align: right;">ADINA</th>
+<th style="text-align: right;">beamfeapy</th>
+<th style="text-align: right;">T [s]</th>
+<th style="text-align: right;">error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>transverse (lateral)</td>
+<td style="text-align: right;">0.0309</td>
+<td style="text-align: right;">0.0313</td>
+<td style="text-align: right;">0.0322</td>
+<td style="text-align: right;">31.0</td>
+<td style="text-align: right;">+4%</td>
+</tr>
+<tr>
+<td>2</td>
+<td>vertical antisymmetric</td>
+<td style="text-align: right;">0.0569</td>
+<td style="text-align: right;">0.0585</td>
+<td style="text-align: right;">0.0598</td>
+<td style="text-align: right;">16.7</td>
+<td style="text-align: right;">+5%</td>
+</tr>
+<tr>
+<td>3</td>
+<td>longitudinal</td>
+<td style="text-align: right;">0.0593</td>
+<td style="text-align: right;">0.0593</td>
+<td style="text-align: right;">0.0662</td>
+<td style="text-align: right;">15.1</td>
+<td style="text-align: right;">+12%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>vertical symmetric</td>
+<td style="text-align: right;">0.0809</td>
+<td style="text-align: right;">0.0809</td>
+<td style="text-align: right;">0.0877</td>
+<td style="text-align: right;">11.4</td>
+<td style="text-align: right;">+8%</td>
+</tr>
+</tbody>
+</table>
+<p><em>Frequencies in Hz; error relative to IBDAS.</em></p>
+<p><img alt="Comparison of the first 4 global mode frequencies" src="images/messina_modal_bar.png"></p>
+<p><img alt="Fundamental mode shapes" src="images/messina_modes.png"></p>
+<p><img alt="Fundamental mode shapes in 3D (undeformed shown in gray)" src="images/messina_modes_3d.png"></p>
+<p>The same four mode shapes in the <strong>official ADINA/IBDAS model</strong> (screenshots taken
+from the PS0005 validation report) confirm the <strong>type, hierarchy and shape</strong> of each
+mode: the lateral half-wave in plan (mode 1), the antisymmetric vertical with a node
+at mid-span (mode 2), the longitudinal mode (mode 3) and the symmetric vertical hump
+(mode 4).</p>
+<p><img alt="Mode shapes of the official ADINA/IBDAS model (from PS0005)" src="images/messina_ibdas_modes.png"></p>
+<p><strong>Theoretical check.</strong> The first vertical antisymmetric mode of a parabolic cable
+has frequency f ≈ √(g/8f) = 0.0638 Hz, <strong>independent of the mass</strong>: it depends only
+on the sag. The model (0.0598 Hz) reproduces this relation and is consistent with
+IBDAS (0.0569 Hz).</p>
+<h2 id="7-discussion-and-limitations">7. Discussion and limitations</h2>
+<ul>
+<li>The fundamental (transverse) mode agrees excellently (+4%); the other modes are
+  within +5÷8%.</li>
+<li>The residual upward bias mainly comes from clamping the saddles rigidly and
+  fixing the tower bases: neglecting tower and foundation flexibility makes the
+  model stiffer than reality. A suspension bridge vertical frequency depends on the
+  sag and <strong>not</strong> on the mass, so the bias is not due to the mass.</li>
+<li>Consistently, the static cable forces are ~13% higher than IBDAS: the PG0022
+  permanent load is slightly conservative. Mass (slightly high) and stiffness
+  (slightly high from the rigid restraints) act in opposite directions on the
+  frequencies, leaving a small net error.</li>
+<li>The deck vertical alignment, the restraint devices (tower buffers) and
+  aerodynamic/seismic effects remain simplified.</li>
+</ul>
+<p><strong>Key point:</strong> the ~4÷12% agreement on the modes and the exactness of the cable
+mechanics (H = wL²/8f within 0.2%) are obtained with the <strong>real IBDAS sections</strong>
+and <strong>no mass calibration</strong>, using public data only.</p>
+<h2 id="8-references">8. References</h2>
+<ul>
+<li><strong>PG0022</strong> — Summary of permanent loads for the Global Model (Final Design,
+  rev. F0, 2011).</li>
+<li><strong>PS0002</strong> — IBDAS global model, description (Appendix D-1, beam sections).</li>
+<li><strong>PS0005</strong> — Validation of the global finite-element model (IBDAS/ADINA modal
+  and static results).</li>
+<li><strong>PB0030 / PB0031</strong> — Equivalent soil-foundation stiffness and damping matrices.</li>
+<li>H.M. Irvine, <em>Cable Structures</em>, MIT Press, 1981.</li>
+<li>A.G. Pugsley, <em>The Theory of Suspension Bridges</em>, 2nd ed., Edward Arnold, 1968.</li>
+</ul>
+<h2 id="9-how-to-reproduce">9. How to reproduce</h2>
+<pre><code class="language-bash">python scripts/messina_global_model.py   # build model + static and modal analysis
+python scripts/messina_figures.py        # all figures on this page
+</code></pre>
+<p>See also the <a href="en-35-suspension-vincent-thomas.html">Vincent Thomas suspension bridge</a>
+and the <a href="en-33-cables-cable-stayed-suspension.html">cable-element theory</a>.</p>
+    </div>
+<nav class="pager"><div class="prev"><small>← precedente</small><a href="en-35-suspension-vincent-thomas.html">35 - Vincent Thomas Suspension Bridge</a></div><div class="next"><small>successivo →</small><a href="en-15-testing-validation.html">15 - Testing &amp; Validation</a></div></nav>
+    <div class="doc-foot">feagent · documentazione tecnica — libreria FEM per travi 3D · NTC 2018 / Eurocodici</div>
+  </div>
+</main>
+</div>
+<script>
+(function(){
+  var input = document.getElementById('navSearch');
+  if(!input) return;
+  input.addEventListener('input', function(){
+    var q = input.value.trim().toLowerCase();
+    document.querySelectorAll('.nav-group').forEach(function(g){
+      var show = !q;
+      g.querySelectorAll('a.nav-item').forEach(function(a){
+        var hit = a.textContent.toLowerCase().indexOf(q) >= 0;
+        a.style.display = hit ? 'block' : 'none';
+        if(hit) show = true;
+      });
+      g.style.display = show ? 'block' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

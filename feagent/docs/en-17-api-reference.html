@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>17 - API Reference — feagent · Documentazione</title>
+<meta name="description" content="feagent — documentazione della libreria FEM per travi 3D: installazione, quick start, carichi, sezioni, precompressione, analisi modale, casi di studio.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f8f9d'/%3E%3Cpath d='M10 44h44' stroke='%23ffffff' stroke-width='4.5' stroke-linecap='round'/%3E%3Cpath d='M14 44v-6a18 18 0 0 1 36 0v6' stroke='%23ffd43b' stroke-width='4.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M22 44v-8M32 44v-11M42 44v-8' stroke='%23ffffff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--brand:#2f8f9d;--brand7:#227080;--brand1:#d9eef1;--brand0:#f0f9fa;
+ --ink:#111827;--sub:#4b5563;--muted:#9ca3af;--ring:#e5e7eb;--ring2:#d1d5db;
+ --code-bg:#0d1117;--code-ink:#e6edf3;--surface:#f7f8fa;--r:12px;
+ --font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','SF Mono',Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#fff;color:var(--ink);font-family:var(--font);font-size:15.5px;line-height:1.7}
+a{color:var(--brand7);text-decoration:none}
+a:hover{color:var(--brand)}
+.layout{display:flex;align-items:flex-start}
+aside.side{width:308px;flex:none;position:sticky;top:0;height:100vh;overflow-y:auto;
+ background:var(--surface);border-right:1px solid var(--ring);padding:18px 14px 40px}
+.side-brand{display:flex;align-items:center;gap:10px;padding:2px 8px 14px;border-bottom:1px solid var(--ring);margin-bottom:12px}
+.side-brand b{font-size:14.5px;letter-spacing:-.01em}
+.side-brand small{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.logo-dot{width:34px;height:34px;flex:none;background:var(--brand0);border:2px solid var(--ink);border-radius:10px;display:grid;place-items:center;font-size:15px}
+#navSearch{width:100%;margin-bottom:14px;padding:9px 12px;border:1px solid var(--ring2);border-radius:9px;
+ font-family:var(--mono);font-size:12px;background:#fff;outline:none}
+#navSearch:focus{border-color:var(--brand)}
+.nav-group{margin:2px 0 10px}
+.nav-group>a{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:9px;
+ font-size:13.5px;font-weight:700;color:var(--ink)}
+.nav-group>a:hover{background:#fff}
+.nav-group>a .caret{font-size:10px;color:var(--muted)}
+.nav-group .child{display:flex;flex-direction:column;gap:1px;margin:4px 0 4px 10px;border-left:1px solid var(--ring);padding-left:8px}
+.nav-group a.nav-item{padding:5.5px 10px;border-radius:8px;font-size:13px;color:var(--sub);line-height:1.35}
+.nav-group a.nav-item:hover{background:#fff;color:var(--brand7)}
+.nav-group a.nav-item.active{background:var(--brand1);color:var(--brand7);font-weight:600}
+.nav-group a.nav-item.grand{margin-left:12px;font-size:12.5px}
+main{flex:1;min-width:0}
+.main-in{max-width:880px;margin:0 auto;padding:26px 38px 90px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+ padding:12px 0;border-bottom:1px solid var(--ring);margin-bottom:26px;
+ font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted)}
+.topbar a{color:var(--brand7)}
+.topbar a:hover{color:var(--brand)}
+.doc-body h1{font-size:27px;letter-spacing:-.02em;margin:6px 0 18px}
+.doc-body h2{font-size:20px;margin:34px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--ring)}
+.doc-body h3{font-size:16.5px;margin:26px 0 10px}
+.doc-body p{margin:12px 0}
+.doc-body ul,.doc-body ol{margin:12px 0;padding-left:24px}
+.doc-body li{margin:5px 0}
+.doc-body blockquote{background:var(--brand0);border-left:3px solid var(--brand);border-radius:0 10px 10px 0;
+ padding:10px 16px;margin:14px 0;color:var(--sub)}
+.doc-body blockquote p{margin:4px 0}
+.doc-body code{background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:1.5px 6px;
+ font-family:var(--mono);font-size:13px;color:#c0392b}
+.doc-body pre{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:16px 18px;
+ overflow-x:auto;margin:16px 0;font-family:var(--mono);font-size:13px;line-height:1.65}
+.doc-body pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+.doc-body table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+.doc-body th{background:var(--surface);text-align:left}
+.doc-body th,.doc-body td{border:1px solid var(--ring2);padding:8px 12px}
+.doc-body img{max-width:100%;height:auto;border:1px solid var(--ring);border-radius:10px;margin:10px 0}
+.doc-body hr{border:0;border-top:1px solid var(--ring);margin:26px 0}
+.doc-body .footnote{font-size:13px;color:var(--sub)}
+.pager{display:flex;justify-content:space-between;gap:16px;margin-top:52px;padding-top:18px;border-top:1px solid var(--ring);
+ font-size:13.5px}
+.pager .next{text-align:right}
+.pager small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.doc-foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--ring);
+ font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted)}
+@media(max-width:900px){
+ .layout{flex-direction:column}
+ aside.side{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--ring)}
+ .main-in{padding:20px 20px 70px}
+}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto}}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  }
+});
+</script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+<div class="side-brand"><span class="logo-dot">F</span><div><b>feagent</b><small>documentazione</small></div></div>
+<input id="navSearch" type="text" placeholder="Cerca nella doc…">
+<div class="nav-group"><a href="index.html">Home </a>
+</div>
+<div class="nav-group"><a href="en.html">English <span class="caret">▾</span></a>
+<div class="child">
+<a class="nav-item" href="en-01-installation.html">01 - Installation</a>
+<a class="nav-item" href="en-02-quick-start.html">02 - Quick Start</a>
+<a class="nav-item" href="en-03-structural-model.html">03 - Structural Model</a>
+<a class="nav-item" href="en-04-loads.html">04 - Loads</a>
+<a class="nav-item" href="en-05-tapered-section.html">05 - Tapered Section</a>
+<a class="nav-item" href="en-06-timoshenko-releases.html">06 - Timoshenko &amp; End Releases</a>
+<a class="nav-item" href="en-07-load-cases.html">07 - Load Cases &amp; Combinations</a>
+<a class="nav-item" href="en-08-section-orientation.html">08 - Section Orientation</a>
+<a class="nav-item" href="en-09-post-processing.html">09 - Post-Processing</a>
+<a class="nav-item" href="en-10-plotly-charts.html">10 - Plotly Charts</a>
+<a class="nav-item" href="en-11-excel-io.html">11 - Excel I/O</a>
+<a class="nav-item" href="en-12-sparse-solver.html">12 - Sparse Solver</a>
+<a class="nav-item" href="en-13-conventions.html">13 - Conventions</a>
+<a class="nav-item" href="en-14-usage-examples.html">14 - Usage Examples</a>
+<div class="child">
+<a class="nav-item grand" href="en-16-case-studies-gallery.html">16 - Case Studies Gallery</a>
+<a class="nav-item grand" href="en-25-palazzo-3d.html">25 - Palazzo 3D Case Study</a>
+<a class="nav-item grand" href="en-26-advanced-case-studies.html">26 - Advanced Case Studies</a>
+<a class="nav-item grand" href="en-27-advanced-case-studies-ii.html">27 - Advanced Case Studies II</a>
+<a class="nav-item grand" href="en-30-composite-grillage-bridge.html">30 - IABSE Grillage Bridge</a>
+<a class="nav-item grand" href="en-31-shrinkage-composite-sections.html">31 - Shrinkage in Composite Sections</a>
+<a class="nav-item grand" href="en-32-twin-girder-bridge.html">32 - Twin-Girder Composite Bridge</a>
+<a class="nav-item grand" href="en-33-cables-cable-stayed-suspension.html">33 - Cables: Cable-Stayed &amp; Suspension Bridges</a>
+<a class="nav-item grand" href="en-34-cable-stayed-emerson.html">34 - Bill Emerson Cable-Stayed Bridge</a>
+<a class="nav-item grand" href="en-35-suspension-vincent-thomas.html">35 - Vincent Thomas Suspension Bridge</a>
+<a class="nav-item grand" href="en-36-strait-of-messina-bridge.html">36 - Strait of Messina Bridge</a>
+</div>
+<a class="nav-item" href="en-15-testing-validation.html">15 - Testing &amp; Validation</a>
+<a class="nav-item active" href="en-17-api-reference.html">17 - API Reference</a>
+<a class="nav-item" href="en-18-illustrated-functions.html">18 - Illustrated Functions</a>
+<a class="nav-item" href="en-19-modal-analysis.html">19 - Modal Analysis</a>
+<a class="nav-item" href="en-20-shape-functions.html">20 - Shape Functions</a>
+<a class="nav-item" href="en-21-stiffness-assembly.html">21 - Stiffness Matrix Assembly</a>
+<a class="nav-item" href="en-22-saving-results.html">22 - Saving Results</a>
+<a class="nav-item" href="en-23-hdf5-format.html">23 - HDF5 Results Format</a>
+<a class="nav-item" href="en-24-external-export.html">24 - External Software Export</a>
+<a class="nav-item" href="en-28-web-ui.html">28 - Web UI (Streamlit)</a>
+<a class="nav-item" href="en-29-performance.html">29 - Performance &amp; Benchmarks</a>
+<a class="nav-item" href="en-37-cli.html">37 - Command-Line Interface (CLI)</a>
+</div>
+</div>
+<div class="nav-group"><a href="it.html">Italiano <span class="caret">▾</span></a>
+<div class="child">
+<a class="nav-item" href="it-01-installation.html">01 - Installazione</a>
+<a class="nav-item" href="it-02-quick-start.html">02 - Quick Start</a>
+<a class="nav-item" href="it-03-structural-model.html">03 - Modello Strutturale</a>
+<a class="nav-item" href="it-04-loads.html">04 - Carichi</a>
+<a class="nav-item" href="it-05-tapered-section.html">05 - Sezione Variabile</a>
+<a class="nav-item" href="it-06-timoshenko-releases.html">06 - Timoshenko e Rilasci</a>
+<a class="nav-item" href="it-07-load-cases.html">07 - Load Case e Combinazioni</a>
+<a class="nav-item" href="it-08-section-orientation.html">08 - Orientazione della Sezione</a>
+<a class="nav-item" href="it-09-post-processing.html">09 - Post-Processing</a>
+<a class="nav-item" href="it-10-plotly-charts.html">10 - Plotly e Grafici</a>
+<a class="nav-item" href="it-11-excel-io.html">11 - Excel I/O</a>
+<a class="nav-item" href="it-12-sparse-solver.html">12 - Solver Sparso</a>
+<a class="nav-item" href="it-13-conventions.html">13 - Convenzioni</a>
+<a class="nav-item" href="it-14-usage-examples.html">14 - Esempi d&#x27;Uso</a>
+<div class="child">
+<a class="nav-item grand" href="it-16-case-studies-gallery.html">16 - Galleria degli Esempi</a>
+<a class="nav-item grand" href="it-25-palazzo-3d.html">25 - Caso Studio: Palazzo 3D</a>
+<a class="nav-item grand" href="it-26-advanced-case-studies.html">26 - Casi Studio Avanzati</a>
+<a class="nav-item grand" href="it-27-advanced-case-studies-ii.html">27 - Casi Studio Avanzati II</a>
+<a class="nav-item grand" href="it-30-ponte-graticcio-misto.html">30 - Ponte a Graticcio IABSE</a>
+<a class="nav-item grand" href="it-31-ritiro-sezioni-composte.html">31 - Ritiro nelle Sezioni Composte</a>
+<a class="nav-item grand" href="it-32-ponte-bitrave-misto.html">32 - Ponte Bitrave in Sezione Mista</a>
+<a class="nav-item grand" href="it-33-cavi-ponti-strallati-sospesi.html">33 - Cavi: Ponti Strallati e Sospesi</a>
+<a class="nav-item grand" href="it-34-ponte-strallato-emerson.html">34 - Ponte Strallato Bill Emerson</a>
+<a class="nav-item grand" href="it-35-ponte-sospeso-vincent-thomas.html">35 - Ponte Sospeso Vincent Thomas</a>
+<a class="nav-item grand" href="it-36-ponte-stretto-messina.html">36 - Ponte sullo Stretto di Messina</a>
+</div>
+<a class="nav-item" href="it-15-testing-validation.html">15 - Testing e Validazione</a>
+<a class="nav-item" href="it-17-api-reference.html">17 - API Reference</a>
+<a class="nav-item" href="it-18-illustrated-functions.html">18 - Funzioni Illustrate</a>
+<a class="nav-item" href="it-19-modal-analysis.html">19 - Analisi Modale</a>
+<a class="nav-item" href="it-20-shape-functions.html">20 - Funzioni di Forma</a>
+<a class="nav-item" href="it-21-stiffness-assembly.html">21 - Assemblaggio della Rigidezza</a>
+<a class="nav-item" href="it-22-saving-results.html">22 - Salvataggio dei Risultati</a>
+<a class="nav-item" href="it-23-hdf5-format.html">23 - Formato HDF5</a>
+<a class="nav-item" href="it-24-external-export.html">24 - Export Software Esterni</a>
+<a class="nav-item" href="it-28-web-ui.html">28 - Interfaccia Streamlit (UI)</a>
+<a class="nav-item" href="it-29-performance.html">29 - Prestazioni e Benchmark</a>
+<a class="nav-item" href="it-37-cli.html">37 - Interfaccia a riga di comando (CLI)</a>
+</div>
+</div>
+</aside>
+<main>
+  <div class="main-in">
+    <div class="topbar">
+      <a href="../">← feagent · landing</a>
+      <span>DOCUMENTAZIONE FEAGENT</span>
+      <a href="https://github.com/DomenicoGaudioso/feagent" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <div class="doc-body">
+<h1 id="17-api-reference">17 - API Reference</h1>
+<p>Complete reference of all public functions in <strong>beamfeapy</strong>. For illustrated
+examples of each family see <a href="en-18-illustrated-functions.html">Illustrated Functions</a>.</p>
+<p>Typical import:</p>
+<pre><code class="language-python">from beamfeapy import Model, Material, Section, VariableSection, read_excel
+from beamfeapy import postprocess
+from beamfeapy.plotting import (plot_model, plot_loads, plot_diagram,
+                                plot_deformed, plot_reactions, plot_internal_forces)
+</code></pre>
+<hr>
+<h2 id="materials-and-sections">Materials and Sections</h2>
+<h3 id="materiale-nu03-alpha00-gnone-rho00-name"><code>Material(E, nu=0.3, alpha=0.0, G=None, rho=0.0, name="")</code></h3>
+<p>Isotropic elastic material. <code>G</code> (shear modulus) is derived as
+<code>E/(2(1+nu))</code> if not provided. <code>alpha</code> = thermal expansion; <code>rho</code> = density
+(not used in static analysis).</p>
+<h3 id="sectiona-iy-iz-j-asynone-asznone-h_ynone-h_znone-name"><code>Section(A, Iy, Iz, J, Asy=None, Asz=None, h_y=None, h_z=None, name="")</code></h3>
+<p>Section properties (principal local axes y, z).
+- <code>A</code> area; <code>Iy</code> inertia about y (x-z plane); <code>Iz</code> about z (x-y plane); <code>J</code> torsion.
+- <code>Asy</code>, <code>Asz</code> effective shear areas — <strong>Timoshenko only</strong> (<code>shear=True</code>).
+- <code>h_y</code>, <code>h_z</code> section heights — <strong>for thermal gradient loads only</strong>.</p>
+<h3 id="variablesectiona-iy-iz-j-asynone-asznone-breakpoints"><code>VariableSection(A, Iy, Iz, J, Asy=None, Asz=None, breakpoints=())</code></h3>
+<p>Variable section along the element: each property is a constant value or a
+function of <code>xi = x/L ∈ [0,1]</code>.
+- <strong><code>VariableSection.from_sections(sec_i, sec_j)</code></strong> — linear interpolation between two sections.
+- <strong><code>VariableSection.from_stations([(xi, sec), ...])</code></strong> — piecewise linear between stations (xi=0 and 1 required); internal abscissae become <code>breakpoints</code>.
+- <strong><code>VariableSection.rectangular(b, h, E_shear=False)</code></strong> — rectangular section with <code>b(xi)</code>, <code>h(xi)</code> (constants or callables).</p>
+<hr>
+<h2 id="model">Model</h2>
+<h3 id="model_1"><code>Model()</code></h3>
+<p>FEM model container. Attributes: <code>nodes</code>, <code>elements</code>, <code>sections</code>,
+<code>nodal_loads</code>, <code>concentrated_loads</code>, <code>distributed_loads</code>, <code>thermal_loads</code>,
+<code>prestress_loads</code>, <code>settlements</code>.</p>
+<h3 id="add_nodeid-x-y-z-node"><code>add_node(id, x, y, z) -&gt; Node</code></h3>
+<p>Add a node (6 DOFs: <code>ux, uy, uz, rx, ry, rz</code>).</p>
+<h3 id="add_sectionid-sectionnone-props-section"><code>add_section(id, section=None, **props) -&gt; Section</code></h3>
+<p>Register a section with a reusable <code>id</code>. Pass a <code>Section</code> object or parameters
+(<code>A=</code>, <code>Iy=</code>, ...). Useful for defining elements by section ID.</p>
+<h3 id="add_beamid-node_i-node_j-material-section-ref_vectornone-roll00-shearfalse-releases_inone-releases_jnone-beamelement3d"><code>add_beam(id, node_i, node_j, material, section, ref_vector=None, roll=0.0, shear=False, releases_i=None, releases_j=None) -&gt; BeamElement3D</code></h3>
+<p>Prismatic 3D beam element (Euler-Bernoulli; Timoshenko if <code>shear=True</code>).
+- <code>section</code>: a <code>Section</code> object <strong>or id</strong> registered with <code>add_section</code>.
+- <code>ref_vector</code>: vector that, with local x-axis, defines the x-y plane (section orientation). If <code>None</code>, automatic selection (global Z, Y for vertical elements).
+- <code>roll</code>: angle [rad] of section rotation about local x-axis.
+- <code>shear</code>: if <code>True</code> uses Timoshenko (requires <code>Asy</code>/<code>Asz</code> in section).
+- <code>releases_i</code>, <code>releases_j</code>: lists of released DOFs at ends, e.g. <code>["rz"]</code> (flexural hinge), <code>["ry","rz"]</code>. Removed by static condensation.</p>
+<h3 id="add_tapered_beamid-node_i-node_j-material-varsectionnone-section_inone-section_jnone-stationsnone-ref_vectornone-roll00-shearfalse-n_gauss8"><code>add_tapered_beam(id, node_i, node_j, material, varsection=None, section_i=None, section_j=None, stations=None, ref_vector=None, roll=0.0, shear=False, n_gauss=8)</code></h3>
+<p><strong>Variable-section</strong> element (exact force-based stiffness). Section is specified
+in three ways:
+- <code>varsection</code>: a <code>VariableSection</code>;
+- <code>section_i</code>, <code>section_j</code>: section (or id) at start/end → linear interpolation;
+- <code>stations={xi: section, ...}</code> or <code>[(xi, section), ...]</code> → piecewise linear.</p>
+<h3 id="constraints">Constraints</h3>
+<ul>
+<li><strong><code>fix(node, dofs=None)</code></strong> — restrain listed DOFs (<code>["ux","uy",...]</code>); <code>None</code> = all 6 (fixed).</li>
+<li><strong><code>pin(node)</code></strong> — spherical hinge: restrains 3 translations.</li>
+<li><strong><code>support(node, ux=False, uy=False, ..., rz=False)</code></strong> — selective constraint, e.g. <code>support(1, uy=True, uz=True)</code>.</li>
+</ul>
+<h3 id="add_settlementnode-dof-value-settlement"><code>add_settlement(node, dof, value) -&gt; Settlement</code></h3>
+<p>Settlement (imposed displacement/rotation): <code>dof</code> ∈ <code>{ux,uy,uz,rx,ry,rz}</code>.</p>
+<hr>
+<h2 id="loads">Loads</h2>
+<p>All <code>add_*</code> methods accept <code>case="..."</code> (load case, default <code>"default"</code>).</p>
+<h3 id="add_nodal_loadnode-casedefault-fx0-fy0-fz0-mx0-my0-mz0-nodalload"><code>add_nodal_load(node, case="default", Fx=0, Fy=0, Fz=0, Mx=0, My=0, Mz=0) -&gt; NodalLoad</code></h3>
+<p>Concentrated force/moment at a node (global system).</p>
+<h3 id="add_concentrated_loadelem-xi-fx0-fy0-fz0-mx0-my0-mz0-framelocal-casedefault"><code>add_concentrated_load(elem, xi, Fx=0, Fy=0, Fz=0, Mx=0, My=0, Mz=0, frame="local", case="default")</code></h3>
+<p>Concentrated force/moment at an <strong>internal abscissa</strong> <code>xi ∈ [0,1]</code> of the element.
+<code>frame</code>: <code>"local"</code> (default) or <code>"global"</code>. Equivalent load <code>N(ξL)ᵀ[F,M]</code>.</p>
+<h3 id="add_distributed_loadelem-component-q_i-q_jnone-anone-bnone-framelocal-casedefault"><code>add_distributed_load(elem, component, q_i, q_j=None, a=None, b=None, frame="local", case="default")</code></h3>
+<p>Distributed load on an element. <code>component</code> ∈ <code>{fx,fy,fz,mx,my,mz}</code> (forces and
+<strong>distributed moments</strong>). <code>q_i</code>→<code>q_j</code> linear (trapezoidal; uniform if <code>q_j=None</code>);
+<code>a,b</code> for a <strong>partial</strong> span. <code>frame</code>: <code>"local"</code>/<code>"global"</code>.</p>
+<h3 id="add_thermal_loadelem-dt_axial0-dt_grad_y0-dt_grad_z0-casedefault"><code>add_thermal_load(elem, dT_axial=0, dT_grad_y=0, dT_grad_z=0, case="default")</code></h3>
+<p>Uniform temperature change (<code>dT_axial</code>) and linear gradient along y/z (requires
+<code>h_y</code>/<code>h_z</code> in section).</p>
+<h3 id="add_thermal_profileelem-profile-axisy-widthnone-n_section24-casedefault"><code>add_thermal_profile(elem, profile, axis="y", width=None, n_section=24, case="default")</code></h3>
+<p><strong>Generic</strong> thermal profile along the height: <code>profile</code> is a function <code>T(s)</code> or
+a sequence of points <code>[(s, T), ...]</code>. Projection onto uniform+linear part +
+self-equilibrating residual (eigenstress, EN 1991-1-5).</p>
+<h3 id="add_prestresselem-p-e_i0-e_jnone-planey-sag00-profilenone-casedefault"><code>add_prestress(elem, P, e_i=0, e_j=None, plane="y", sag=0.0, profile=None, case="default")</code></h3>
+<p>Prestress from cable (equivalent load method): tension <code>P</code>, eccentricity
+<code>e_i</code>→<code>e_j</code> + parabolic sag <code>sag</code> (or <code>profile(xi)</code>). <code>plane</code> ∈ <code>{y,z}</code>.</p>
+<h3 id="add_cable_prestressp-points-elementsnone-casedefault"><code>add_cable_prestress(P, points, elements=None, case="default")</code></h3>
+<p>Prestress from <strong>3D cable geometry</strong>: <code>points</code> = polyline of global
+coordinates, <code>P</code> = tension. Computes anchor forces (<code>±P·t</code>) and deviation
+(<code>P·(t_out−t_in)</code>) and applies them as eccentric concentrated loads on beams.</p>
+<hr>
+<h2 id="solution">Solution</h2>
+<h3 id="load_cases-liststr"><code>load_cases() -&gt; list[str]</code></h3>
+<p>Sorted list of load cases present in the loads.</p>
+<h3 id="solvesparsefalse-casesnone-result"><code>solve(sparse=False, cases=None) -&gt; Result</code></h3>
+<p>Solve the system.
+- <code>sparse</code>: <code>True</code> uses COO→CSR triplet assembly and sparse SuperLU solver (large models).
+- <code>cases</code>: load combination —
+  - <code>None</code> = all loads (coeff 1);
+  - string = a single load case;
+  - list/set = combination (coeff 1 each);
+  - <strong>dict <code>{case: coefficient}</code></strong> = combination with <strong>multiplicative coefficients</strong> for each load pattern, e.g. ULS <code>solve(cases={"G": 1.35, "Q": 1.5})</code>.</p>
+<h3 id="assemble_massmass_source-g981-ndarray"><code>assemble_mass(mass_source, g=9.81) -&gt; ndarray</code></h3>
+<p>Concentrated mass vector (diagonal, ndof) obtained from the loads of the
+specified load cases. <code>mass_source</code> is a dict <code>{case: coefficient}</code>: mass = coeff ·
+|force| / g, assigned to the 3 translational DOFs of each node. Distributed loads
+are distributed to nodes (equivalent nodal forces), concentrated span loads
+are linearly interpolated. Include gravitational (vertical) load cases in the source.</p>
+<h3 id="modaln_modes10-mass_sourcenone-g981-modalresult"><code>modal(n_modes=10, mass_source=None, g=9.81) -&gt; ModalResult</code></h3>
+<p>Modal analysis: solves <code>K φ = ω² M φ</code> on free DOFs, with masses from <code>mass_source</code>
+(the user chooses which load cases to convert to mass and with what coefficient).
+Free DOFs <strong>without mass</strong> (rotational and unloaded translational) are eliminated
+by <strong>static condensation</strong> (no spurious modes). Validated vs OpenSees to machine
+precision.</p>
+<h4 id="modalresult"><code>ModalResult</code></h4>
+<p>Attributes: <code>omega</code> [rad/s], <code>freq</code> [Hz], <code>period</code> [s], <code>phi</code> (ndof × n_modes,
+mass-normalized shapes), <code>eff_mass</code> (n_modes × 3), <code>part</code>, <code>total_mass</code>.
+Methods: <code>mode(i)</code>, <code>mode_shape(i, node)</code>, <code>mass_participation()</code> (ratios per
+mode and direction X/Y/Z), <code>summary()</code>.</p>
+<h3 id="from_excelpath-classmethod-assemble_stiffness-assemble_stiffness_sparse-assemble_loadscasesnone"><code>from_excel(path)</code> <em>(classmethod)</em> / <code>assemble_stiffness()</code> / <code>assemble_stiffness_sparse()</code> / <code>assemble_loads(cases=None)</code></h3>
+<p><code>Model.from_excel(path)</code> builds the model from Excel (see <a href="en-11-excel-io.html">Excel I/O</a>).
+The <code>assemble_*</code> methods expose the stiffness matrix and load vector.</p>
+<hr>
+<h2 id="results-result">Results (<code>Result</code>)</h2>
+<p>Attributes: <code>U</code> (global displacements), <code>R</code> (global reactions),
+<code>element_forces</code> (local end forces per element, 12),
+<code>element_local_disp</code>, <code>cases</code>.</p>
+<ul>
+<li><strong><code>displacements(node) -&gt; ndarray(6)</code></strong> — <code>[ux,uy,uz,rx,ry,rz]</code> of the node.</li>
+<li><strong><code>displacement(node, dof) -&gt; float</code></strong> — single component.</li>
+<li><strong><code>reactions(node) -&gt; ndarray(6)</code></strong> — <code>[Fx,Fy,Fz,Mx,My,Mz]</code> of the node.</li>
+<li><strong><code>to_excel(path, n_diagram=0)</code></strong> — export displacements, reactions, end forces (and diagrams if <code>n_diagram&gt;1</code>).</li>
+</ul>
+<hr>
+<h2 id="post-processing-beamfeapypostprocess">Post-processing (<code>beamfeapy.postprocess</code>)</h2>
+<h3 id="internal_forcesresult-elem_id-n51-dict"><code>internal_forces(result, elem_id, n=51) -&gt; dict</code></h3>
+<p>Internal forces along the element. Returns <code>{x, N, Vy, Vz, T, My, Mz}</code> (arrays
+of <code>n</code> values). N&gt;0 tension; includes contributions from distributed and
+concentrated loads (jumps).</p>
+<h3 id="element_displacementsresult-elem_id-n21-dict"><code>element_displacements(result, elem_id, n=21) -&gt; dict</code></h3>
+<p><code>{x, u_local}</code> (n×6): local displacements interpolated along the element.</p>
+<h3 id="deformed_shape_globalresult-elem_id-n21-scale10-ndarrayn3"><code>deformed_shape_global(result, elem_id, n=21, scale=1.0) -&gt; ndarray(n,3)</code></h3>
+<p>Global coordinates of the deformed axis (amplified by <code>scale</code>).</p>
+<hr>
+<h2 id="visualization-beamfeapyplotting">Visualization (<code>beamfeapy.plotting</code>)</h2>
+<p>Requires the <code>plot</code> extra (<code>plotly</code>, <code>kaleido</code>). Each function returns a
+<code>plotly.graph_objects.Figure</code> (<code>.show()</code>, <code>.write_html(...)</code>, <code>.write_image(...)</code>).</p>
+<ul>
+<li><strong><code>plot_model(model, show_node_ids=True)</code></strong> — geometry (nodes, elements).</li>
+<li><strong><code>plot_loads(model, case=None, scale=0.14)</code></strong> — structure + loads (filterable by load case).</li>
+<li><strong><code>plot_diagram(result, component="Mz", scale=None, n=41)</code></strong> — internal force diagram along the structure, drawn as <strong>bicolor filled area</strong> (positive and negative with different colors and transparency; bending: positive light blue, negative light red). Each action is plotted on its <strong>usage axis</strong> (N shares the axis of My). Moments in European convention (negative at extrados). Labels on global max and min.</li>
+<li><strong><code>plot_deformed(result, scale=1.0, n=21)</code></strong> — deformed configuration.</li>
+<li><strong><code>plot_reactions(result, scale=0.14)</code></strong> — reactions (forces and moments) at supports.</li>
+<li><strong><code>plot_internal_forces(result, elem_id, n=101)</code></strong> — the 6 2D diagrams for one element.</li>
+<li><strong><code>plot_mode(modal_result, i=0, scale=1.0, n=21)</code></strong> — draws the i-th mode shape (with frequency and period in the title).</li>
+</ul>
+<hr>
+<h2 id="excel-importexport-beamfeapyio_excel">Excel Import/Export (<code>beamfeapy.io_excel</code>)</h2>
+<ul>
+<li><strong><code>read_model(path)</code></strong> (alias <code>beamfeapy.read_excel</code>, <code>Model.from_excel</code>) — builds the model from Excel sheets.</li>
+<li><strong><code>write_results(result, path, n_diagram=0)</code></strong> (alias <code>Result.to_excel</code>) — exports results.</li>
+<li><strong><code>write_template(path)</code></strong> — generates a fillable template workbook.</li>
+</ul>
+<p>Sheets: <code>Node, Material, Section, Element, Support, NodalLoad, DistributedLoad,
+ConcentratedLoad, Thermal, Settlement, Prestress</code> (see <a href="en-11-excel-io.html">Excel I/O</a>).</p>
+    </div>
+<nav class="pager"><div class="prev"><small>← precedente</small><a href="en-15-testing-validation.html">15 - Testing &amp; Validation</a></div><div class="next"><small>successivo →</small><a href="en-18-illustrated-functions.html">18 - Illustrated Functions</a></div></nav>
+    <div class="doc-foot">feagent · documentazione tecnica — libreria FEM per travi 3D · NTC 2018 / Eurocodici</div>
+  </div>
+</main>
+</div>
+<script>
+(function(){
+  var input = document.getElementById('navSearch');
+  if(!input) return;
+  input.addEventListener('input', function(){
+    var q = input.value.trim().toLowerCase();
+    document.querySelectorAll('.nav-group').forEach(function(g){
+      var show = !q;
+      g.querySelectorAll('a.nav-item').forEach(function(a){
+        var hit = a.textContent.toLowerCase().indexOf(q) >= 0;
+        a.style.display = hit ? 'block' : 'none';
+        if(hit) show = true;
+      });
+      g.style.display = show ? 'block' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>
