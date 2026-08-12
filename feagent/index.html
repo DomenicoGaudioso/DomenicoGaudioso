@@ -251,14 +251,8 @@
   .c-bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
   .c-br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
 
-  /* ============================================
-     FEATURES — QUADRATI CON ICONA IN TILE
-     ============================================ */
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
+  /* FEATURES — QUADRATI */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .feature-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -284,31 +278,19 @@
     transition: opacity 0.3s ease;
     box-shadow: 0 0 12px var(--accent);
   }
-  .feature-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--border-accent);
-    background: #fff;
-  }
+  .feature-card:hover { transform: translateY(-4px); border-color: var(--border-accent); background: #fff; }
   .feature-card:hover::before { opacity: 1; }
   .feature-icon {
-    width: 62px;
-    height: 62px;
-    border-radius: 16px;
-    background: var(--accent-soft);
-    border: 1px solid var(--border-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    margin-bottom: 18px;
+    width: 62px; height: 62px; border-radius: 16px;
+    background: var(--accent-soft); border: 1px solid var(--border-accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin-bottom: 18px;
     transition: transform 0.3s ease;
   }
   .feature-card:hover .feature-icon { transform: rotate(-6deg) scale(1.08); }
   .feature-title { font-size: 17px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
   .feature-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.55; }
-  @media (max-width: 900px) {
-    .features-grid { grid-template-columns: repeat(2, 1fr); }
-  }
+  @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) {
     .features-grid { grid-template-columns: 1fr; }
     .feature-card { aspect-ratio: auto; }
@@ -582,7 +564,7 @@
   </div>
 </section>
 
-<!-- FEATURES — QUADRATI -->
+<!-- FEATURES -->
 <section class="section">
   <div class="container">
     <div class="section-header">
@@ -900,7 +882,7 @@
   }
 
   /* ============================================================
-     STAGE 1 — PONTE (2D) + diagramma M(x), frecce carico, valle
+     STAGE 1 — PONTE (2D)
      ============================================================ */
   function drawTruckSide(ctx2, x, y, H) {
     const s = H * 0.13;
@@ -928,7 +910,6 @@
     ctx2.strokeStyle = 'rgba(130,150,180,.06)'; ctx2.lineWidth = 1;
     for (let x = 0; x < W; x += 46) { ctx2.beginPath(); ctx2.moveTo(x, 0); ctx2.lineTo(x, H); ctx2.stroke(); }
     for (let y = 0; y < H; y += 46) { ctx2.beginPath(); ctx2.moveTo(0, y); ctx2.lineTo(W, y); ctx2.stroke(); }
-    // valle
     const vg = ctx2.createLinearGradient(0, H * 0.78, 0, H);
     vg.addColorStop(0, 'rgba(14,30,52,0)'); vg.addColorStop(1, 'rgba(14,30,52,.6)');
     ctx2.fillStyle = vg; ctx2.fillRect(0, H * 0.78, W, H * 0.22);
@@ -1029,7 +1010,6 @@
         i ? ctx2.lineTo(x, y) : ctx2.moveTo(x, y);
       }
       ctx2.stroke();
-      // frecce di carico sulle ruote
       ctx2.strokeStyle = 'rgba(251,191,36,.95)'; ctx2.lineWidth = 2;
       [-W * 0.02, W * 0.02].forEach(o => {
         const ax2 = truckX + o;
@@ -1041,7 +1021,6 @@
         ctx2.lineTo(ax2 + 5, deckY - H * 0.036);
         ctx2.closePath(); ctx2.fill();
       });
-      // diagramma M(x)
       const baseM = deckY + H * 0.13;
       ctx2.beginPath();
       const NM = 60;
@@ -1061,7 +1040,6 @@
       ctx2.setLineDash([]);
       ctx2.fillStyle = 'rgba(160,170,190,.85)'; ctx2.font = '10px ' + MONO;
       ctx2.fillText('M(x) — inviluppo flessionale', x0 + 8, baseM + H * 0.05);
-      // flusso di forza nell'arco
       ctx2.setLineDash([16, 26]); ctx2.lineDashOffset = -gt * 70;
       ctx2.strokeStyle = 'rgba(0,212,170,.32)'; ctx2.lineWidth = Math.max(4, H * 0.015) + 3;
       ctx2.beginPath();
@@ -1084,7 +1062,7 @@
   }
 
   /* ============================================================
-     STAGE 2 — TELAIO (2D) + profilo drift, storia sommità, P1..P6
+     STAGE 2 — TELAIO (2D)
      ============================================================ */
   function drawBuildingStage(ctx2, W, H, lt, gt, st) {
     const g = ctx2.createLinearGradient(0, 0, 0, H);
@@ -1160,7 +1138,6 @@
     const dy = baseY - storyH * (dfl - 0.5);
     ctx2.fillStyle = 'rgba(239,68,68,.95)'; ctx2.font = 'bold 12px ' + MONO;
     ctx2.fillText('drift max → piano ' + dfl, cx + bw / 2 + 20, dy + 4);
-    // pannello profilo drift
     const panX = 24, panY = H * 0.2, panW = Math.min(120, W * 0.13), panH = H * 0.52;
     ctx2.fillStyle = 'rgba(8,10,16,.72)'; ctx2.fillRect(panX, panY, panW, panH);
     ctx2.strokeStyle = 'rgba(0,212,170,.4)'; ctx2.lineWidth = 1; ctx2.strokeRect(panX, panY, panW, panH);
@@ -1176,7 +1153,6 @@
       ctx2.fillStyle = 'rgba(235,240,245,.75)';
       ctx2.fillText('P' + i, panX + 10, yy + rowH * 0.36);
     }
-    // accelerogramma + spostamento sommità
     if (!st.acc) st.acc = [];
     if (!st.topH) st.topH = [];
     st.acc.push(ug); if (st.acc.length > 220) st.acc.shift();
@@ -1211,7 +1187,7 @@
   }
 
   /* ============================================================
-     STAGE 3 — LASTRA (2D) + iso-stress, freccia carico, σmax(t)
+     STAGE 3 — LASTRA (2D)
      ============================================================ */
   function drawPlateStage(ctx2, W, H, lt, gt, st) {
     ctx2.fillStyle = '#0a0d14'; ctx2.fillRect(0, 0, W, H);
@@ -1253,7 +1229,6 @@
     }
     ctx2.strokeStyle = 'rgba(240,242,248,.6)'; ctx2.lineWidth = 2;
     ctx2.strokeRect(m, m, pw, ph);
-    // iso-stress
     ctx2.save(); ctx2.beginPath(); ctx2.rect(m, m, pw, ph); ctx2.clip();
     ctx2.setLineDash([6, 7]);
     [0.62, 0.38, 0.2].forEach((vv, ii) => {
@@ -1277,7 +1252,6 @@
     const glow = ctx2.createRadialGradient(lx, ly, 0, lx, ly, r0 * 1.4);
     glow.addColorStop(0, 'rgba(239,68,68,.32)'); glow.addColorStop(1, 'rgba(239,68,68,0)');
     ctx2.fillStyle = glow; ctx2.fillRect(lx - r0 * 1.4, ly - r0 * 1.4, r0 * 2.8, r0 * 2.8);
-    // freccia carico
     ctx2.strokeStyle = '#ef4444'; ctx2.lineWidth = 2.4;
     ctx2.beginPath(); ctx2.moveTo(lx, ly - 46); ctx2.lineTo(lx, ly - 20); ctx2.stroke();
     ctx2.fillStyle = '#ef4444';
@@ -1286,7 +1260,6 @@
     ctx2.closePath(); ctx2.fill();
     ctx2.fillStyle = 'rgba(255,255,255,.92)'; ctx2.font = '10px ' + MONO;
     ctx2.fillText('225 kN', lx + 10, ly - 32);
-    // crosshair
     ctx2.strokeStyle = 'rgba(255,255,255,.55)'; ctx2.lineWidth = 1;
     ctx2.beginPath(); ctx2.moveTo(lx - 24, ly); ctx2.lineTo(lx + 24, ly); ctx2.moveTo(lx, ly - 24); ctx2.lineTo(lx, ly + 24); ctx2.stroke();
     const pr = 10 + 3 * Math.sin(gt * 3);
@@ -1297,7 +1270,6 @@
     ctx2.fillStyle = '#fff'; ctx2.beginPath(); ctx2.arc(lx, ly, 3.5, 0, 7); ctx2.fill();
     ctx2.fillStyle = 'rgba(255,255,255,.95)'; ctx2.font = 'bold 12px ' + MONO;
     ctx2.fillText('σmax ' + Math.round(60 + vmax * 195) + ' MPa', lx + 18, ly - 16);
-    // colorbar
     const cbW = 14, cbH = ph * 0.66, cbX = m + pw - cbW - 14, cbY = m + (ph - cbH) / 2;
     for (let i = 0; i < 60; i++) {
       ctx2.fillStyle = heatCSS(1 - i / 59);
@@ -1309,7 +1281,6 @@
     ctx2.fillText('245 MPa', cbX - 6, cbY + 8);
     ctx2.fillText('0 MPa', cbX - 6, cbY + cbH);
     ctx2.textAlign = 'left';
-    // sparkline σmax(t)
     if (!st.vmH) st.vmH = [];
     st.vmH.push(60 + vmax * 195); if (st.vmH.length > 240) st.vmH.shift();
     const spW = Math.min(280, W * 0.26), spH = 52, spX = 24, spY = H - spH - 66;
@@ -1336,7 +1307,7 @@
   }
 
   /* ============================================================
-     SCENE 3D potenziate
+     SCENE 3D
      ============================================================ */
   const hasTHREE = typeof THREE !== 'undefined';
 
@@ -1350,13 +1321,11 @@
       const m2 = new THREE.Mesh(new THREE.BoxGeometry(L, 1.1, 0.5), girderMat);
       m2.position.set(0, -0.6, z); g.add(m2);
     });
-    // strisce di corsia
     const dashMat = new THREE.MeshStandardMaterial({ color: 0xdfe6ee, roughness: .7 });
     for (let x = -L / 2 + 3; x < L / 2 - 2; x += 4.2) {
       const dsh = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.06, 0.16), dashMat);
       dsh.position.set(x, 0.34, 0); g.add(dsh);
     }
-    // ringhiere
     const railMat = new THREE.MeshStandardMaterial({ color: 0x51617c, roughness: .5, metalness: .5 });
     [-WD / 2 + 0.15, WD / 2 - 0.15].forEach(z => {
       const rail = new THREE.Mesh(new THREE.BoxGeometry(L, 0.07, 0.07), railMat);
@@ -1380,7 +1349,6 @@
         g.add(cyl); hangers.push({ x: p.x, mat: hm });
       }
     });
-    // controventi tra gli archi
     [0.32, 0.5, 0.68].forEach(s => {
       const qx = (1 - s) * (1 - s) * (-L / 2) + s * s * (L / 2);
       const qy = 4 * AH * (1 - s) * s;
@@ -1424,6 +1392,14 @@
     }};
   }
 
+  /* ============================================================
+     EDIFICIO 3D — cinematica coerente per piano (CORRETTO)
+     Ogni piano è un diaframma rigido con spostamento u[f]:
+     - travi, impalcati e facciate traslano con u[f]
+     - i conci di colonna tra piano f e f+1 hanno base su
+       u[f] e testa su u[f+1] → posizione media + rotazione
+       coerente (segno corretto rispetto all'asse Z)
+     ============================================================ */
   function buildBuilding3D(scene) {
     const g = new THREE.Group(); scene.add(g);
     const floors = 6, bx = 3, bz = 2, bay = 6, sh = 4;
@@ -1434,7 +1410,8 @@
         const m = new THREE.MeshStandardMaterial({ color: 0x8fa3bd, roughness: .5, metalness: .35 });
         const c = new THREE.Mesh(new THREE.BoxGeometry(.7, sh, .7), m);
         c.position.set(-BW / 2 + ix * bay, sh / 2 + f * sh, -BD / 2 + iz * bay);
-        g.add(c); cols.push({ mesh: c, f: f, mat: m, bx0: c.position.x });
+        g.add(c);
+        cols.push({ mesh: c, f: f, mat: m, bx0: c.position.x });
       }
     }
     const beamMat = new THREE.MeshStandardMaterial({ color: 0xc9d2de, roughness: .5, metalness: .3 });
@@ -1442,28 +1419,29 @@
       const y = f * sh;
       for (let iz = 0; iz <= bz; iz++) {
         const b = new THREE.Mesh(new THREE.BoxGeometry(BW + .8, .55, .55), beamMat);
-        b.position.set(0, y, -BD / 2 + iz * bay); g.add(b); beams.push({ mesh: b, f: f });
+        b.position.set(0, y, -BD / 2 + iz * bay);
+        g.add(b); beams.push({ mesh: b, f: f, bx0: b.position.x });
       }
       for (let ix = 0; ix <= bx; ix++) {
         const b = new THREE.Mesh(new THREE.BoxGeometry(.55, .55, BD + .8), beamMat);
-        b.position.set(-BW / 2 + ix * bay, y, 0); g.add(b); beams.push({ mesh: b, f: f });
+        b.position.set(-BW / 2 + ix * bay, y, 0);
+        g.add(b); beams.push({ mesh: b, f: f, bx0: b.position.x });
       }
       const slab = new THREE.Mesh(new THREE.BoxGeometry(BW + 2.2, .3, BD + 2.2), new THREE.MeshStandardMaterial({ color: 0xe6eaf1, roughness: .85 }));
-      slab.position.set(0, y + .42, 0); g.add(slab); slabs.push({ mesh: slab, f: f, bx0: 0 });
+      slab.position.set(0, y + .42, 0);
+      g.add(slab); slabs.push({ mesh: slab, f: f, bx0: 0 });
     }
-    // copertura tecnica
     const roof = new THREE.Mesh(new THREE.BoxGeometry(5, 1.8, 3.4), new THREE.MeshStandardMaterial({ color: 0x38465c, roughness: .7 }));
     roof.position.set(-BW / 6, floors * sh + 1.35, 0); g.add(roof);
     slabs.push({ mesh: roof, f: floors, bx0: -BW / 6 });
-    // facciate vetrate (fronte/retro)
     const facMat = new THREE.MeshStandardMaterial({ color: 0x9fc3d8, transparent: true, opacity: .16, roughness: .15, metalness: .6 });
     for (let f = 0; f < floors; f++) {
       [-(BD / 2 + 1.05), BD / 2 + 1.05].forEach(z => {
         const p = new THREE.Mesh(new THREE.BoxGeometry(BW + 1.6, sh - 0.9, 0.12), facMat);
-        p.position.set(0, sh / 2 + f * sh + 0.2, z); g.add(p); facs.push({ mesh: p, f: f });
+        p.position.set(0, sh / 2 + f * sh + 0.2, z);
+        g.add(p); facs.push({ mesh: p, f: f, bx0: 0 });
       });
     }
-    // onde sismiche a terra
     const ripples = [];
     for (let i = 0; i < 3; i++) {
       const rm = new THREE.Mesh(new THREE.RingGeometry(1, 1.06, 48), new THREE.MeshBasicMaterial({ color: 0x00d4aa, transparent: true, opacity: .3, side: THREE.DoubleSide }));
@@ -1476,17 +1454,24 @@
       const ug = Math.sin(t * 2) * 1.1 + Math.sin(t * 4.7) * 0.5 + Math.sin(t * 7.3) * 0.25;
       const u = [];
       for (let f = 0; f <= floors; f++) u.push(ug + 2.4 * Math.sin(t * 1.5 + 0.5) * Math.pow(f / floors, 1.4));
+      // colonne: base su u[f], testa su u[f+1]
       cols.forEach(c => {
-        const f = c.f, du = u[f + 1] - u[f];
-        c.mesh.position.x = c.bx0 + (u[f] + u[f + 1]) / 2;
-        c.mesh.rotation.z = Math.atan(du / sh);
+        const f = c.f;
+        const ub = u[f], ut = u[f + 1];
+        const du = ut - ub;
+        c.mesh.position.x = c.bx0 + (ub + ut) / 2;
+        c.mesh.rotation.z = -Math.atan2(du, sh);
         const c3 = heatRGB(Math.min(1, Math.abs(du) / 2.6));
         tc.setRGB(c3[0] / 255, c3[1] / 255, c3[2] / 255);
         c.mat.color.copy(tc);
       });
-      beams.forEach(b => { b.mesh.position.x = u[b.f]; });
+      // travi: traslano con il proprio piano (mantenendo la posizione base)
+      beams.forEach(b => { b.mesh.position.x = b.bx0 + u[b.f]; });
+      // impalcati + copertura
       slabs.forEach(s => { s.mesh.position.x = s.bx0 + u[s.f]; });
-      facs.forEach(fc => { fc.mesh.position.x = (u[fc.f] + u[fc.f + 1]) / 2; });
+      // facciate: piano medio tra f e f+1
+      facs.forEach(fc => { fc.mesh.position.x = fc.bx0 + (u[fc.f] + u[fc.f + 1]) / 2; });
+      // onde sismiche
       ripples.forEach((rm, i) => {
         const s = ((t * 5 + i * 11) % 33);
         rm.scale.set(s, s, 1);
@@ -1505,7 +1490,6 @@
     mesh.position.y = 4; scene.add(mesh);
     const wire = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ wireframe: true, color: 0xffffff, transparent: true, opacity: .12 }));
     wire.position.y = 4.03; scene.add(wire);
-    // travi di bordo
     const ebMat = new THREE.MeshStandardMaterial({ color: 0x2b3950, roughness: .6, metalness: .4 });
     [-LZ / 2, LZ / 2].forEach(z => {
       const b = new THREE.Mesh(new THREE.BoxGeometry(LX + 1, 0.5, 0.5), ebMat);
