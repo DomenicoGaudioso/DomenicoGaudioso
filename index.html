@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ing. Domenico Gaudioso — Ingegneria Strutturale · Ponti misti · FEM · BIM · Monitoraggio</title>
+<meta name="description" content="Ingegnere civile strutturista: progettazione di ponti a struttura mista acciaio-calcestruzzo, modellazione FEM e BIM, sistemi di monitoraggio strutturale e analisi dei dati. Strumenti: civilbox.xyz.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f8f9d'/%3E%3Cpath d='M10 44h44' stroke='%23ffffff' stroke-width='4.5' stroke-linecap='round'/%3E%3Cpath d='M14 44v-6a18 18 0 0 1 36 0v6' stroke='%23ffd43b' stroke-width='4.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M22 44v-8M32 44v-11M42 44v-8' stroke='%23ffffff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins/500.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins/600.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins/700.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins/800.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono/500.css" rel="stylesheet">
+<style>
+:root{
+  --bg:#f9fafb; --card:#ffffff; --ink:#111827; --sub:#4b5563; --muted:#9ca3af;
+  --ring:#e5e7eb; --ring2:#d1d5db; --hard:#161616; --slate:#33506b;
+  --brand:#2f8f9d; --brand7:#227080; --brand5:#3ba3b2; --brand1:#d9eef1; --brand0:#f0f9fa;
+  --yellow:#ffd43b; --blue:#3b74a8;
+  --r-lg:18px; --r-md:12px; --r-pill:999px;
+  --sh-card:0 1px 3px rgba(17,24,39,.07),0 1px 2px rgba(17,24,39,.04);
+  --sh-hover:0 18px 38px -16px rgba(17,24,39,.22),0 4px 10px rgba(17,24,39,.06);
+  --sh-tile:0 12px 22px rgba(31,45,61,.20),0 2px 4px rgba(31,45,61,.12);
+  --sh-brand:0 14px 30px -12px rgba(47,143,157,.55);
+  --ease:cubic-bezier(.22,.9,.28,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:"Poppins",system-ui,sans-serif;font-size:16px;line-height:1.65;overflow-x:hidden}
+::selection{background:var(--brand1);color:var(--brand7)}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{letter-spacing:-.02em;line-height:1.12}
+.mono{font-family:"IBM Plex Mono",monospace}
+.wrap{width:min(1180px,92%);margin:0 auto}
+section{scroll-margin-top:96px}
+
+/* ══════ logo ══════ */
+.logo-mark{width:38px;height:38px;flex:none;background:var(--brand0);border:2px solid var(--hard);border-radius:11px;box-shadow:var(--sh-card);display:grid;place-items:center;transition:transform .35s var(--ease)}
+.brand:hover .logo-mark{transform:rotate(-4deg) translateY(-2px)}
+.logo-mark svg{width:24px;height:24px}
+
+/* ══════ top strip ══════ */
+.topstrip{background:var(--brand);color:#fff;overflow:hidden}
+.mq{display:flex;width:max-content;animation:mq 38s linear infinite}
+.mq span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;padding:7px 0;white-space:nowrap}
+.mq b{color:var(--yellow);font-weight:500}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ══════ header ══════ */
+header.site{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--ring);transition:box-shadow .3s}
+header.site.scrolled{box-shadow:0 6px 24px -14px rgba(17,24,39,.25)}
+.nav-in{display:flex;align-items:center;gap:26px;height:68px}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+.brand-txt b{font-weight:800;font-size:17px;letter-spacing:-.02em;display:block;line-height:1.1}
+.brand-txt span{font-size:10.5px;font-weight:600;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:22px}
+.nav-links a{font-size:14px;font-weight:600;color:var(--sub);position:relative;padding:6px 0;transition:color .25s}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px;background:var(--brand);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.nav-links a:hover{color:var(--brand7)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{background:var(--brand);color:#fff!important;font-size:14px;font-weight:600;border-radius:var(--r-pill);padding:10px 20px;box-shadow:var(--sh-brand);transition:.3s var(--ease)}
+.nav-cta:hover{background:var(--brand7);transform:translateY(-2px)}
+.nav-cta::after{display:none!important}
+.burger{display:none;background:#fff;border:1px solid var(--ring2);border-radius:10px;width:42px;height:42px;cursor:pointer;position:relative}
+.burger i,.burger i::before,.burger i::after{content:"";position:absolute;left:11px;right:11px;height:2px;border-radius:2px;background:var(--ink);transition:.3s}
+.burger i{top:20px}.burger i::before{left:0;right:0;top:-6px}.burger i::after{left:0;right:0;top:6px}
+@media(max-width:980px){
+  .nav-links,.nav-cta{display:none}
+  .burger{display:block}
+  header.site.open .nav-links{display:flex;flex-direction:column;position:absolute;top:68px;left:0;right:0;background:#fff;border-bottom:1px solid var(--ring);padding:18px 6%;gap:6px;align-items:flex-start;box-shadow:0 20px 30px -20px rgba(17,24,39,.3)}
+  header.site.open .nav-links a{padding:10px 0;width:100%}
+  header.site.open .nav-cta{display:inline-block;margin:10px 6% 0}
+}
+
+/* ══════ hero ══════ */
+.hero{position:relative;padding:54px 0 76px;overflow:hidden;
+  background:radial-gradient(760px 380px at 78% -60px,var(--brand0),transparent 70%)}
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:58px;align-items:center}
+.badge-top{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--ring);border-radius:var(--r-pill);padding:7px 16px;font-size:12px;font-weight:600;color:var(--sub);box-shadow:var(--sh-card);margin-bottom:22px}
+.badge-top i{width:8px;height:8px;border-radius:50%;background:var(--brand);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(47,143,157,.45)}70%{box-shadow:0 0 0 9px rgba(47,143,157,0)}100%{box-shadow:0 0 0 0 rgba(47,143,157,0)}}
+.hero h1{font-size:clamp(34px,4.8vw,56px);font-weight:800}
+.hero h1 .teal{color:var(--brand);background:linear-gradient(transparent 66%,var(--brand1) 66%)}
+.hero p.lead{color:var(--sub);max-width:50ch;margin:20px 0 28px;font-size:16.5px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:inherit;font-size:15px;font-weight:600;border-radius:var(--r-pill);padding:13px 26px;cursor:pointer;border:0;transition:.3s var(--ease)}
+.btn .arr{transition:transform .3s}
+.btn:hover .arr{transform:translateX(4px)}
+.btn-primary{background:var(--brand);color:#fff;box-shadow:var(--sh-brand)}
+.btn-primary:hover{background:var(--brand7);transform:translateY(-3px)}
+.btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--ring2);box-shadow:var(--sh-card)}
+.btn-ghost:hover{border-color:var(--brand5);color:var(--brand7);transform:translateY(-3px)}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+.hero-tags span{background:#fff;border:1px solid var(--ring);border-radius:var(--r-pill);padding:6px 14px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--sub);box-shadow:var(--sh-card);transition:.25s}
+.hero-tags span:hover{border-color:var(--brand5);color:var(--brand7);transform:translateY(-2px)}
+
+/* --- disegno tecnico hero --- */
+.hero-draw{position:relative}
+.draw-card{background:#fff;border:2px solid var(--hard);border-radius:20px;box-shadow:var(--sh-tile);overflow:hidden;position:relative;transition:transform .5s var(--ease)}
+.hero-draw:hover .draw-card{transform:translateY(-6px)}
+.draw-head,.draw-foot{display:flex;justify-content:space-between;gap:12px;padding:9px 16px;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.16em;color:var(--sub);flex-wrap:wrap}
+.draw-head{border-bottom:2px solid var(--hard);background:var(--brand0)}
+.draw-foot{border-top:2px solid var(--hard);background:#fbfcfd}
+.draw-foot .rev{color:var(--brand7)}
+svg.bridge{width:100%;height:auto;display:block}
+svg.bridge .st{stroke:var(--slate);stroke-width:2.4;fill:none;stroke-linejoin:round}
+svg.bridge .thin{stroke:#8ba0b5;stroke-width:1.2;fill:none}
+svg.bridge .blue{stroke:var(--blue);stroke-width:1.2;fill:none}
+svg.bridge .acc{stroke:var(--brand);stroke-width:2.2;fill:none;stroke-dasharray:7 6}
+svg.bridge text{font-family:"IBM Plex Mono",monospace;font-size:10px;fill:var(--sub);letter-spacing:.06em}
+.draw{stroke-dasharray:1700;stroke-dashoffset:1700;animation:draw 2.4s var(--ease) forwards}
+.draw.d2{animation-delay:.5s}.draw.d3{animation-delay:.95s}
+@keyframes draw{to{stroke-dashoffset:0}}
+#truckG{animation:truck 15s linear infinite}
+@keyframes truck{from{transform:translateX(-90px)}to{transform:translateX(1000px)}}
+
+/* tessere flottanti sul disegno */
+.float-tile{position:absolute;width:66px;height:66px;background:#fff;border:2px solid var(--hard);border-radius:14px;display:grid;place-items:center;box-shadow:var(--sh-tile);cursor:pointer;z-index:3;opacity:0;transition:box-shadow .3s}
+.float-tile:hover{box-shadow:0 16px 28px rgba(47,143,157,.42),0 2px 4px rgba(31,45,61,.12)}
+.float-tile svg{width:34px;height:34px}
+.hero-draw.in .float-tile{animation:tilePop .8s cubic-bezier(.2,1.5,.4,1) forwards,tileFloat 5.5s ease-in-out infinite;animation-delay:var(--pd),calc(var(--pd) + .8s)}
+@keyframes tilePop{from{opacity:0;transform:translateY(60px) scale(.4)}to{opacity:1;transform:translateY(0) scale(1) rotate(var(--rot))}}
+@keyframes tileFloat{0%,100%{margin-top:0}50%{margin-top:-10px}}
+.ft-label{position:absolute;z-index:3;background:#fff;border:1.5px solid var(--hard);border-radius:var(--r-pill);padding:3px 10px;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.14em;color:var(--slate);box-shadow:var(--sh-card);opacity:0}
+.hero-draw.in .ft-label{animation:fadeUp .6s var(--ease) forwards;animation-delay:calc(var(--pd) + .9s)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:980px){.hero-grid{grid-template-columns:1fr;gap:70px}.hero{padding-top:36px}}
+@media(max-width:560px){.float-tile{width:54px;height:54px}.float-tile svg{width:27px;height:27px}}
+
+/* ══════ titoli sezione ══════ */
+.sec-head{text-align:center;max-width:640px;margin:0 auto 44px}
+.sec-head .pill,.pill-sec{display:inline-block;background:var(--brand1);color:var(--brand7);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;border-radius:var(--r-pill);padding:6px 14px;margin-bottom:14px}
+.sec-head h2{font-size:clamp(26px,3.4vw,40px);font-weight:800}
+.sec-head p{color:var(--sub);margin-top:12px}
+
+/* ══════ chi sono ══════ */
+#chi-sono{padding:88px 0}
+.about-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center}
+.about-txt h2{font-size:clamp(26px,3.2vw,38px);font-weight:800;margin-bottom:16px}
+.about-txt>p{color:var(--sub)}
+.about-feats{list-style:none;margin:24px 0}
+.about-feats li{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--ring);font-size:14.5px;align-items:baseline}
+.about-feats li i{font-style:normal;width:30px;height:30px;flex:none;border-radius:9px;border:2px solid var(--hard);background:#fff;box-shadow:var(--sh-card);display:grid;place-items:center;font-weight:800;font-size:12px;transform:translateY(4px)}
+.about-feats li:nth-child(1) i{color:var(--brand)}
+.about-feats li:nth-child(2) i{color:var(--blue)}
+.about-feats li:nth-child(3) i{color:#c99700}
+.about-feats li:nth-child(4) i{color:var(--slate)}
+.about-feats b{display:block}
+.about-feats small{color:var(--muted);font-size:12.5px}
+.about-cert{margin-top:26px;display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--ring);border-radius:var(--r-pill);padding:8px 16px;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;color:var(--sub);box-shadow:var(--sh-card)}
+.about-cert i{width:8px;height:8px;border-radius:50%;background:#10b981;flex:none}
+@media(max-width:960px){.about-grid{grid-template-columns:1fr}}
+
+/* ══════ servizi ══════ */
+#servizi{padding:88px 0}
+.srv-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.srv-card{background:var(--card);border:1px solid var(--ring);border-radius:var(--r-lg);box-shadow:var(--sh-card);padding:30px;transition:.35s var(--ease);display:flex;flex-direction:column}
+.srv-card:hover{transform:translateY(-6px);box-shadow:var(--sh-hover);border-color:var(--brand1)}
+.srv-top{display:flex;align-items:flex-start;gap:18px;margin-bottom:16px}
+.srv-ico{width:64px;height:64px;flex:none;background:#fff;border:2px solid var(--hard);border-radius:12px;display:grid;place-items:center;box-shadow:var(--sh-tile);transition:transform .35s var(--ease)}
+.srv-card:hover .srv-ico{transform:rotate(-4deg) translateY(-3px)}
+.srv-ico svg{width:34px;height:34px}
+.srv-num{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:.14em}
+.srv-card h3{font-size:21px;font-weight:700}
+.srv-card>p{color:var(--sub);font-size:14.5px;flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 4px}
+.chip{background:var(--brand0);color:var(--brand7);font-size:11.5px;font-weight:600;border-radius:var(--r-pill);padding:5px 12px;transition:.25s}
+.chip:hover{background:var(--brand1)}
+.srv-more{margin-top:16px;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--ring2);border-radius:var(--r-pill);padding:9px 18px;font-size:13.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:.3s var(--ease)}
+.srv-more:hover{border-color:var(--brand5);color:var(--brand7)}
+.srv-more .plus{width:18px;height:18px;border-radius:50%;background:var(--brand1);color:var(--brand7);display:grid;place-items:center;font-size:13px;transition:transform .35s var(--ease)}
+.srv-card.open .srv-more .plus{transform:rotate(45deg);background:var(--brand);color:#fff}
+.srv-detail{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
+.srv-detail-in{border-top:1px dashed var(--ring2);margin-top:18px;padding-top:18px}
+.srv-detail-in h5{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--brand7);margin-bottom:10px;font-weight:700}
+.srv-detail-in ul{list-style:none}
+.srv-detail-in li{padding:7px 0 7px 26px;position:relative;font-size:14px;color:var(--sub);border-bottom:1px solid var(--bg)}
+.srv-detail-in li::before{content:"✓";position:absolute;left:2px;color:var(--brand);font-weight:700}
+@media(max-width:820px){.srv-grid{grid-template-columns:1fr}}
+
+/* ══════ livelli ══════ */
+#livelli{padding:20px 0 88px}
+.lvl-shell{background:var(--card);border:1px solid var(--ring);border-radius:22px;box-shadow:var(--sh-card);overflow:hidden}
+.lvl-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--ring);font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;color:var(--muted);flex-wrap:wrap}
+.lvl-topbar b{color:var(--brand7);font-weight:500}
+.stepper{display:flex;justify-content:space-between;position:relative;padding:36px 6% 22px}
+.stepper::before{content:"";position:absolute;left:9%;right:9%;top:54px;height:3px;border-radius:3px;background:var(--ring)}
+.stepper-fill{position:absolute;left:9%;top:54px;height:3px;border-radius:3px;background:var(--brand);transition:width .5s var(--ease);width:0}
+.lvl-node{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;z-index:1;width:18%}
+.lvl-dot{width:40px;height:40px;border-radius:50%;border:2px solid var(--hard);background:#fff;box-shadow:var(--sh-tile);display:grid;place-items:center;font-weight:800;font-size:15px;color:var(--slate);transition:.35s var(--ease)}
+.lvl-node small{font-size:10.5px;font-weight:600;color:var(--muted);text-align:center}
+.lvl-node:hover .lvl-dot{transform:translateY(-3px) rotate(-4deg)}
+.lvl-node.cur .lvl-dot{background:var(--brand);color:#fff;box-shadow:var(--sh-brand)}
+.lvl-node.cur small{color:var(--brand7)}
+.lvl-panel{display:grid;grid-template-columns:1.1fr .9fr;border-top:1px solid var(--ring)}
+.lvl-panel.swap{animation:panelIn .45s var(--ease) both}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.lvl-left{padding:34px 36px}
+.lvl-left h3{font-size:23px;font-weight:700;margin-bottom:10px}
+.lvl-left h3 .tag{color:var(--brand)}
+.lvl-left p{color:var(--sub);font-size:14.5px}
+.lvl-left ul{list-style:none;margin-top:16px}
+.lvl-left li{padding:9px 0 9px 28px;position:relative;font-size:14px;color:var(--sub);border-bottom:1px solid var(--bg)}
+.lvl-left li::before{content:"→";position:absolute;left:2px;color:var(--brand);font-weight:700}
+.lvl-right{padding:34px 36px;background:var(--brand0)}
+.lvl-right h4{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--brand7);margin-bottom:16px;font-weight:700}
+.out-card{background:#fff;border:1px solid var(--ring);border-radius:var(--r-md);padding:14px 16px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start;font-size:14px;box-shadow:var(--sh-card);transition:.3s var(--ease)}
+.out-card:hover{transform:translateX(6px);border-color:var(--brand1);box-shadow:var(--sh-hover)}
+.out-card i{font-style:normal;width:24px;height:24px;flex:none;border-radius:50%;background:var(--brand1);color:var(--brand7);display:grid;place-items:center;font-size:11px;font-weight:700}
+.lvl-ref{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;color:var(--muted);margin-top:6px}
+.lvl-meter{display:flex;align-items:center;gap:14px;padding:13px 24px;border-top:1px solid var(--ring);font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.16em;color:var(--muted)}
+.meter-bar{flex:1;height:6px;border-radius:6px;background:var(--ring);overflow:hidden}
+.meter-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--brand5),var(--brand7));transition:width .5s var(--ease)}
+@media(max-width:900px){.lvl-panel{grid-template-columns:1fr}.lvl-node small{display:none}.lvl-node.cur small{display:block}}
+
+/* ══════ band ══════ */
+.band{padding:10px 0 88px}
+.band-card{background:var(--brand);border-radius:26px;padding:52px 6%;position:relative;overflow:hidden;box-shadow:var(--sh-brand)}
+.band-card::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.14) 1.5px,transparent 1.5px);background-size:22px 22px}
+.band-head{position:relative;text-align:center;color:#fff;max-width:720px;margin:0 auto 44px}
+.band-head .pill-band{display:inline-block;background:rgba(255,255,255,.16);color:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;border-radius:var(--r-pill);padding:6px 14px;margin-bottom:16px}
+.band-head h2{font-size:clamp(26px,3.4vw,40px);font-weight:800;color:#fff}
+.band-head p{color:rgba(255,255,255,.9);margin-top:12px;font-size:14.5px}
+.band-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.btn-white{background:#fff;color:var(--brand7)}
+.btn-white:hover{background:var(--brand0);transform:translateY(-3px)}
+.btn-ghost-white{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.45)}
+.btn-ghost-white:hover{border-color:#fff;transform:translateY(-3px)}
+.band-grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.bstat{text-align:center;color:#fff}
+.bstat b{font-size:clamp(19px,2.4vw,28px);font-weight:800;display:block;line-height:1.15;letter-spacing:.06em}
+.bstat span{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.18em;opacity:.85}
+.band-mq{margin-top:44px;border-top:1px solid rgba(255,255,255,.25);border-bottom:1px solid rgba(255,255,255,.25);position:relative}
+@media(max-width:820px){.band-grid{grid-template-columns:1fr 1fr}}
+
+/* ══════ contatti ══════ */
+#contatti{padding:0 0 96px}
+.ct-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
+.ct-card,.mail-card{background:var(--card);border:1px solid var(--ring);border-radius:22px;box-shadow:var(--sh-card);padding:36px}
+.ct-card h2{font-size:clamp(24px,2.8vw,32px);font-weight:800;margin-bottom:12px}
+.ct-card>p{color:var(--sub);font-size:14.5px}
+.ct-rows{margin-top:22px}
+.ct-row{display:flex;justify-content:space-between;gap:14px;padding:12px 2px;border-bottom:1px solid var(--bg);font-size:14px}
+.ct-row b{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:10px;letter-spacing:.16em;color:var(--muted);padding-top:4px}
+.ct-row a{color:var(--brand7);font-weight:600}
+.ct-row a:hover{color:var(--brand)}
+.avail{display:inline-flex;align-items:center;gap:10px;margin-top:22px;background:#ecfdf5;color:#047857;font-size:12px;font-weight:600;border-radius:var(--r-pill);padding:8px 16px}
+.avail i{width:8px;height:8px;border-radius:50%;background:#10b981;animation:pulse 2s infinite}
+.mail-top{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+.mail-ico{width:64px;height:64px;flex:none;background:#fff;border:2px solid var(--hard);border-radius:12px;display:grid;place-items:center;box-shadow:var(--sh-tile)}
+.mail-ico svg{width:32px;height:32px}
+.mail-card h3{font-size:23px;font-weight:800}
+.mail-card .mono-sub{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;color:var(--muted)}
+.mail-card>p{color:var(--sub);font-size:14.5px;margin-bottom:20px}
+.mail-include{background:var(--brand0);border:1px solid var(--brand1);border-radius:var(--r-lg);padding:20px 22px;margin-bottom:24px}
+.mail-include h4{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--brand7);margin-bottom:12px;font-weight:700}
+.mail-include ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mail-include li{padding:2px 0 2px 24px;position:relative;font-size:13.5px;color:var(--sub)}
+.mail-include li::before{content:"✓";position:absolute;left:2px;color:var(--brand);font-weight:700}
+.mail-ctas{display:flex;gap:12px;flex-wrap:wrap}
+.mail-note{margin-top:20px;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--muted)}
+.mail-note i{width:8px;height:8px;border-radius:50%;background:#10b981;flex:none;animation:pulse 2s infinite}
+.mail-note.privacy{align-items:flex-start;background:var(--brand0);border:1px solid var(--brand1);border-radius:var(--r-md);padding:12px 14px;color:var(--sub)}
+.mail-note.privacy i{margin-top:6px}
+@media(max-width:960px){.ct-grid{grid-template-columns:1fr}.mail-include ul{grid-template-columns:1fr}}
+
+/* ══════ footer ══════ */
+footer.site{background:#fff;border-top:1px solid var(--ring);padding:56px 0 0}
+.ft-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding-bottom:44px}
+.ft-grid h5{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--ink);margin-bottom:16px}
+.ft-grid a{color:var(--sub);display:block;padding:4px 0;font-size:14px;transition:.25s}
+.ft-grid a:hover{color:var(--brand7);transform:translateX(4px)}
+.ft-brand p{color:var(--sub);font-size:14px;max-width:38ch;margin-top:12px}
+.ft-bottom{border-top:1px solid var(--ring);padding:18px 0;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--muted)}
+@media(max-width:800px){.ft-grid{grid-template-columns:1fr}}
+
+/* ══════ reveal & toast ══════ */
+[data-reveal]{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
+[data-reveal].in{opacity:1;transform:none}
+.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,90px);background:var(--ink);color:#fff;font-size:13px;font-weight:500;padding:13px 24px;border-radius:var(--r-pill);z-index:80;transition:transform .5s var(--ease);box-shadow:0 16px 30px -12px rgba(17,24,39,.5)}
+.toast.on{transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  [data-reveal]{opacity:1;transform:none}
+  .float-tile,.ft-label{opacity:1;transform:rotate(var(--rot,0deg))}
+}
+</style>
+</head>
+<body>
+
+<!-- nastro -->
+<div class="topstrip" aria-hidden="true"><div class="mq" id="mqTop"></div></div>
+
+<!-- header -->
+<header class="site" id="navBar">
+  <div class="wrap nav-in">
+    <a class="brand" href="#">
+      <span class="logo-mark">
+        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M3 21.5h26" stroke="#111827" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M5.5 21.5v-5a10.5 10.5 0 0 1 21 0v5" stroke="#2f8f9d" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          <path d="M10.5 21.5v-5.4M16 21.5v-7.6M21.5 21.5v-5.4" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+          <path d="M7 21.5V26M25 21.5V26" stroke="#111827" stroke-width="2.6" stroke-linecap="round"/>
+          <circle cx="16" cy="6" r="1.6" fill="#ffd43b"/>
+        </svg>
+      </span>
+      <span class="brand-txt"><b>Ing. Domenico Gaudioso</b><span>ingegneria strutturale</span></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#chi-sono" data-anchor="chi-sono">Chi sono</a>
+      <a href="#servizi" data-anchor="servizi">Servizi</a>
+      <a href="#livelli" data-anchor="livelli">Livelli 0–4</a>
+      <a href="#contatti" data-anchor="contatti">Contatti</a>
+    </nav>
+    <a class="nav-cta" href="mailto:domenicogaudioso@outlook.it">Scrivimi</a>
+    <button class="burger" id="burger" aria-label="Apri menu"><i></i></button>
+  </div>
+</header>
+
+<main>
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="badge-top"><i></i>Studio di ingegneria strutturale · ponti, viadotti &amp; strutture</span>
+      <h1>Ponti e strutture,<br><span class="teal">dal progetto al monitoraggio.</span></h1>
+      <p class="lead">Progettazione di ponti a struttura mista acciaio-calcestruzzo, modellazione FEM e BIM di opere nuove ed esistenti, sistemi di monitoraggio strutturale e analisi dei dati.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#servizi" data-anchor="servizi">Scopri i servizi <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#chi-sono" data-anchor="chi-sono">Chi sono</a>
+        <a class="btn btn-ghost" href="https://civilbox.xyz" target="_blank" rel="noopener">CivilBox ⌁</a>
+      </div>
+      <div class="hero-tags">
+        <span>NTC 2018</span><span>DM 204/2022 · LL.GG. PONTI</span><span>EN 1994-2</span><span>OPENBIM</span><span>PYTHON</span>
+      </div>
+    </div>
+
+    <div class="hero-draw" data-reveal>
+      <!-- tessere flottanti -->
+      <button class="float-tile" data-anchor="livelli" title="Valutazioni livello 0–4" style="top:-26px;left:-24px;--rot:-7deg;--pd:.3s">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 19h16M4 15h11M4 11h7M4 7h4" stroke="#2f8f9d" stroke-width="2.2" stroke-linecap="round"/><circle cx="18" cy="7" r="2.6" fill="#ffd43b" stroke="#33506b" stroke-width="1.4"/></svg>
+      </button>
+      <span class="ft-label" style="top:48px;left:-30px;--pd:.35s">L0 → L4</span>
+
+      <button class="float-tile" data-anchor="servizi" title="FEM e BIM" style="bottom:-28px;left:26%;--rot:6deg;--pd:.5s">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.2" stroke="#3b74a8" stroke-width="1.7"/><circle cx="7" cy="7" r="1.4" fill="#2f8f9d"/><path d="M16 4h5v2.4h-1.7v5.2h1.7V14h-5v-2.4h1.7V6.4H16z" fill="#3b74a8"/><path d="M4 16h16v4H4z" stroke="#33506b" stroke-width="1.7"/></svg>
+      </button>
+      <span class="ft-label" style="bottom:-52px;left:24%;--pd:.55s">FEM · BIM</span>
+
+      <a class="float-tile" href="https://civilbox.xyz" target="_blank" rel="noopener" title="CivilBox — la mia suite di calcolo" style="top:30%;right:-28px;--rot:8deg;--pd:.7s">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v3.4h-5v9.2h5V20H5v-3.4h5V7.4H5z" stroke="#33506b" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 4v2.6M12 17.4V20" stroke="#2f8f9d" stroke-width="1.6"/><circle cx="12" cy="5.6" r="1.3" fill="#ffd43b" stroke="#33506b"/></svg>
+      </a>
+      <span class="ft-label" style="top:calc(30% + 74px);right:-34px;--pd:.75s">CIVILBOX</span>
+
+      <!-- tavola tecnica -->
+      <div class="draw-card">
+        <div class="draw-head"><span>ELAB. S-01 · PROSPETTO</span><span>SCALA 1:200</span></div>
+        <svg class="bridge" viewBox="0 0 960 440" role="img" aria-label="Prospetto schematico di viadotto continuo a struttura mista acciaio-calcestruzzo con carico mobile">
+          <!-- quote -->
+          <path class="blue draw d3" d="M60 132 H900 M60 126 V138 M240 126 V138 M480 126 V138 M720 126 V138 M900 126 V138"/>
+          <text x="134" y="120">18,00</text><text x="344" y="120">24,00</text><text x="584" y="120">24,00</text><text x="794" y="120">18,00</text>
+          <!-- terreno -->
+          <path class="thin draw d2" d="M20 400 H940 M40 400 l8 10 M88 400 l8 10 M136 400 l8 10 M184 400 l8 10 M232 400 l8 10 M280 400 l8 10 M328 400 l8 10 M376 400 l8 10 M424 400 l8 10 M472 400 l8 10 M520 400 l8 10 M568 400 l8 10 M616 400 l8 10 M664 400 l8 10 M712 400 l8 10 M760 400 l8 10 M808 400 l8 10 M856 400 l8 10 M904 400 l8 10"/>
+          <!-- spalle e pile -->
+          <path class="st draw d2" d="M48 210 h24 v190 h-24 Z M888 210 h24 v190 h-24 Z"/>
+          <path class="st draw d2" d="M226 210 h28 v190 h-28 Z M466 210 h28 v190 h-28 Z M706 210 h28 v190 h-28 Z"/>
+          <path class="st draw d2" d="M218 200 h44 v10 h-44 Z M458 200 h44 v10 h-44 Z M698 200 h44 v10 h-44 Z"/>
+          <!-- impalcato -->
+          <path class="st draw" d="M60 170 H900 V210 H60 Z"/>
+          <!-- soletta: bordo inferiore -->
+          <path class="thin" d="M60 182 H900"/>
+          <!-- anima metallica: asse -->
+          <path class="acc draw d3" d="M70 196 H890"/>
+          <!-- irrigidimenti verticali d'anima -->
+          <path class="thin" d="M110 182 V210 M160 182 V210 M210 182 V210 M260 182 V210 M310 182 V210 M360 182 V210 M410 182 V210 M460 182 V210 M510 182 V210 M560 182 V210 M610 182 V210 M660 182 V210 M710 182 V210 M760 182 V210 M810 182 V210 M860 182 V210"/>
+          <!-- sezione A-A -->
+          <path class="blue" d="M360 158 V222 M352 158 h16 M352 222 h16"/>
+          <text x="368" y="152">A</text><text x="368" y="236">A</text>
+          <!-- carico mobile -->
+          <g id="truckG">
+            <rect x="0" y="144" width="46" height="16" fill="none" stroke="#2f8f9d" stroke-width="2"/>
+            <path d="M46 150 h12 v10 h-12 Z" fill="none" stroke="#2f8f9d" stroke-width="2"/>
+            <circle cx="10" cy="165" r="5" fill="none" stroke="#33506b" stroke-width="2"/>
+            <circle cx="36" cy="165" r="5" fill="none" stroke="#33506b" stroke-width="2"/>
+            <circle cx="52" cy="165" r="5" fill="none" stroke="#33506b" stroke-width="2"/>
+            <path d="M23 144 V128 M17 134 l6 -6 l6 6" fill="none" stroke="#33506b" stroke-width="1.5"/>
+          </g>
+          <text x="760" y="62">Q = 400 kN</text>
+          <text x="24" y="428">IMPALCATO CONTINUO A 4 CAMPI — SISTEMA MISTO ACCIAIO-CLS</text>
+        </svg>
+        <div class="draw-foot"><span>REV. 01 — EMESSO PER PUBBLICAZIONE</span><span class="rev" id="heroDate"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CHI SONO ══════════════════════ -->
+<section id="chi-sono">
+  <div class="wrap about-grid">
+    <div class="about-draw" data-reveal>
+      <div class="draw-card">
+        <div class="draw-head"><span>SEZ. TIPO · IMPALCATO MISTO</span><span>SCALA 1:50</span></div>
+        <svg class="bridge" viewBox="0 0 520 340" role="img" aria-label="Sezione trasversale schematica di impalcato misto acciaio-calcestruzzo a doppia trave">
+          <!-- soletta -->
+          <rect x="60" y="70" width="400" height="14" fill="none" stroke="#33506b" stroke-width="2.4"/>
+          <!-- arcarecci d'anima (linea mezzeria soletta) -->
+          <path class="thin" d="M60 77 H460"/>
+          <!-- riseghe -->
+          <rect x="148" y="84" width="24" height="8" fill="none" stroke="#8ba0b5" stroke-width="1.2"/>
+          <rect x="348" y="84" width="24" height="8" fill="none" stroke="#8ba0b5" stroke-width="1.2"/>
+          <!-- trave 1 -->
+          <rect x="147" y="92" width="26" height="8" fill="none" stroke="#33506b" stroke-width="2.2"/>
+          <rect x="156" y="100" width="8" height="72" fill="none" stroke="#33506b" stroke-width="2.2"/>
+          <rect x="143" y="172" width="34" height="10" fill="none" stroke="#33506b" stroke-width="2.2"/>
+          <!-- trave 2 -->
+          <rect x="347" y="92" width="26" height="8" fill="none" stroke="#33506b" stroke-width="2.2"/>
+          <rect x="356" y="100" width="8" height="72" fill="none" stroke="#33506b" stroke-width="2.2"/>
+          <rect x="343" y="172" width="34" height="10" fill="none" stroke="#33506b" stroke-width="2.2"/>
+          <!-- irrigidimenti d'anima -->
+          <path class="thin" d="M160 104 v64 M360 104 v64"/>
+          <path class="thin" d="M160 120 v32 M360 120 v32"/>
+          <!-- controventi di fondo tra le travi -->
+          <path class="acc" d="M164 158 H356"/>
+          <!-- quote orizzontali -->
+          <path class="blue" d="M60 252 H460 M60 246 V258 M460 246 V258"/>
+          <text x="260" y="244" text-anchor="middle">L = 8,00 m</text>
+          <path class="blue" d="M160 286 H360 M160 280 V292 M360 280 V292"/>
+          <text x="260" y="278" text-anchor="middle">i = 4,00 m</text>
+          <!-- quota verticale -->
+          <path class="blue" d="M492 98 V182 M486 98 H498 M486 182 H498"/>
+          <text x="500" y="146">h = 1,80 m</text>
+        </svg>
+        <div class="draw-foot"><span>SISTEMA MISTO ACCIAIO-CALCESTRUZZO</span><span class="rev">EN 1994-2</span></div>
+      </div>
+    </div>
+    <div class="about-txt" data-reveal style="--d:.1s">
+      <span class="pill-sec">Chi sono</span>
+      <h2>L'ingegnere dietro le strutture.</h2>
+      <p>Ingegnere civile strutturista, iscritto all'Ordine degli Ingegneri — Sezione A. Progetto ponti a struttura mista acciaio-calcestruzzo, costruisco modelli FEM e BIM di ponti e viadotti nuovi ed esistenti e progetto sistemi di monitoraggio strutturale con analisi dei dati.</p>
+      <ul class="about-feats">
+        <li><i>a</i><span><b>Ponti e viadotti</b><small>impalcati misti acciaio-calcestruzzo, sottostrutture, apparecchi d'appoggio e particolari costruttivi</small></span></li>
+        <li><i>b</i><span><b>Modellazione FEM</b><small>modelli statici, dinamici e sismici; linee d'influenza e verifiche secondo le Linee Guida Ponti</small></span></li>
+        <li><i>c</i><span><b>BIM &amp; OpenBIM</b><small>Tekla, Revit e Rhinoceros-Grasshopper; interoperabilità IFC lungo il ciclo di vita dell'opera</small></span></li>
+        <li><i>d</i><span><b>Monitoraggio strutturale</b><small>sistemi statici e dinamici, analisi modale operativa, digital twin e analisi dei dati</small></span></li>
+      </ul>
+      <span class="about-cert"><i></i>BIM SPECIALIST STRUTTURE — CERTIFICAZIONE UNI 11337-7</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ SERVIZI ══════════════════════ -->
+<section id="servizi">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="pill">I servizi</span>
+      <h2>Quattro aree, un unico metodo.</h2>
+      <p>Dalla concezione dell'opera al monitoraggio in esercizio: ogni incarico segue lo stesso percorso rigoroso, dal modello di calcolo alla consegna.</p>
+    </div>
+
+    <div class="srv-grid">
+      <!-- 01 PONTI -->
+      <article class="srv-card" data-reveal>
+        <div class="srv-top">
+          <div class="srv-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M2 16h20" stroke="#2f8f9d" stroke-width="2.2" stroke-linecap="round"/><path d="M4 16v-5a8 8 0 0 1 16 0v5" stroke="#33506b" stroke-width="1.8"/><path d="M8 16v-3M12 16v-4.6M16 16v-3" stroke="#33506b" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div><span class="srv-num">AREA /01</span><h3>Ponti e viadotti</h3></div>
+        </div>
+        <p>Progettazione di ponti e viadotti in sistema misto acciaio-calcestruzzo: concezione dell'impalcato, sezioni tipo, sottostrutture e particolari costruttivi, dalle nuove opere agli adeguamenti.</p>
+        <div class="chips"><span class="chip">Sistema misto</span><span class="chip">Impalcati</span><span class="chip">NTC 2018 · EN 1994-2</span></div>
+        <button class="srv-more" aria-expanded="false"><span class="plus">+</span> Dettagli e consegne</button>
+        <div class="srv-detail"><div class="srv-detail-in">
+          <h5>Cosa consegno</h5>
+          <ul>
+            <li>Relazioni di calcolo secondo NTC 2018 ed Eurocodici</li>
+            <li>Sezioni tipo, carpenteria e particolari costruttivi</li>
+            <li>Fasi costruttive, montaggio e opere provvisionali</li>
+            <li>Verifiche su strutture esistenti e adeguamenti</li>
+          </ul>
+        </div></div>
+      </article>
+
+      <!-- 02 FEM -->
+      <article class="srv-card" data-reveal style="--d:.08s">
+        <div class="srv-top">
+          <div class="srv-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6l5 2 6-2 7 2-2 8-7 2-6-2-3-8z" stroke="#2f8f9d" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 8l2 8M14 6l1 10M3 6l5 2 1 8" stroke="#33506b" stroke-width="1"/><circle cx="8" cy="8" r="1" fill="#ffd43b"/><circle cx="14" cy="6" r="1" fill="#ffd43b"/><circle cx="9" cy="16" r="1" fill="#ffd43b"/></svg></div>
+          <div><span class="srv-num">AREA /02</span><h3>Modellazione FEM</h3></div>
+        </div>
+        <p>Modelli agli elementi finiti di impalcati, pile e spalle: analisi statiche, dinamiche e sismiche, linee d'influenza e carichi mobili, aggiornamento dei modelli sui dati di monitoraggio.</p>
+        <div class="chips"><span class="chip">Graticci e solidi</span><span class="chip">Carichi mobili</span><span class="chip">Midas · OpenSees</span></div>
+        <button class="srv-more" aria-expanded="false"><span class="plus">+</span> Dettagli e consegne</button>
+        <div class="srv-detail"><div class="srv-detail-in">
+          <h5>Cosa consegno</h5>
+          <ul>
+            <li>Modelli a graticcio e a elementi finiti per impalcati da ponte</li>
+            <li>Analisi modale, spettrale e time history</li>
+            <li>Linee d'influenza e inviluppi per i carichi mobili</li>
+            <li>Calibrazione del modello sui dati misurati</li>
+          </ul>
+        </div></div>
+      </article>
+
+      <!-- 03 BIM -->
+      <article class="srv-card" data-reveal style="--d:.12s">
+        <div class="srv-top">
+          <div class="srv-ico"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.2" stroke="#33506b" stroke-width="1.7"/><circle cx="7" cy="7" r="1.4" fill="#2f8f9d"/><path d="M16 4h5v2.4h-1.7v5.2h1.7V14h-5v-2.4h1.7V6.4H16z" fill="#3b74a8"/><path d="M4 16h16v4H4z" stroke="#33506b" stroke-width="1.7"/></svg></div>
+          <div><span class="srv-num">AREA /03</span><h3>BIM &amp; OpenBIM</h3></div>
+        </div>
+        <p>Modellazione BIM di ponti e viadotti con Tekla e Revit, approccio parametrico con Rhinoceros-Grasshopper e interoperabilità OpenBIM (IFC) lungo tutto il ciclo di vita dell'opera.</p>
+        <div class="chips"><span class="chip">Tekla · Revit</span><span class="chip">Grasshopper</span><span class="chip">IFC · OpenBIM</span></div>
+        <button class="srv-more" aria-expanded="false"><span class="plus">+</span> Dettagli e consegne</button>
+        <div class="srv-detail"><div class="srv-detail-in">
+          <h5>Cosa consegno</h5>
+          <ul>
+            <li>Modelli informativi di struttura a diversi livelli di dettaglio</li>
+            <li>Scambio dati IFC/BCF con tutti gli attori del processo</li>
+            <li>Flussi parametrici per varianti e ottimizzazione</li>
+            <li>Supporto a committenza e direzione lavori sul processo BIM</li>
+          </ul>
+        </div></div>
+      </article>
+
+      <!-- 04 MONITORAGGIO -->
+      <article class="srv-card" data-reveal style="--d:.16s">
+        <div class="srv-top">
+          <div class="srv-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19h16M4 15h11M4 11h7M4 7h4" stroke="#2f8f9d" stroke-width="2.2" stroke-linecap="round"/><circle cx="18" cy="7" r="2.6" fill="#ffd43b" stroke="#33506b" stroke-width="1.4"/><path d="M18 7v12" stroke="#33506b" stroke-width="1.6" stroke-dasharray="2 2"/></svg></div>
+          <div><span class="srv-num">AREA /04</span><h3>Monitoraggio strutturale</h3></div>
+        </div>
+        <p>Progettazione di sistemi di monitoraggio statici e dinamici per ponti e viadotti: analisi modale operativa (OMA), elaborazione dati in tempo reale e digital twin per la gestione del rischio.</p>
+        <div class="chips"><span class="chip">OMA</span><span class="chip">Digital twin</span><span class="chip">Python</span></div>
+        <button class="srv-more" aria-expanded="false"><span class="plus">+</span> Dettagli e consegne</button>
+        <div class="srv-detail"><div class="srv-detail-in">
+          <h5>Cosa consegno</h5>
+          <ul>
+            <li>Progettazione di sensoristica e sistemi di acquisizione</li>
+            <li>Analisi modale operativa e time history</li>
+            <li>Calibrazione automatica dei modelli sui dati misurati</li>
+            <li>Report, soglie di allerta e piattaforme di analisi dati</li>
+          </ul>
+        </div></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ LIVELLI 0-4 ══════════════════════ -->
+<section id="livelli">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="pill">Linee Guida Ponti · All. A, DM 204/2022</span>
+      <h2>Valutazioni multilivello, dal censimento al monitoraggio.</h2>
+      <p>Seleziona un livello per vedere attività e prodotti consegnati.</p>
+    </div>
+    <div class="lvl-shell" data-reveal>
+      <div class="lvl-topbar"><span>PROCEDURA DI CLASSIFICAZIONE E GESTIONE DEL RISCHIO</span><span>LIVELLO ATTIVO: <b id="lvlCur">L0</b></span></div>
+      <div class="stepper" id="stepper" tabindex="0" aria-label="Selettore livello di valutazione, usare frecce sinistra e destra">
+        <div class="stepper-fill" id="stepFill"></div>
+      </div>
+      <div class="lvl-panel" id="lvlPanel"></div>
+      <div class="lvl-meter"><span>APPROFONDIMENTO</span><div class="meter-bar"><div class="meter-fill" id="meterFill"></div></div><span id="meterPct">20%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CIVILBOX ══════════════════════ -->
+<section class="band" id="civilbox">
+  <div class="wrap">
+    <div class="band-card" data-reveal>
+      <div class="band-head">
+        <span class="pill-band">La mia suite di calcolo</span>
+        <h2>CivilBox — calcoli strutturali nel browser.</h2>
+        <p>La suite gratuita che uso ogni giorno in studio e in sopralluogo: travi, pilastri, verifiche di sezione e azioni su ponti secondo NTC 2018, con formule a vista e input guidati. Nessuna installazione: apri il browser e calcoli.</p>
+        <div class="band-ctas">
+          <a class="btn btn-white" href="https://civilbox.xyz" target="_blank" rel="noopener">Apri civilbox.xyz <span class="arr">↗</span></a>
+          <a class="btn btn-ghost-white" href="mailto:domenicogaudioso@outlook.it?subject=Richiesta%20accesso%20strumenti%20di%20studio">Richiedi gli strumenti dedicati</a>
+        </div>
+      </div>
+      <div class="band-grid">
+        <div class="bstat"><b>METODO</b><span>ogni coefficiente tracciabile dalla norma</span></div>
+        <div class="bstat"><b>RIGORE</b><span>verifiche NTC 2018 ed Eurocodici</span></div>
+        <div class="bstat"><b>DATI</b><span>monitoraggio e analisi dei dati</span></div>
+        <div class="bstat"><b>INNOVAZIONE</b><span>Python, OpenBIM e ricerca</span></div>
+      </div>
+      <div class="band-mq"><div class="mq" id="mqBand"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CONTATTI ══════════════════════ -->
+<section id="contatti">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="pill">Contatti</span>
+      <h2>Scrivimi una email.</h2>
+      <p>Raccontami l'opera in due righe: ti rispondo di persona con una prima lettura del caso e il percorso più adatto.</p>
+    </div>
+    <div class="ct-grid">
+      <div class="ct-card" data-reveal>
+        <h2>Recapiti di studio</h2>
+        <p>Rispondo di norma entro 48 ore lavorative.</p>
+        <div class="ct-rows">
+          <div class="ct-row"><b>EMAIL</b><a href="mailto:domenicogaudioso@outlook.it">domenicogaudioso@outlook.it</a></div>
+          <div class="ct-row"><b>PEC</b><a href="mailto:domenicogaudioso@pec.it">domenicogaudioso@pec.it</a></div>
+          <div class="ct-row"><b>STUDIO</b><span>Bologna (BO)</span></div>
+          <div class="ct-row"><b>P.IVA</b><span>03850520796</span></div>
+        </div>
+        <span class="avail"><i></i>Disponibile per collaborazioni e nuovi incarichi</span>
+      </div>
+
+      <div class="mail-card" data-reveal style="--d:.1s">
+        <div class="mail-top">
+          <div class="mail-ico">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="5" width="19" height="14" rx="2.4" stroke="#33506b" stroke-width="1.8"/><path d="M3.5 6.5 12 13l8.5-6.5" stroke="#2f8f9d" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><circle cx="18.5" cy="16" r="2.2" fill="#ffd43b" stroke="#33506b" stroke-width="1.3"/></svg>
+          </div>
+          <div><h3>Due righe bastano.</h3><span class="mono-sub">NESSUN MODULO · SOLO EMAIL</span></div>
+        </div>
+        <p>Scrivi direttamente a <b>domenicogaudioso@outlook.it</b>: leggo tutto io e ti indico percorso, tempi ed elaborati attesi.</p>
+        <div class="mail-include">
+          <h4>Nella mail, se puoi, indica:</h4>
+          <ul>
+            <li>Tipologia e luce dell'opera</li>
+            <li>Anno di costruzione</li>
+            <li>Documenti disponibili</li>
+            <li>Obiettivo: progetto, verifica, monitoraggio</li>
+          </ul>
+        </div>
+        <div class="mail-ctas">
+          <a class="btn btn-primary" href="mailto:domenicogaudioso@outlook.it?subject=Richiesta%20informazioni%20—%20Ing.%20Gaudioso">Scrivi una email <span class="arr">✉</span></a>
+          <button class="btn btn-ghost" id="copyMail" type="button">Copia l'indirizzo</button>
+        </div>
+        <div class="mail-note privacy"><i></i>Il CV e il portfolio lavori non sono pubblicati online: sono disponibili su richiesta via email.</div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- footer -->
+<footer class="site">
+  <div class="wrap">
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <a class="brand" href="#">
+          <span class="logo-mark" style="width:34px;height:34px">
+            <svg viewBox="0 0 32 32" fill="none" style="width:21px;height:21px" aria-hidden="true">
+              <path d="M3 21.5h26" stroke="#111827" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M5.5 21.5v-5a10.5 10.5 0 0 1 21 0v5" stroke="#2f8f9d" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+              <path d="M10.5 21.5v-5.4M16 21.5v-7.6M21.5 21.5v-5.4" stroke="#111827" stroke-width="2" stroke-linecap="round"/>
+              <path d="M7 21.5V26M25 21.5V26" stroke="#111827" stroke-width="2.6" stroke-linecap="round"/>
+              <circle cx="16" cy="6" r="1.6" fill="#ffd43b"/>
+            </svg>
+          </span>
+          <span class="brand-txt"><b>Ing. Domenico Gaudioso</b><span>ingegneria strutturale</span></span>
+        </a>
+        <p>Ponti a struttura mista acciaio-calcestruzzo, modellazione FEM e BIM, monitoraggio strutturale e analisi dei dati. Il calcolo è un mestiere: si fa con metodo, rigore e attrezzi giusti.</p>
+      </div>
+      <div>
+        <h5>Sezioni</h5>
+        <a href="#chi-sono" data-anchor="chi-sono">Chi sono</a>
+        <a href="#servizi" data-anchor="servizi">Servizi</a>
+        <a href="#livelli" data-anchor="livelli">Valutazioni livello 0–4</a>
+        <a href="#contatti" data-anchor="contatti">Contatti</a>
+      </div>
+      <div>
+        <h5>Strumenti &amp; riferimenti</h5>
+        <a href="https://civilbox.xyz" target="_blank" rel="noopener">civilbox.xyz ↗</a>
+        <a href="mailto:domenicogaudioso@outlook.it">domenicogaudioso@outlook.it</a>
+        <a href="mailto:domenicogaudioso@pec.it">domenicogaudioso@pec.it</a>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© <span id="yearNow"></span> ING. DOMENICO GAUDIOSO · P.IVA 03850520796</span>
+      <span>NTC 2018 · DM 204/2022 · EN 1994-2 · UNI 11337-7</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* marquee */
+  var strip = "PROGETTAZIONE DI PONTI MISTI ACCIAIO-CALCESTRUZZO &nbsp;·&nbsp; <b>MODELLAZIONE FEM E BIM</b> &nbsp;·&nbsp; MONITORAGGIO STRUTTURALE E ANALISI DEI DATI &nbsp;·&nbsp; <b>VALUTAZIONI L0 → L4 · LINEE GUIDA PONTI</b> &nbsp;·&nbsp; NTC 2018 &nbsp;·&nbsp; CIVILBOX.XYZ &nbsp;·&nbsp; ";
+  var mqTop = document.getElementById("mqTop"), mqBand = document.getElementById("mqBand");
+  mqTop.innerHTML = "<span>"+strip+strip+"</span><span>"+strip+strip+"</span>";
+  mqBand.innerHTML = mqTop.innerHTML;
+
+  document.getElementById("yearNow").textContent = new Date().getFullYear();
+  document.getElementById("heroDate").textContent = "AGG. " + new Date().toLocaleDateString("it-IT");
+
+  /* toast */
+  var toastEl = document.getElementById("toast"), toastTimer = null;
+  function showToast(msg){
+    toastEl.textContent = msg; toastEl.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove("on"); }, 3200);
+  }
+
+  /* reveal */
+  var revealObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add("in"); revealObs.unobserve(en.target); }
+    });
+  }, {threshold:.12});
+  document.querySelectorAll("[data-reveal]").forEach(function(el){ revealObs.observe(el); });
+
+  /* nav */
+  var navBar = document.getElementById("navBar");
+  window.addEventListener("scroll", function(){ navBar.classList.toggle("scrolled", window.scrollY > 10); }, {passive:true});
+  document.getElementById("burger").addEventListener("click", function(){ navBar.classList.toggle("open"); });
+
+  /* ancoraggio smooth */
+  document.querySelectorAll("[data-anchor]").forEach(function(a){
+    a.addEventListener("click", function(e){
+      e.preventDefault();
+      navBar.classList.remove("open");
+      var el = document.getElementById(a.getAttribute("data-anchor"));
+      if(el) el.scrollIntoView({behavior: reduced ? "auto" : "smooth"});
+    });
+  });
+
+  /* copia indirizzo email */
+  var studioMail = "domenicogaudioso@outlook.it";
+  document.getElementById("copyMail").addEventListener("click", function(){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(studioMail).then(function(){
+        showToast("✓ Indirizzo copiato: " + studioMail);
+      }).catch(function(){
+        showToast("Indirizzo: " + studioMail);
+      });
+    } else {
+      showToast("Indirizzo: " + studioMail);
+    }
+  });
+
+  /* accordion servizi */
+  document.querySelectorAll(".srv-card").forEach(function(card){
+    var more = card.querySelector(".srv-more"), detail = card.querySelector(".srv-detail");
+    more.addEventListener("click", function(){
+      var opening = !card.classList.contains("open");
+      card.classList.toggle("open", opening);
+      more.setAttribute("aria-expanded", String(opening));
+      detail.style.maxHeight = opening ? detail.scrollHeight + "px" : "0px";
+    });
+  });
+  window.addEventListener("resize", function(){
+    document.querySelectorAll(".srv-card.open .srv-detail").forEach(function(d){ d.style.maxHeight = d.scrollHeight + "px"; });
+  });
+
+  /* livelli */
+  var lvlData = [
+    { t:"Censimento dell'opera", d:"Il punto di partenza: censimento del ponte e raccolta sistematica di tutte le informazioni disponibili — progetti, collaudi, as-built, manutenzioni, eventi eccezionali.",
+      a:["Censimento e georeferenziazione dell'opera","Raccolta di elaborati, relazioni e documenti d'archivio","Scheda di censimento conforme alle Linee Guida","Organizzazione del fascicolo digitale del ponte"],
+      o:["Scheda di censimento compilata","Fascicolo documentale dell'opera"] },
+    { t:"Ispezioni visive e schede difetto", d:"Ispezioni visive dirette e indirette per individuare e mappare i difetti: schede difetto, grado di evoluzione e giudizio sul degrado secondo le Linee Guida.",
+      a:["Ispezione di campate, pile, spalle e apparecchi d'appoggio","Compilazione schede difetto e mappatura del degrado","Giudizio su estensione, gravità ed evoluzione dei difetti","Fotoreportaggio georeferenziato"],
+      o:["Report d'ispezione con schede difetto","Quadro del degrado e delle criticità visibili"] },
+    { t:"Valutazione preliminare · Classi di Attenzione", d:"Combinando censimento e ispezioni si attribuiscono le Classi di Attenzione iniziali: strutturale/statica, sismica, da frana/alluvione e da degrado.",
+      a:["Calcolo dei parametri per le classi di attenzione","Incrocio dati censimento ↔ ispezioni","Attribuzione delle CdA per rischio strutturale, sismico, idraulico-geotecnico, degrado"],
+      o:["Classe di Attenzione preliminare","Indirizzi per i livelli successivi"] },
+    { t:"Valutazione accurata", d:"Per le classi medio-alte: analisi raffinata con indagini in sito, caratterizzazione dei materiali e modelli FEM aggiornati per confermare o riclassificare la Classe di Attenzione.",
+      a:["Indagini diagnostiche e prove sui materiali","Rilievo geometrico e quadro fessurativo","Modello FEM aggiornato con i dati acquisiti","Riclassificazione della Classe di Attenzione"],
+      o:["Relazione di valutazione accurata","Modello FEM aggiornato e CdA definitiva"] },
+    { t:"Verifiche di sicurezza e monitoraggio", d:"Il livello finale: verifiche allo stato limite secondo NTC 2018 e Linee Guida, con tempi di riferimento dedicati, e progettazione del monitoraggio statico e dinamico.",
+      a:["Verifiche SL con azioni e vita di riferimento delle LL.GG.","Stima della vita residua e priorità d'intervento","Progettazione del monitoraggio statico/dinamico","Piano di manutenzione e gestione del rischio"],
+      o:["Relazione di verifica della sicurezza","Piano di monitoraggio e gestione"] }
+  ];
+  var lvlLabels = ["Censimento","Ispezioni","Valut. prelim.","Valut. accurata","Verifiche &amp; monit."];
+  var stepperEl = document.getElementById("stepper"),
+      stepFill = document.getElementById("stepFill"),
+      lvlPanel = document.getElementById("lvlPanel"),
+      lvlCur = document.getElementById("lvlCur"),
+      meterFill = document.getElementById("meterFill"),
+      meterPct = document.getElementById("meterPct"),
+      lvlIndex = 0;
+
+  lvlData.forEach(function(lv, i){
+    var btn = document.createElement("button");
+    btn.className = "lvl-node";
+    btn.setAttribute("aria-label","Livello "+i);
+    btn.innerHTML = '<span class="lvl-dot">'+i+'</span><small>'+lvlLabels[i]+'</small>';
+    btn.addEventListener("click", function(){ setLevel(i); });
+    stepperEl.appendChild(btn);
+  });
+
+  function setLevel(i){
+    lvlIndex = i;
+    var nodes = stepperEl.querySelectorAll(".lvl-node");
+    nodes.forEach(function(n, k){ n.classList.toggle("cur", k===i); });
+    stepFill.style.width = (i/4*82) + "%";
+    lvlCur.textContent = "L"+i;
+    meterFill.style.width = ((i+1)/5*100) + "%";
+    meterPct.textContent = ((i+1)*20) + "%";
+    var lv = lvlData[i];
+    lvlPanel.innerHTML =
+      '<div class="lvl-left"><h3><span class="tag">LIVELLO '+i+'</span> — '+lv.t+'</h3><p>'+lv.d+'</p>'+
+      '<ul>'+lv.a.map(function(x){return "<li>"+x+"</li>";}).join("")+'</ul></div>'+
+      '<div class="lvl-right"><h4>Output consegnato</h4>'+
+      lv.o.map(function(x){return '<div class="out-card"><i>✓</i><span>'+x+'</span></div>';}).join("")+
+      '<div class="lvl-ref">RIF. LINEE GUIDA PONTI — ALL. A, DM 204/2022 · LIVELLO '+i+'</div></div>';
+    lvlPanel.classList.remove("swap");
+    void lvlPanel.offsetWidth;
+    lvlPanel.classList.add("swap");
+  }
+  stepperEl.addEventListener("keydown", function(e){
+    if(e.key==="ArrowRight"){ setLevel(Math.min(4, lvlIndex+1)); e.preventDefault(); }
+    if(e.key==="ArrowLeft"){ setLevel(Math.max(0, lvlIndex-1)); e.preventDefault(); }
+  });
+  setLevel(0);
+})();
+</script>
+</body>
+</html>
