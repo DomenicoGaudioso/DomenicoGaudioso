@@ -1,17 +1,26 @@
-# DomenicoGaudioso.github.io
+### Ciao! 👋
 
-Sito personale di **Ing. Domenico Gaudioso** — ingegneria strutturale: ponti a struttura mista acciaio-calcestruzzo, modellazione FEM e BIM, monitoraggio strutturale e analisi dei dati.
+I'm a civil engineer passionate about structures, from design to monitoring. In my world of concrete and steel, I also carve out space for my love of computer science, especially using Python.
 
-Pubblicato con GitHub Pages: **https://domenicogaudioso.github.io**
+- 🔭 Currently, I'm working on projects involving the design and monitoring of bridges.
+- 🌱 I'm constantly enhancing my computer science skills, with a particular focus on Python and its engineering applications.
+- 👯 I'm eager to collaborate on projects that integrate civil engineering and computer science, creating effective and innovative solutions.
+- 💬 Ask me anything about structural design, bridge monitoring, or software development for civil engineering.
+- 🛠️ I use Grasshopper and Rhinoceros (🦏 + 🦗) for parametric design approaches and to experiment with innovative solutions.
+- 🏗️ I am a certified BIM Specialist with experience using Tekla and Revit, with a perspective also oriented towards the OpenBIM community.
+- 📫 You can reach out to me at domenicogaudioso@outlook.it to discuss interesting projects or simply exchange ideas.
+- ⚡ Fun fact: I love solving complex problems and finding creative solutions!
 
-## Contenuti del sito
+* [Visita il mio sito web](https://domenicogaudioso.github.io/DomenicoGaudioso/)
+* [CivilBox — la mia suite di calcolo](https://civilbox.xyz)
+* CV e portfolio lavori: disponibili su richiesta via email — domenicogaudioso@outlook.it
 
-- Chi sono
-- Servizi professionali (ponti e viadotti, modellazione FEM, BIM & OpenBIM, monitoraggio strutturale)
-- Valutazioni di livello 0–4 (Linee Guida Ponti, All. A, DM 204/2022)
-- Strumenti: [civilbox.xyz](https://civilbox.xyz)
-- Contatti
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
-## Privacy
-
-Il **CV** e il **portfolio lavori** non fanno parte di questa repository e non sono pubblicati online: restano nella repository privata `Ing.-Domenico-Gaudioso` e sono disponibili su richiesta via email.
+<model-viewer 
+  src="glb/draghetto.glb" 
+  alt="Modello 3D di un draghetto" 
+  auto-rotate 
+  camera-controls 
+  style="width: 100%; height: 400px; background-color: #f0f0f0; border-radius: 10px;">
+</model-viewer>
