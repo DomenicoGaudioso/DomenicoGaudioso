@@ -22,13 +22,3 @@ I'm a civil engineer passionate about structures, from design to monitoring. In 
 ## 💝 Supportami
 
 Se ti piacciono i miei progetti e vuoi supportare il mio lavoro contattami per scambiarci i contatti.
-
-<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
-
-<model-viewer 
-  src="glb/draghetto.glb" 
-  alt="Modello 3D di un draghetto" 
-  auto-rotate 
-  camera-controls 
-  style="width: 100%; height: 400px; background-color: #f0f0f0; border-radius: 10px;">
-</model-viewer>
