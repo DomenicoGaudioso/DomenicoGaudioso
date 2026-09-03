@@ -17,6 +17,14 @@ I'm a civil engineer passionate about structures, from design to monitoring. In 
 * [feagent — Documentazione](https://domenicogaudioso.github.io/feagent-docs/)
 * CV e portfolio lavori: disponibili su richiesta via email — domenicogaudioso@outlook.it
 
+---
+
+## 💝 Supportami
+
+Se ti piacciono i miei progetti e vuoi supportare il mio lavoro:
+
+[![Satispay](https://img.shields.io/badge/Satispay-Sponsor-00D9FF?style=for-the-badge)](https://satispay.com/gaudioso_d)
+
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
 <model-viewer 
