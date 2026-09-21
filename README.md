@@ -15,6 +15,8 @@ I'm a civil engineer passionate about structures, from design to monitoring. In 
 * [CivilBox — la mia suite di calcolo](https://civilbox.xyz)
 * [feagent — FEM CLI con AI](https://domenicogaudioso.github.io/DomenicoGaudioso/feagent/)
 * [feagent — Documentazione](https://domenicogaudioso.github.io/feagent-docs/)
+* [NonLinearSection — verifiche delle sezioni in c.a. e c.a.p.](https://domenicogaudioso.github.io/NonLinearSection_tool/)
+* [CompositeSectionCheck  —  verifiche delle sezioni miste acciaio-calcestruzzo](https://domenicogaudioso.github.io/CompositeSectionCheck_tool/)
 * CV e portfolio lavori: disponibili su richiesta via email — domenicogaudioso@outlook.it
 
 ---
