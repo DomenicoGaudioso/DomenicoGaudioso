@@ -218,6 +218,7 @@
     transition: opacity 0.25s linear;
   }
   .demo-stage-wrap canvas.gl-layer { opacity: 0; }
+  .demo-stage-wrap video.demo-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; background: #060608; z-index: 1; }
   .stage-vignette {
     position: absolute; inset: 0; z-index: 3; pointer-events: none;
     background: radial-gradient(ellipse at center, transparent 52%, rgba(0,0,0,0.52) 100%);
@@ -440,10 +441,10 @@
   <div class="container demo-head-zone">
     <div class="demo-head">
       <div class="demo-text">
-        <span class="demo-label reveal-up d1">CASE STUDY 01 · GENERAZIONE</span>
-        <h2 class="demo-title reveal-up d2">Generazione AI di Impalcati da Ponte</h2>
+        <span class="demo-label reveal-up d1">CASE STUDY 01 · ESEGUIBILE</span>
+        <h2 class="demo-title reveal-up d2">L'Eseguibile: il FEM in Finestra</h2>
         <p class="demo-desc reveal-up d3">
-          Descrivi la geometria in linguaggio naturale. L'AI interpreta il prompt, genera i nodi strutturali, i collegamenti e imposta la mesh FEM ottimale in pochi secondi. Poi la vista passa in 3D.
+          feagent-gui &egrave; l'interfaccia desktop del solver: albero del modello, viste 3D, analisi statiche e modali con un clic. La finestra &egrave; pilotabile anche dall'AI in tempo reale, tramite le API live. Nel video: graticcio di un impalcato, statica SLU e modale.
         </p>
       </div>
       <div class="demo-terminal reveal-up d3">
@@ -453,28 +454,26 @@
             <span style="background:#febc2e"></span>
             <span style="background:#28c840"></span>
           </div>
-          <span>feagent — ai-gen</span>
+          <span>feagent-gui.exe — interfaccia desktop</span>
         </div>
         <div class="demo-terminal-body">
-          <div><span class="dt-prompt">➜</span> <span class="dt-cmd" id="t1cmd"></span><span class="dt-cursor"></span></div>
-          <div class="dt-out" id="t1out1" style="opacity:0">✓ Parsing prompt...</div>
-          <div class="dt-out" id="t1out2" style="opacity:0">✓ Deck + arco + pendini generati</div>
-          <div class="dt-out good" id="t1out3" style="opacity:0">✓ Mesh: 124 nodes, 240 elements</div>
+          <div><span class="dt-prompt">➜</span> <span class="dt-cmd">feagent-gui.exe</span></div>
+          <div class="dt-out" style="opacity:1">✓ Graticcio di travi (impalcato) caricato</div>
+          <div class="dt-out" style="opacity:1">✓ Statica SLU · |u| max 49.2 mm</div>
+          <div class="dt-out good" style="opacity:1">✓ Modale · modo 1 = 3.16 Hz</div>
         </div>
       </div>
     </div>
   </div>
   <div class="demo-stage-wrap">
-    <canvas id="stage1"></canvas>
-    <canvas id="gl1" class="gl-layer"></canvas>
-    <div class="scanlines"></div>
+    <video class="demo-video" src="assets/case01.mp4" poster="assets/case01.jpg" autoplay muted loop playsinline preload="metadata"></video>
     <div class="stage-vignette"></div>
     <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
-    <div class="hud hud-tl"><span class="rec"></span> CASE 01 · AI-GEN · IMPALCATO AD ARCO</div>
-    <div class="hud hud-tc" id="vw1">VISTA 2D · ANALISI</div>
-    <div class="hud hud-tr" id="tc1">00:00</div>
-    <div class="hud hud-bl" id="ro1">nodi 0 · elementi 0</div>
-    <div class="hud hud-br">feagent · live simulation</div>
+    <div class="hud hud-tl"><span class="rec"></span> CASE 01 · GUI · IMPALCATO (GRATICCIO)</div>
+    <div class="hud hud-tc">REGISTRAZIONE REALE · FULLSCREEN</div>
+    <div class="hud hud-tr">00:50</div>
+    <div class="hud hud-bl">14 nodi · 19 elementi · statica + modale</div>
+    <div class="hud hud-br">feagent-gui.exe · v1.0.0</div>
   </div>
 </section>
 
@@ -486,7 +485,7 @@
         <span class="demo-label reveal-up d1">CASE STUDY 02 · SOLVER</span>
         <h2 class="demo-title reveal-up d2">Solver Sismico su Edifici Multipiano</h2>
         <p class="demo-desc reveal-up d3">
-          Modellazione dinamica e analisi sismica di strutture complesse. feagent risolve le equazioni del moto e valuta gli spostamenti di piano (drift) sotto carichi dinamici — in 2D e in 3D.
+          Analisi modale e spettro di risposta elastico EC8/NTC con combinazione CQC: periodi, masse partecipanti, taglio alla base e controllo degli interpiano drift. Nel video un telaio a 6 piani, risolto da terminale.
         </p>
       </div>
       <div class="demo-terminal reveal-up d3">
@@ -496,28 +495,26 @@
             <span style="background:#febc2e"></span>
             <span style="background:#28c840"></span>
           </div>
-          <span>feagent — solver</span>
+          <span>feagent — CLI / Python API</span>
         </div>
         <div class="demo-terminal-body">
-          <div><span class="dt-prompt">➜</span> <span class="dt-cmd" id="t2cmd"></span><span class="dt-cursor"></span></div>
-          <div class="dt-out" id="t2out1" style="opacity:0">✓ Assembling stiffness matrix...</div>
-          <div class="dt-out" id="t2out2" style="opacity:0">✓ Time-history: Newmark β 0.25</div>
-          <div class="dt-out good" id="t2out3" style="opacity:0">✓ Max drift: 14.2mm @ Floor 3</div>
+          <div><span class="dt-prompt">➜</span> <span class="dt-cmd">python case02_seismic.py</span></div>
+          <div class="dt-out" style="opacity:1">✓ 10 modi propri · massa partecipante X 100 %</div>
+          <div class="dt-out" style="opacity:1">✓ Taglio alla base CQC: 635 kN</div>
+          <div class="dt-out good" style="opacity:1">✓ Drift max 0.60 %h (piano 2)</div>
         </div>
       </div>
     </div>
   </div>
   <div class="demo-stage-wrap">
-    <canvas id="stage2"></canvas>
-    <canvas id="gl2" class="gl-layer"></canvas>
-    <div class="scanlines"></div>
+    <video class="demo-video" src="assets/case02.mp4" poster="assets/case02.jpg" autoplay muted loop playsinline preload="metadata"></video>
     <div class="stage-vignette"></div>
     <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
     <div class="hud hud-tl"><span class="rec"></span> CASE 02 · SOLVER · TELAIO 6 PIANI</div>
-    <div class="hud hud-tc" id="vw2">VISTA 2D · ANALISI</div>
-    <div class="hud hud-tr" id="tc2">00:00</div>
-    <div class="hud hud-bl" id="ro2">drift max — mm · piano —</div>
-    <div class="hud hud-br">feagent · live simulation</div>
+    <div class="hud hud-tc">REGISTRAZIONE REALE · TERMINALE</div>
+    <div class="hud hud-tr">00:29</div>
+    <div class="hud hud-bl">drift max 0.60 %h · piano 2 · T1 2.26 s</div>
+    <div class="hud hud-br">feagent · Python API</div>
   </div>
 </section>
 
@@ -529,7 +526,7 @@
         <span class="demo-label reveal-up d1">CASE STUDY 03 · POST-PROCESSING</span>
         <h2 class="demo-title reveal-up d2">Post-Processing &amp; Mappe di Tensione</h2>
         <p class="demo-desc reveal-up d3">
-          Visualizza le tensioni di von Mises e la deformata della superficie. In 3D la lastra si inflette davvero sotto il carico mobile. Esporta i risultati in VTK per Paraview.
+          Tensioni di von Mises e deformata di una piastra in acciaio da 1&times;1 m, modellata con 1152 elementi solidi Hex8 sotto 250 kPa di pressione. Equilibrio globale verificato; risultati in grafici 3D interattivi.
         </p>
       </div>
       <div class="demo-terminal reveal-up d3">
@@ -539,28 +536,26 @@
             <span style="background:#febc2e"></span>
             <span style="background:#28c840"></span>
           </div>
-          <span>feagent — post</span>
+          <span>feagent — Python API</span>
         </div>
         <div class="demo-terminal-body">
-          <div><span class="dt-prompt">➜</span> <span class="dt-cmd" id="t3cmd"></span><span class="dt-cursor"></span></div>
-          <div class="dt-out" id="t3out1" style="opacity:0">✓ Calculating von Mises...</div>
-          <div class="dt-out" id="t3out2" style="opacity:0">✓ Contour + colorbar renderizzati</div>
-          <div class="dt-out good" id="t3out3" style="opacity:0">✓ Export: results/plate.vtk</div>
+          <div><span class="dt-prompt">➜</span> <span class="dt-cmd">python case03_plate.py</span></div>
+          <div class="dt-out" style="opacity:1">✓ 1152 Hex8 · equilibrio ΣR = 250 kN</div>
+          <div class="dt-out" style="opacity:1">✓ σvm max 15.9 MPa · freccia −0.26 mm</div>
+          <div class="dt-out good" style="opacity:1">✓ Mappa + deformata 3D (Plotly)</div>
         </div>
       </div>
     </div>
   </div>
   <div class="demo-stage-wrap">
-    <canvas id="stage3"></canvas>
-    <canvas id="gl3" class="gl-layer"></canvas>
-    <div class="scanlines"></div>
+    <video class="demo-video" src="assets/case03.mp4" poster="assets/case03.jpg" autoplay muted loop playsinline preload="metadata"></video>
     <div class="stage-vignette"></div>
     <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
     <div class="hud hud-tl"><span class="rec"></span> CASE 03 · POST · VON MISES</div>
-    <div class="hud hud-tc" id="vw3">VISTA 2D · ANALISI</div>
-    <div class="hud hud-tr" id="tc3">00:00</div>
-    <div class="hud hud-bl" id="ro3">σmax — MPa</div>
-    <div class="hud hud-br">feagent · live simulation</div>
+    <div class="hud hud-tc">REGISTRAZIONE REALE · TERMINALE</div>
+    <div class="hud hud-tr">00:29</div>
+    <div class="hud hud-bl">σvm max 15.9 MPa · freccia 0.26 mm</div>
+    <div class="hud hud-br">feagent · Python API</div>
   </div>
 </section>
 
@@ -579,8 +574,8 @@
       </div>
       <div class="feature-card">
         <div class="feature-icon">🤖</div>
-        <h3 class="feature-title">AI-Assisted Mesh</h3>
-        <p class="feature-desc">Genera geometrie e mesh da descrizioni testuali. Ottimizza la risoluzione automaticamente.</p>
+        <h3 class="feature-title">AI Connector</h3>
+        <p class="feature-desc">28 tool esposti via MCP e REST: Claude, ChatGPT, Codex e altri assistenti pilotano feagent — anche la GUI, in tempo reale.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">⚡</div>
@@ -599,8 +594,8 @@
       </div>
       <div class="feature-card">
         <div class="feature-icon">📦</div>
-        <h3 class="feature-title">Export Universale</h3>
-        <p class="feature-desc">VTK, STL, STEP, MED, CGNS, ENSIGHT. Compatibile con Paraview, Salome, FreeCAD.</p>
+        <h3 class="feature-title">Export Verso Altri Solver</h3>
+        <p class="feature-desc">OpenSees, SAP2000, MIDAS, Robot, Straus7 — più Excel e HDF5. I modelli e i risultati viaggiano con te.</p>
       </div>
     </div>
   </div>
@@ -618,29 +613,30 @@
         <button class="copy-btn" id="copyBtn">Copia</button>
         <span class="code-label">bash</span>
       </div>
-      <pre class="code-content" id="codeContent"><span class="code-comment"># Installa feagent globalmente</span>
-<span class="code-command">npm install -g feagent</span>
+      <pre class="code-content" id="codeContent"><span class="code-comment"># Installa feagent (Python ≥ 3.9)</span>
+<span class="code-command">pip install feagent</span>
 
-<span class="code-comment"># Autenticati con la tua license key (richiedila contattandoci)</span>
-<span class="code-command">feagent auth --key YOUR_LICENSE_KEY</span>
+<span class="code-comment"># Verifica ambiente ed esempi con controlli analitici</span>
+<span class="code-command">feagent doctor</span>
+<span class="code-command">feagent examples grillage --verify</span>
 
-<span class="code-comment"># Inizializza un progetto FEM</span>
-<span class="code-command">feagent init bridge-analysis</span>
+<span class="code-comment"># Risolvi combinazioni di carico dal workbook Excel</span>
+<span class="code-command">feagent solve grillage.xlsx --cases G=1.35 Q=1.5</span>
+<span class="code-command">feagent solve model.xlsx --combos --envelope</span>
 
-<span class="code-comment"># Genera geometria con AI</span>
-<span class="code-command">feagent ai-generate --prompt "trave a campata singola 30m, carico 50kN"</span>
+<span class="code-comment"># Modale, buckling, grafici e relazione Word</span>
+<span class="code-command">feagent modal model.xlsx -n 12 --mass-cases G=1.0 Q=0.3</span>
+<span class="code-command">feagent plot model.xlsx --what deformed --open</span>
+<span class="code-command">feagent report model.xlsx --combos -o report.docx</span>
 
-<span class="code-comment"># Mesh, materiali e solve</span>
-<span class="code-command">feagent mesh --resolution fine</span>
-<span class="code-command">feagent material --type steel --young 210e9</span>
-<span class="code-command">feagent solve --load 50000 --boundary fixed</span>
+<span class="code-comment"># Esporta verso altri solver</span>
+<span class="code-command">feagent export model.xlsx bridge.mct   # MIDAS · anche SAP2000/OpenSees/Robot</span>
 
-<span class="code-comment"># Post-processa ed esporta</span>
-<span class="code-command">feagent post --stress --deformation</span>
-<span class="code-command">feagent export --format vtk --output results/</span></pre>
+<span class="code-comment"># AI connector: MCP/REST per Claude, ChatGPT, Codex, ...</span>
+<span class="code-command">feagent connect claude-desktop --write</span></pre>
     </div>
     <p class="install-note">
-      ℹ️ L'utilizzo di feagent richiede una license key. <a href="mailto:info@civilbox.xyz">Contattaci per ottenerla</a>.
+      ℹ️ feagent è gratuito per uso non commerciale (licenza PolyForm NC). L'eseguibile <code>feagent-gui</code> è nelle <a href="https://github.com/DomenicoGaudioso/feagent/releases" target="_blank" rel="noopener noreferrer">release GitHub</a>.
     </p>
   </div>
 </section>
@@ -652,10 +648,10 @@
       <div class="cta-glow"></div>
       <div class="cta-content">
         <h2 class="cta-title">Pronto a simulare dal terminale?</h2>
-        <p class="cta-subtitle">Unisciti agli ingegneri che usano feagent. Contattaci per ottenere l'accesso al framework e portare il FEM nel futuro.</p>
+        <p class="cta-subtitle">Unisciti agli ingegneri che usano feagent: installa da pip oppure scarica l'eseguibile dalle release GitHub e porta il FEM nel tuo flusso di lavoro.</p>
         <div class="cta-buttons">
           <a href="https://github.com/DomenicoGaudioso/feagent" class="btn btn-primary" target="_blank" rel="noopener noreferrer">⭐ Star su GitHub</a>
-          <a href="mailto:info@civilbox.xyz" class="btn btn-secondary">✉️ Contattaci per l'accesso</a>
+          <a href="https://github.com/DomenicoGaudioso/feagent" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">🐙 Vedi su GitHub</a>
         </div>
       </div>
     </div>
@@ -666,7 +662,6 @@
   feagent — creato da <a href="https://github.com/DomenicoGaudioso/feagent" target="_blank" rel="noopener noreferrer">Domenico Gaudioso</a> · Parte di <a href="https://civilbox.xyz" target="_blank" rel="noopener noreferrer">civilbox.xyz</a> · <a href="mailto:info@civilbox.xyz">Contattaci</a> · <a href="../">← Sito personale</a>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
   const MONO = "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace";
   function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
@@ -786,28 +781,22 @@
   }
   const terminalContent = document.getElementById('terminalContent');
   const terminalSteps = [
-    { type: 'input', text: 'feagent init bridge-analysis' },
-    { type: 'output', text: '✓ progetto FEM inizializzato' },
-    { type: 'output', text: '✓ template: structural-static' },
-    { type: 'input', text: 'feagent ai-generate --prompt "trave 30m, carico 50kN"' },
-    { type: 'output', text: '✓ geometria generata da AI:' },
-    { type: 'output', text: '  ├─ length: 30.00 m' },
-    { type: 'output', text: '  ├─ cross-section: IPE 400' },
-    { type: 'output', text: '  └─ load: 50 kN (distributed)' },
-    { type: 'input', text: 'feagent mesh --resolution fine' },
-    { type: 'output', text: '✓ mesh: 12,480 elements, 8,220 nodes' },
-    { type: 'output', text: '✓ quality: min Jacobian 0.87' },
-    { type: 'input', text: 'feagent solve --boundary fixed' },
-    { type: 'output', text: 'Solver: direct (sparse LU)' },
-    { type: 'output', text: '  ├─ DOFs: 24,660' },
-    { type: 'output', text: '  ├─ iterations: 1 (linear)' },
-    { type: 'output-accent', text: '  └─ max stress: 187.4 MPa  ✓' },
-    { type: 'input', text: 'feagent post --stress --deformation' },
-    { type: 'output', text: '✓ von Mises stress map generated' },
-    { type: 'output', text: '✓ max deformation: 12.3 mm @ midspan' },
-    { type: 'input', text: 'feagent export --format vtk' },
-    { type: 'output', text: '✓ exported to ./results/bridge.vtk' },
-    { type: 'output', text: '✓ ready for Paraview' },
+    { type: 'input', text: 'pip install feagent' },
+    { type: 'output', text: '✓ solver FEM installato (numpy + scipy)' },
+    { type: 'input', text: 'feagent examples grillage --verify' },
+    { type: 'output', text: 'grillage — Graticcio di travi (impalcato)' },
+    { type: 'output', text: '  ├─ nodi 14 · elementi 19 · casi G, Q' },
+    { type: 'output-accent', text: '  └─ 2/2 verifiche superate (formule chiuse) ✓' },
+    { type: 'input', text: 'feagent solve grillage.xlsx --cases G=1.35 Q=1.5' },
+    { type: 'output', text: 'Solver: denso · |U| max = 4.92e-02 m' },
+    { type: 'output', text: '  └─ Σ reazioni Fy = 396.0 kN' },
+    { type: 'input', text: 'feagent modal palazzo.xlsx -n 12 --mass-cases G=1.0' },
+    { type: 'output', text: '✓ 12 modi propri · massa partecipante X 100%' },
+    { type: 'input', text: 'feagent plot palazzo.xlsx --what deformed --open' },
+    { type: 'output', text: '✓ deformata 3D interattiva (Plotly)' },
+    { type: 'input', text: 'feagent export palazzo.xlsx ponte.mct' },
+    { type: 'output', text: '✓ esportato: MIDAS (.mct)' },
+    { type: 'output', text: '  └─ anche SAP2000 · OpenSees · Robot' },
   ];
   let animationActive = true;
   async function runTerminal() {
@@ -865,813 +854,15 @@
     }
   });
 
-  /* ================= PALETTE ================= */
-  function heatRGB(v) {
-    const stops = [[12,40,92],[24,100,196],[0,190,205],[46,212,125],[242,200,44],[246,120,32],[235,52,42]];
-    v = Math.min(1, Math.max(0, v)) * (stops.length - 1);
-    const i = Math.floor(v), f = v - i, a = stops[i], b = stops[Math.min(i + 1, stops.length - 1)];
-    return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f];
-  }
-  function heatCSS(v, alpha) {
-    const c = heatRGB(v);
-    return 'rgba(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ',' + (alpha === undefined ? 1 : alpha) + ')';
-  }
-  function timecode(lt) {
-    const m = Math.floor(lt / 60), s = Math.floor(lt % 60);
-    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-  }
+  /* Demo simulate (canvas 2D/Three.js) rimosse: i case study mostrano
+     registrazioni reali del software, riprodotte da <video>. */
 
-  /* ============================================================
-     STAGE 1 — PONTE (2D)
-     ============================================================ */
-  function drawTruckSide(ctx2, x, y, H) {
-    const s = H * 0.13;
-    ctx2.save(); ctx2.translate(x, y);
-    const wr = s * 0.17;
-    ctx2.fillStyle = '#10141b';
-    for (const wx of [-s * 0.52, s * 0.3, s * 0.52]) {
-      ctx2.beginPath(); ctx2.arc(wx, -wr, wr, 0, 7); ctx2.fill();
-      ctx2.strokeStyle = 'rgba(255,255,255,.45)'; ctx2.lineWidth = 1.2;
-      ctx2.beginPath(); ctx2.arc(wx, -wr, wr * 0.45, 0, 7); ctx2.stroke();
-    }
-    ctx2.fillStyle = 'rgba(246,248,252,.96)';
-    ctx2.beginPath(); ctx2.roundRect(-s * 0.76, -s * 0.84, s * 1.0, s * 0.56, 4); ctx2.fill();
-    ctx2.fillStyle = 'rgba(10,14,20,.5)'; ctx2.fillRect(-s * 0.68, -s * 0.72, s * 0.84, s * 0.12);
-    ctx2.fillStyle = '#fbbf24';
-    ctx2.beginPath(); ctx2.roundRect(s * 0.3, -s * 0.7, s * 0.46, s * 0.44, 4); ctx2.fill();
-    ctx2.fillStyle = 'rgba(255,255,255,.9)'; ctx2.fillRect(s * 0.62, -s * 0.62, s * 0.1, s * 0.13);
-    ctx2.restore();
-  }
 
-  function drawBridgeStage(ctx2, W, H, lt, gt, st) {
-    const g = ctx2.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, '#0b1322'); g.addColorStop(1, '#0d1117');
-    ctx2.fillStyle = g; ctx2.fillRect(0, 0, W, H);
-    ctx2.strokeStyle = 'rgba(130,150,180,.06)'; ctx2.lineWidth = 1;
-    for (let x = 0; x < W; x += 46) { ctx2.beginPath(); ctx2.moveTo(x, 0); ctx2.lineTo(x, H); ctx2.stroke(); }
-    for (let y = 0; y < H; y += 46) { ctx2.beginPath(); ctx2.moveTo(0, y); ctx2.lineTo(W, y); ctx2.stroke(); }
-    const vg = ctx2.createLinearGradient(0, H * 0.78, 0, H);
-    vg.addColorStop(0, 'rgba(14,30,52,0)'); vg.addColorStop(1, 'rgba(14,30,52,.6)');
-    ctx2.fillStyle = vg; ctx2.fillRect(0, H * 0.78, W, H * 0.22);
-    ctx2.strokeStyle = 'rgba(90,140,200,.16)'; ctx2.lineWidth = 1;
-    for (let k = 0; k < 3; k++) {
-      ctx2.beginPath();
-      for (let x = 0; x <= W; x += 14) {
-        const y = H * 0.91 + k * 8 + Math.sin(x * 0.02 + gt * 1.5 + k) * 2.2;
-        x ? ctx2.lineTo(x, y) : ctx2.moveTo(x, y);
-      }
-      ctx2.stroke();
-    }
-
-    const T = 19, cyc = lt % T;
-    const x0 = W * 0.13, x1 = W * 0.87, deckY = H * 0.66, rise = H * 0.36;
-    const P1 = { x: (x0 + x1) / 2, y: deckY - 2 * rise };
-    const bez = s => ({
-      x: (1 - s) * (1 - s) * x0 + 2 * (1 - s) * s * P1.x + s * s * x1,
-      y: (1 - s) * (1 - s) * deckY + 2 * (1 - s) * s * P1.y + s * s * deckY
-    });
-    if (cyc < 2.2) {
-      const sx = x0 + (x1 - x0) * (cyc / 2.2);
-      const grd = ctx2.createLinearGradient(sx - 70, 0, sx, 0);
-      grd.addColorStop(0, 'rgba(0,212,170,0)'); grd.addColorStop(1, 'rgba(0,212,170,.14)');
-      ctx2.fillStyle = grd; ctx2.fillRect(sx - 70, H * 0.08, 70, H * 0.84);
-      ctx2.strokeStyle = 'rgba(0,212,170,.8)'; ctx2.lineWidth = 1.5;
-      ctx2.beginPath(); ctx2.moveTo(sx, H * 0.08); ctx2.lineTo(sx, H * 0.92); ctx2.stroke();
-      ctx2.fillStyle = 'rgba(0,212,170,.85)';
-      for (let i = 0; i <= 48; i++) {
-        const px = x0 + (x1 - x0) * i / 48;
-        if (px < sx) { ctx2.beginPath(); ctx2.arc(px, deckY, 1.7, 0, 7); ctx2.fill(); }
-        const p = bez(i / 48);
-        if (p.x < sx) { ctx2.beginPath(); ctx2.arc(p.x, p.y, 1.7, 0, 7); ctx2.fill(); }
-      }
-    }
-    ctx2.strokeStyle = 'rgba(160,170,190,.4)'; ctx2.lineWidth = 1.5;
-    ctx2.beginPath(); ctx2.moveTo(0, H * 0.86); ctx2.lineTo(W, H * 0.86); ctx2.stroke();
-    const dp = Math.min(1, Math.max(0, (cyc - 2) / 2.6));
-    if (dp > 0) {
-      const ex = x0 + (x1 - x0) * dp;
-      ctx2.strokeStyle = '#43536b'; ctx2.lineWidth = Math.max(6, H * 0.02); ctx2.lineCap = 'round';
-      ctx2.beginPath(); ctx2.moveTo(x0, deckY); ctx2.lineTo(ex, deckY); ctx2.stroke();
-      ctx2.fillStyle = '#00d4aa';
-      ctx2.beginPath(); ctx2.arc(ex, deckY, 4, 0, 7); ctx2.fill();
-      ctx2.fillStyle = '#263244';
-      ctx2.fillRect(x0 - W * 0.022, deckY, W * 0.026, H * 0.2);
-      if (dp > 0.95) ctx2.fillRect(x1 - W * 0.004, deckY, W * 0.026, H * 0.2);
-      ctx2.fillStyle = 'rgba(160,170,190,.75)'; ctx2.font = '11px ' + MONO; ctx2.textAlign = 'center';
-      ctx2.fillText('luce 60.0 m', (x0 + x1) / 2, H * 0.9);
-      ctx2.textAlign = 'left';
-    }
-    const ap = Math.min(1, Math.max(0, (cyc - 5) / 3.2));
-    if (ap > 0) {
-      ctx2.strokeStyle = '#00d4aa'; ctx2.lineWidth = Math.max(4, H * 0.015); ctx2.lineCap = 'round';
-      ctx2.beginPath();
-      const nA = Math.max(2, Math.floor(ap * 64));
-      for (let i = 0; i <= nA; i++) { const p = bez(i / 64); i ? ctx2.lineTo(p.x, p.y) : ctx2.moveTo(p.x, p.y); }
-      ctx2.stroke();
-      const tip = bez(Math.min(1, nA / 64));
-      ctx2.fillStyle = '#c6fff2';
-      ctx2.beginPath(); ctx2.arc(tip.x, tip.y, 3.5, 0, 7); ctx2.fill();
-    }
-    const HS = [0.13, 0.24, 0.35, 0.46, 0.54, 0.65, 0.76, 0.87];
-    const truckT = Math.min(1, Math.max(0, (cyc - 10.4) / 7.4));
-    const truckX = x0 + (x1 - x0) * truckT;
-    HS.forEach((s, i) => {
-      const hp = Math.min(1, Math.max(0, (cyc - (8 + i * 0.16)) / 0.45));
-      if (hp <= 0 || cyc <= 8) return;
-      const pa = bez(s);
-      const tt = (cyc > 10.2) ? Math.exp(-Math.pow(pa.x - truckX, 2) / (2 * Math.pow(W * 0.05, 2))) : 0;
-      ctx2.strokeStyle = tt > 0.05
-        ? 'rgba(' + Math.round(150 + 105 * tt) + ',' + Math.round(175 - 70 * tt) + ',' + Math.round(205 - 150 * tt) + ',' + (0.65 + 0.35 * tt) + ')'
-        : 'rgba(155,175,205,.8)';
-      ctx2.lineWidth = 1.6 + tt * 1.8;
-      ctx2.beginPath(); ctx2.moveTo(pa.x, pa.y); ctx2.lineTo(pa.x, pa.y + (deckY - pa.y) * hp); ctx2.stroke();
-    });
-    const np = Math.min(1, Math.max(0, (cyc - 9.2) / 0.9));
-    if (np > 0) {
-      ctx2.fillStyle = '#00d4aa';
-      for (let i = 0; i <= 9; i++) {
-        const x = x0 + (x1 - x0) * i / 9;
-        ctx2.beginPath(); ctx2.arc(x, deckY, 3.2, 0, 7); ctx2.fill();
-        if (np < 1) {
-          ctx2.strokeStyle = 'rgba(0,212,170,' + (0.7 * (1 - np)).toFixed(2) + ')';
-          ctx2.lineWidth = 1.2;
-          ctx2.beginPath(); ctx2.arc(x, deckY, 5 + np * 14, 0, 7); ctx2.stroke();
-        }
-      }
-    }
-    let hudSigma = 0, hudX = 0;
-    if (cyc > 10.2) {
-      const dipA = H * 0.014, sig = W * 0.045;
-      ctx2.strokeStyle = 'rgba(0,212,170,.55)'; ctx2.lineWidth = 1.4;
-      ctx2.beginPath();
-      for (let i = 0; i <= 90; i++) {
-        const x = x0 + (x1 - x0) * i / 90;
-        const y = deckY + dipA * Math.exp(-Math.pow(x - truckX, 2) / (2 * sig * sig));
-        i ? ctx2.lineTo(x, y) : ctx2.moveTo(x, y);
-      }
-      ctx2.stroke();
-      ctx2.strokeStyle = 'rgba(251,191,36,.95)'; ctx2.lineWidth = 2;
-      [-W * 0.02, W * 0.02].forEach(o => {
-        const ax2 = truckX + o;
-        ctx2.beginPath(); ctx2.moveTo(ax2, deckY - H * 0.1); ctx2.lineTo(ax2, deckY - H * 0.03); ctx2.stroke();
-        ctx2.fillStyle = 'rgba(251,191,36,.95)';
-        ctx2.beginPath();
-        ctx2.moveTo(ax2, deckY - H * 0.018);
-        ctx2.lineTo(ax2 - 5, deckY - H * 0.036);
-        ctx2.lineTo(ax2 + 5, deckY - H * 0.036);
-        ctx2.closePath(); ctx2.fill();
-      });
-      const baseM = deckY + H * 0.13;
-      ctx2.beginPath();
-      const NM = 60;
-      for (let i = 0; i <= NM; i++) {
-        const xx = x0 + (x1 - x0) * i / NM;
-        const u2 = (xx - x0) / (x1 - x0);
-        const M = Math.exp(-Math.pow(xx - truckX, 2) / (2 * Math.pow(W * 0.05, 2)))
-          - 0.55 * Math.exp(-u2 * u2 / 0.002) - 0.55 * Math.exp(-(1 - u2) * (1 - u2) / 0.002);
-        const yy = baseM + M * H * 0.05;
-        i ? ctx2.lineTo(xx, yy) : ctx2.moveTo(xx, yy);
-      }
-      ctx2.strokeStyle = 'rgba(0,212,170,.85)'; ctx2.lineWidth = 1.6; ctx2.stroke();
-      ctx2.lineTo(x1, baseM); ctx2.lineTo(x0, baseM); ctx2.closePath();
-      ctx2.fillStyle = 'rgba(0,212,170,.12)'; ctx2.fill();
-      ctx2.setLineDash([3, 5]); ctx2.strokeStyle = 'rgba(160,170,190,.4)';
-      ctx2.beginPath(); ctx2.moveTo(x0, baseM); ctx2.lineTo(x1, baseM); ctx2.stroke();
-      ctx2.setLineDash([]);
-      ctx2.fillStyle = 'rgba(160,170,190,.85)'; ctx2.font = '10px ' + MONO;
-      ctx2.fillText('M(x) — inviluppo flessionale', x0 + 8, baseM + H * 0.05);
-      ctx2.setLineDash([16, 26]); ctx2.lineDashOffset = -gt * 70;
-      ctx2.strokeStyle = 'rgba(0,212,170,.32)'; ctx2.lineWidth = Math.max(4, H * 0.015) + 3;
-      ctx2.beginPath();
-      for (let i = 0; i <= 64; i++) { const p = bez(i / 64); i ? ctx2.lineTo(p.x, p.y) : ctx2.moveTo(p.x, p.y); }
-      ctx2.stroke();
-      ctx2.setLineDash([]);
-      drawTruckSide(ctx2, truckX, deckY + dipA, H);
-      hudSigma = 96 + 170 * Math.exp(-Math.pow(truckX - (x0 + x1) / 2, 2) / Math.pow(W * 0.16, 2));
-      hudX = truckT * 60;
-    }
-    if (gt - st.hud > 0.18) {
-      st.hud = gt;
-      const nNodi = cyc < 2.2 ? Math.round(cyc / 2.2 * 40) : cyc < 9.2 ? 40 + Math.round(Math.min(1, (cyc - 2) / 7) * 62) : 124;
-      const nElem = cyc < 9.2 ? Math.round(Math.min(1, Math.max(0, (cyc - 2) / 7)) * 180) : 240;
-      let txt = 'nodi ' + nNodi + ' · elementi ' + nElem;
-      if (cyc > 10.2) txt += ' · σmax ' + Math.round(hudSigma) + ' MPa · x ' + hudX.toFixed(1) + ' m';
-      document.getElementById('ro1').textContent = txt;
-      document.getElementById('tc1').textContent = timecode(lt);
-    }
-  }
-
-  /* ============================================================
-     STAGE 2 — TELAIO (2D)
-     ============================================================ */
-  function drawBuildingStage(ctx2, W, H, lt, gt, st) {
-    const g = ctx2.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, '#0b1322'); g.addColorStop(1, '#0d1117');
-    ctx2.fillStyle = g; ctx2.fillRect(0, 0, W, H);
-    ctx2.strokeStyle = 'rgba(130,150,180,.06)'; ctx2.lineWidth = 1;
-    for (let x = 0; x < W; x += 46) { ctx2.beginPath(); ctx2.moveTo(x, 0); ctx2.lineTo(x, H); ctx2.stroke(); }
-    for (let y = 0; y < H; y += 46) { ctx2.beginPath(); ctx2.moveTo(0, y); ctx2.lineTo(W, y); ctx2.stroke(); }
-    const floors = 6, bays = 4;
-    const baseY = H * 0.84, topY = H * 0.13, storyH = (baseY - topY) / floors;
-    const bw = Math.min(W * 0.54, H * 1.5), cx = W / 2, bayW = bw / bays;
-    const ug = Math.sin(gt * 2.0) * W * 0.013 + Math.sin(gt * 4.7) * W * 0.006 + Math.sin(gt * 7.3) * W * 0.003;
-    const A = H * 0.024, om = 1.5;
-    const u = [];
-    for (let i = 0; i <= floors; i++) u.push(ug + A * Math.sin(gt * om + 0.5) * Math.pow(i / floors, 1.4));
-    ctx2.setLineDash([4, 6]); ctx2.strokeStyle = 'rgba(130,150,180,.28)'; ctx2.lineWidth = 1;
-    for (let b = 0; b <= bays; b++) {
-      const bx = cx - bw / 2 + b * bayW;
-      ctx2.beginPath(); ctx2.moveTo(bx, baseY); ctx2.lineTo(bx, topY); ctx2.stroke();
-    }
-    for (let i = 1; i <= floors; i++) {
-      const y = baseY - storyH * i;
-      ctx2.beginPath(); ctx2.moveTo(cx - bw / 2, y); ctx2.lineTo(cx + bw / 2, y); ctx2.stroke();
-    }
-    ctx2.setLineDash([]);
-    ctx2.strokeStyle = 'rgba(160,170,190,.6)'; ctx2.lineWidth = 2;
-    ctx2.beginPath(); ctx2.moveTo(0, baseY); ctx2.lineTo(W, baseY); ctx2.stroke();
-    ctx2.strokeStyle = 'rgba(160,170,190,.3)'; ctx2.lineWidth = 1;
-    const off = (gt * 46) % 14;
-    for (let x = -20 + off - 14; x < W; x += 14) {
-      ctx2.beginPath(); ctx2.moveTo(x, baseY); ctx2.lineTo(x - 9, baseY + 9); ctx2.stroke();
-    }
-    const dir = Math.cos(gt * 2.0) >= 0 ? 1 : -1;
-    ctx2.fillStyle = 'rgba(251,191,36,.9)';
-    for (let k = 0; k < 3; k++) {
-      const ax = cx + dir * (bw / 2 + 40 + k * 18), ay = baseY - 10;
-      ctx2.beginPath();
-      ctx2.moveTo(ax + dir * 7, ay); ctx2.lineTo(ax - dir * 4, ay - 6); ctx2.lineTo(ax - dir * 4, ay + 6);
-      ctx2.closePath(); ctx2.fill();
-    }
-    ctx2.font = '11px ' + MONO;
-    ctx2.fillText('azione sismica · PGA 0.30g', cx + bw / 2 + 36, baseY + 16);
-    let dmax = 0, dfl = 1;
-    for (let i = 1; i <= floors; i++) {
-      const d = Math.abs(u[i] - u[i - 1]);
-      if (d > dmax) { dmax = d; dfl = i; }
-    }
-    for (let b = 0; b <= bays; b++) {
-      const bx = cx - bw / 2 + b * bayW;
-      for (let i = 0; i < floors; i++) {
-        const y1 = baseY - storyH * i, y2 = baseY - storyH * (i + 1);
-        const dn = Math.abs(u[i + 1] - u[i]) / (A + 1e-9);
-        ctx2.strokeStyle = heatCSS(Math.min(1, dn * 0.95));
-        ctx2.lineWidth = (i === dfl - 1) ? 3.6 : 2.2;
-        ctx2.beginPath(); ctx2.moveTo(bx + u[i], y1); ctx2.lineTo(bx + u[i + 1], y2); ctx2.stroke();
-      }
-    }
-    ctx2.fillStyle = 'rgba(160,170,190,.8)'; ctx2.font = '10px ' + MONO;
-    for (let i = 1; i <= floors; i++) {
-      const y = baseY - storyH * i;
-      ctx2.fillText('P' + i, cx - bw / 2 + u[i] - 28, y + 3);
-    }
-    for (let i = 1; i <= floors; i++) {
-      const y = baseY - storyH * i;
-      ctx2.fillStyle = 'rgba(242,244,249,.92)';
-      ctx2.fillRect(cx - bw / 2 + u[i] - 8, y - 3, bw + 16, 6);
-      for (let b = 0; b <= bays; b++) {
-        ctx2.fillStyle = '#0d1117';
-        ctx2.strokeStyle = 'rgba(0,212,170,.9)'; ctx2.lineWidth = 1.5;
-        ctx2.beginPath(); ctx2.arc(cx - bw / 2 + b * bayW + u[i], y, 3.4, 0, 7); ctx2.fill(); ctx2.stroke();
-      }
-    }
-    const dy = baseY - storyH * (dfl - 0.5);
-    ctx2.fillStyle = 'rgba(239,68,68,.95)'; ctx2.font = 'bold 12px ' + MONO;
-    ctx2.fillText('drift max → piano ' + dfl, cx + bw / 2 + 20, dy + 4);
-    const panX = 24, panY = H * 0.2, panW = Math.min(120, W * 0.13), panH = H * 0.52;
-    ctx2.fillStyle = 'rgba(8,10,16,.72)'; ctx2.fillRect(panX, panY, panW, panH);
-    ctx2.strokeStyle = 'rgba(0,212,170,.4)'; ctx2.lineWidth = 1; ctx2.strokeRect(panX, panY, panW, panH);
-    ctx2.fillStyle = 'rgba(235,240,245,.72)'; ctx2.font = '9px ' + MONO;
-    ctx2.fillText('DRIFT DI PIANO', panX + 8, panY + 14);
-    const rowH = (panH - 28) / floors;
-    for (let i = 1; i <= floors; i++) {
-      const d = Math.abs(u[i] - u[i - 1]);
-      const wdt = Math.min(1, d / (A * 0.95)) * (panW - 48);
-      const yy = panY + panH - 10 - i * rowH;
-      ctx2.fillStyle = heatCSS(Math.min(1, d / (A * 0.95)));
-      ctx2.fillRect(panX + 32, yy, wdt, rowH * 0.48);
-      ctx2.fillStyle = 'rgba(235,240,245,.75)';
-      ctx2.fillText('P' + i, panX + 10, yy + rowH * 0.36);
-    }
-    if (!st.acc) st.acc = [];
-    if (!st.topH) st.topH = [];
-    st.acc.push(ug); if (st.acc.length > 220) st.acc.shift();
-    st.topH.push(u[floors]); if (st.topH.length > 220) st.topH.shift();
-    const pw = Math.min(300, W * 0.28), ph = 60, px = W - pw - 24, py = H - ph - 56;
-    ctx2.fillStyle = 'rgba(8,10,16,.72)'; ctx2.fillRect(px, py, pw, ph);
-    ctx2.strokeStyle = 'rgba(0,212,170,.4)'; ctx2.strokeRect(px, py, pw, ph);
-    ctx2.strokeStyle = '#00d4aa'; ctx2.lineWidth = 1.2;
-    ctx2.beginPath();
-    st.acc.forEach((v, i) => {
-      const x = px + i * (pw / 220), y = py + ph / 2 + v * 1.5;
-      i ? ctx2.lineTo(x, y) : ctx2.moveTo(x, y);
-    });
-    ctx2.stroke();
-    ctx2.strokeStyle = '#a78bfa'; ctx2.lineWidth = 1;
-    ctx2.beginPath();
-    st.topH.forEach((v, i) => {
-      const x = px + i * (pw / 220), y = py + ph / 2 + v * 1.1;
-      i ? ctx2.lineTo(x, y) : ctx2.moveTo(x, y);
-    });
-    ctx2.stroke();
-    ctx2.fillStyle = 'rgba(235,240,245,.7)'; ctx2.font = '9px ' + MONO;
-    ctx2.fillText('ACCELERAZIONE — teal · SOMMITÀ — viola', px + 8, py + 12);
-    if (gt - st.hud > 0.18) {
-      st.hud = gt;
-      document.getElementById('ro2').textContent =
-        'drift max ' + (dmax * 3.1).toFixed(1) + ' mm · piano ' + dfl +
-        ' · sommità ' + Math.abs(u[floors] * 3.1).toFixed(0) + ' mm' +
-        ' · V base ' + Math.round(860 + 620 * Math.abs(Math.sin(gt * om))) + ' kN';
-      document.getElementById('tc2').textContent = timecode(lt);
-    }
-  }
-
-  /* ============================================================
-     STAGE 3 — LASTRA (2D)
-     ============================================================ */
-  function drawPlateStage(ctx2, W, H, lt, gt, st) {
-    ctx2.fillStyle = '#0a0d14'; ctx2.fillRect(0, 0, W, H);
-    const m = Math.min(W, H) * 0.1, pw = W - 2 * m, ph = H - 2 * m;
-    const T = 15, cyc = lt % T;
-    const sweep = Math.min(1, cyc / 2.4);
-    const lx = m + pw * (0.5 + 0.42 * Math.sin(lt * 0.5));
-    const ly = m + ph * (0.5 + 0.27 * Math.sin(lt * 0.21 + 1.2));
-    if (!st.trail) st.trail = [];
-    st.trail.push({ x: lx, y: ly }); if (st.trail.length > 160) st.trail.shift();
-    const cols = Math.max(24, Math.round(W / 32)), rows = Math.max(11, Math.round(H / 40));
-    const cw = pw / cols, ch = ph / rows;
-    const r0 = Math.min(W, H) * 0.19;
-    let vmax = 0;
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const x = m + c * cw + cw / 2, y = m + r * ch + ch / 2;
-        if (x > m + pw * sweep) continue;
-        const d = Math.hypot(x - lx, y - ly);
-        const v = Math.exp(-(d * d) / (2 * r0 * r0)) * (0.82 + 0.18 * Math.sin(c * 1.7 + r * 2.3)) + 0.04;
-        if (v > vmax) vmax = v;
-        if (v > 0.03) {
-          ctx2.fillStyle = heatCSS(Math.min(1, v));
-          ctx2.globalAlpha = 0.22 + 0.76 * Math.min(1, v);
-          ctx2.fillRect(m + c * cw + 1, m + r * ch + 1, cw - 2, ch - 2);
-        }
-      }
-    }
-    ctx2.globalAlpha = 1;
-    ctx2.strokeStyle = 'rgba(240,242,248,.1)'; ctx2.lineWidth = 1;
-    for (let c = 0; c <= cols; c++) { ctx2.beginPath(); ctx2.moveTo(m + c * cw, m); ctx2.lineTo(m + c * cw, m + ph); ctx2.stroke(); }
-    for (let r = 0; r <= rows; r++) { ctx2.beginPath(); ctx2.moveTo(m, m + r * ch); ctx2.lineTo(m + pw, m + r * ch); ctx2.stroke(); }
-    ctx2.strokeStyle = 'rgba(240,242,248,.06)';
-    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-      ctx2.beginPath();
-      if ((r + c) % 2) { ctx2.moveTo(m + c * cw, m + r * ch); ctx2.lineTo(m + (c + 1) * cw, m + (r + 1) * ch); }
-      else { ctx2.moveTo(m + (c + 1) * cw, m + r * ch); ctx2.lineTo(m + c * cw, m + (r + 1) * ch); }
-      ctx2.stroke();
-    }
-    ctx2.strokeStyle = 'rgba(240,242,248,.6)'; ctx2.lineWidth = 2;
-    ctx2.strokeRect(m, m, pw, ph);
-    ctx2.save(); ctx2.beginPath(); ctx2.rect(m, m, pw, ph); ctx2.clip();
-    ctx2.setLineDash([6, 7]);
-    [0.62, 0.38, 0.2].forEach((vv, ii) => {
-      const rr = r0 * Math.sqrt(2 * Math.log(1 / vv));
-      ctx2.strokeStyle = 'rgba(255,255,255,' + (0.36 - ii * 0.09) + ')';
-      ctx2.lineWidth = 1.1;
-      ctx2.beginPath(); ctx2.arc(lx, ly, rr, 0, 7); ctx2.stroke();
-    });
-    ctx2.setLineDash([]); ctx2.restore();
-    if (sweep < 1) {
-      const sx = m + pw * sweep;
-      ctx2.strokeStyle = 'rgba(0,212,170,.85)'; ctx2.lineWidth = 2;
-      ctx2.beginPath(); ctx2.moveTo(sx, m); ctx2.lineTo(sx, m + ph); ctx2.stroke();
-      ctx2.fillStyle = 'rgba(0,212,170,.95)'; ctx2.font = '11px ' + MONO;
-      ctx2.fillText('calcolo von Mises… ' + Math.round(sweep * 100) + '%', sx + 10, m + 16);
-    }
-    for (let i = 1; i < st.trail.length; i++) {
-      ctx2.strokeStyle = 'rgba(240,242,248,' + (i / st.trail.length * 0.3).toFixed(2) + ')';
-      ctx2.beginPath(); ctx2.moveTo(st.trail[i - 1].x, st.trail[i - 1].y); ctx2.lineTo(st.trail[i].x, st.trail[i].y); ctx2.stroke();
-    }
-    const glow = ctx2.createRadialGradient(lx, ly, 0, lx, ly, r0 * 1.4);
-    glow.addColorStop(0, 'rgba(239,68,68,.32)'); glow.addColorStop(1, 'rgba(239,68,68,0)');
-    ctx2.fillStyle = glow; ctx2.fillRect(lx - r0 * 1.4, ly - r0 * 1.4, r0 * 2.8, r0 * 2.8);
-    ctx2.strokeStyle = '#ef4444'; ctx2.lineWidth = 2.4;
-    ctx2.beginPath(); ctx2.moveTo(lx, ly - 46); ctx2.lineTo(lx, ly - 20); ctx2.stroke();
-    ctx2.fillStyle = '#ef4444';
-    ctx2.beginPath();
-    ctx2.moveTo(lx, ly - 14); ctx2.lineTo(lx - 6, ly - 24); ctx2.lineTo(lx + 6, ly - 24);
-    ctx2.closePath(); ctx2.fill();
-    ctx2.fillStyle = 'rgba(255,255,255,.92)'; ctx2.font = '10px ' + MONO;
-    ctx2.fillText('225 kN', lx + 10, ly - 32);
-    ctx2.strokeStyle = 'rgba(255,255,255,.55)'; ctx2.lineWidth = 1;
-    ctx2.beginPath(); ctx2.moveTo(lx - 24, ly); ctx2.lineTo(lx + 24, ly); ctx2.moveTo(lx, ly - 24); ctx2.lineTo(lx, ly + 24); ctx2.stroke();
-    const pr = 10 + 3 * Math.sin(gt * 3);
-    ctx2.strokeStyle = '#ef4444'; ctx2.lineWidth = 2.4;
-    ctx2.beginPath(); ctx2.arc(lx, ly, pr, 0, 7); ctx2.stroke();
-    ctx2.beginPath(); ctx2.arc(lx, ly, pr + 11 + 4 * Math.sin(gt * 2), 0, 7);
-    ctx2.strokeStyle = 'rgba(239,68,68,.4)'; ctx2.stroke();
-    ctx2.fillStyle = '#fff'; ctx2.beginPath(); ctx2.arc(lx, ly, 3.5, 0, 7); ctx2.fill();
-    ctx2.fillStyle = 'rgba(255,255,255,.95)'; ctx2.font = 'bold 12px ' + MONO;
-    ctx2.fillText('σmax ' + Math.round(60 + vmax * 195) + ' MPa', lx + 18, ly - 16);
-    const cbW = 14, cbH = ph * 0.66, cbX = m + pw - cbW - 14, cbY = m + (ph - cbH) / 2;
-    for (let i = 0; i < 60; i++) {
-      ctx2.fillStyle = heatCSS(1 - i / 59);
-      ctx2.fillRect(cbX, cbY + i * (cbH / 60), cbW, cbH / 60 + 1);
-    }
-    ctx2.strokeStyle = 'rgba(240,242,248,.4)'; ctx2.lineWidth = 1;
-    ctx2.strokeRect(cbX, cbY, cbW, cbH);
-    ctx2.fillStyle = 'rgba(235,240,245,.8)'; ctx2.font = '9px ' + MONO; ctx2.textAlign = 'right';
-    ctx2.fillText('245 MPa', cbX - 6, cbY + 8);
-    ctx2.fillText('0 MPa', cbX - 6, cbY + cbH);
-    ctx2.textAlign = 'left';
-    if (!st.vmH) st.vmH = [];
-    st.vmH.push(60 + vmax * 195); if (st.vmH.length > 240) st.vmH.shift();
-    const spW = Math.min(280, W * 0.26), spH = 52, spX = 24, spY = H - spH - 66;
-    ctx2.fillStyle = 'rgba(8,10,16,.72)'; ctx2.fillRect(spX, spY, spW, spH);
-    ctx2.strokeStyle = 'rgba(0,212,170,.4)'; ctx2.strokeRect(spX, spY, spW, spH);
-    ctx2.strokeStyle = '#00d4aa'; ctx2.lineWidth = 1.3;
-    ctx2.beginPath();
-    st.vmH.forEach((v, i) => {
-      const x = spX + i * (spW / 240), y = spY + spH - 8 - (Math.min(260, v) / 260) * (spH - 22);
-      i ? ctx2.lineTo(x, y) : ctx2.moveTo(x, y);
-    });
-    ctx2.stroke();
-    ctx2.fillStyle = 'rgba(235,240,245,.72)'; ctx2.font = '9px ' + MONO;
-    ctx2.fillText('σmax(t)', spX + 8, spY + 12);
-    if (gt - st.hud > 0.18) {
-      st.hud = gt;
-      const exp = Math.min(100, Math.round(cyc / T * 130));
-      document.getElementById('ro3').textContent =
-        'σmax ' + Math.round(60 + vmax * 195) + ' MPa · ruota 225 kN' +
-        ' · x ' + ((lx - m) / pw * 30).toFixed(1) + ' m' +
-        ' · VTK export ' + Math.min(100, exp) + '%';
-      document.getElementById('tc3').textContent = timecode(lt);
-    }
-  }
-
-  /* ============================================================
-     SCENE 3D
-     ============================================================ */
-  const hasTHREE = typeof THREE !== 'undefined';
-
-  function buildBridge3D(scene) {
-    const g = new THREE.Group(); scene.add(g);
-    const L = 60, WD = 6, AH = 13;
-    const deck = new THREE.Mesh(new THREE.BoxGeometry(L, 0.6, WD), new THREE.MeshStandardMaterial({ color: 0x3a4a63, roughness: .6, metalness: .3 }));
-    g.add(deck);
-    const girderMat = new THREE.MeshStandardMaterial({ color: 0x2b3950, roughness: .5, metalness: .4 });
-    [-WD / 2, WD / 2].forEach(z => {
-      const m2 = new THREE.Mesh(new THREE.BoxGeometry(L, 1.1, 0.5), girderMat);
-      m2.position.set(0, -0.6, z); g.add(m2);
-    });
-    const dashMat = new THREE.MeshStandardMaterial({ color: 0xdfe6ee, roughness: .7 });
-    for (let x = -L / 2 + 3; x < L / 2 - 2; x += 4.2) {
-      const dsh = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.06, 0.16), dashMat);
-      dsh.position.set(x, 0.34, 0); g.add(dsh);
-    }
-    const railMat = new THREE.MeshStandardMaterial({ color: 0x51617c, roughness: .5, metalness: .5 });
-    [-WD / 2 + 0.15, WD / 2 - 0.15].forEach(z => {
-      const rail = new THREE.Mesh(new THREE.BoxGeometry(L, 0.07, 0.07), railMat);
-      rail.position.set(0, 1.32, z); g.add(rail);
-      for (let x = -L / 2 + 1; x <= L / 2 - 1; x += 3.6) {
-        const post = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 1.05, 6), railMat);
-        post.position.set(x, 0.82, z); g.add(post);
-      }
-    });
-    const archMat = new THREE.MeshStandardMaterial({ color: 0x00d4aa, roughness: .35, metalness: .55, emissive: 0x00291f });
-    const hangers = [];
-    [-WD / 2, WD / 2].forEach(z => {
-      const curve = new THREE.QuadraticBezierCurve3(
-        new THREE.Vector3(-L / 2, 0, z), new THREE.Vector3(0, 2 * AH, z), new THREE.Vector3(L / 2, 0, z));
-      g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 72, 0.38, 10), archMat));
-      for (let i = 1; i <= 11; i++) {
-        const p = curve.getPoint(i / 12);
-        const hm = new THREE.MeshStandardMaterial({ color: 0x9fb2cc, roughness: .5, metalness: .5 });
-        const cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, p.y, 8), hm);
-        cyl.position.set(p.x, p.y / 2, z);
-        g.add(cyl); hangers.push({ x: p.x, mat: hm });
-      }
-    });
-    [0.32, 0.5, 0.68].forEach(s => {
-      const qx = (1 - s) * (1 - s) * (-L / 2) + s * s * (L / 2);
-      const qy = 4 * AH * (1 - s) * s;
-      const tie = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, WD, 10), archMat);
-      tie.rotation.x = Math.PI / 2; tie.position.set(qx, qy, 0); g.add(tie);
-    });
-    const supMat = new THREE.MeshStandardMaterial({ color: 0x263244, roughness: .85 });
-    [-L / 2, L / 2].forEach(x => {
-      const m2 = new THREE.Mesh(new THREE.BoxGeometry(3.4, 7.6, WD + 2), supMat);
-      m2.position.set(x, -4.1, 0); g.add(m2);
-    });
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(260, 260), new THREE.MeshStandardMaterial({ color: 0x0e1420, roughness: 1 }));
-    ground.rotation.x = -Math.PI / 2; ground.position.y = -7.9; scene.add(ground);
-    const truck = new THREE.Group();
-    const trailer = new THREE.Mesh(new THREE.BoxGeometry(5, 1.7, 2.4), new THREE.MeshStandardMaterial({ color: 0xe8ecf2, roughness: .5 }));
-    trailer.position.set(-0.8, 1.6, 0); truck.add(trailer);
-    const cab = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2.4), new THREE.MeshStandardMaterial({ color: 0xfbbf24, roughness: .45 }));
-    cab.position.set(2.5, 1.75, 0); truck.add(cab);
-    const lightMat = new THREE.MeshStandardMaterial({ color: 0xfff7cc, emissive: 0xffe08a, emissiveIntensity: .9 });
-    [-0.8, 0.8].forEach(z => {
-      const hl = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.18, 0.3), lightMat);
-      hl.position.set(3.56, 1.35, z); truck.add(hl);
-    });
-    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x14181f, roughness: .9 });
-    [-2.8, -0.9, 2.3, 3.6].forEach(wx => [-1.05, 1.05].forEach(z => {
-      const w = new THREE.Mesh(new THREE.CylinderGeometry(.55, .55, .4, 18), wheelMat);
-      w.rotation.x = Math.PI / 2; w.position.set(wx, .58, z); truck.add(w);
-    }));
-    truck.position.y = 0.3; g.add(truck);
-    const shad = new THREE.Mesh(new THREE.CircleGeometry(3.1, 24), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .28 }));
-    shad.rotation.x = -Math.PI / 2; shad.position.y = 0.32; g.add(shad);
-    return { update: t => {
-      truck.position.x = -L / 2 - 8 + ((t * 6.5) % (L + 16));
-      shad.position.x = truck.position.x;
-      const tx = truck.position.x;
-      hangers.forEach(h => {
-        const k = Math.exp(-Math.pow(h.x - tx, 2) / 72);
-        h.mat.emissive.setRGB(0, k * 0.5, k * 0.4);
-        h.mat.color.setRGB(0.62, 0.7 - k * 0.3, 0.8 - k * 0.55);
-      });
-    }};
-  }
-
-  /* ============================================================
-     EDIFICIO 3D — cinematica coerente per piano (CORRETTO)
-     Ogni piano è un diaframma rigido con spostamento u[f]:
-     - travi, impalcati e facciate traslano con u[f]
-     - i conci di colonna tra piano f e f+1 hanno base su
-       u[f] e testa su u[f+1] → posizione media + rotazione
-       coerente (segno corretto rispetto all'asse Z)
-     ============================================================ */
-  function buildBuilding3D(scene) {
-    const g = new THREE.Group(); scene.add(g);
-    const floors = 6, bx = 3, bz = 2, bay = 6, sh = 4;
-    const BW = bx * bay, BD = bz * bay;
-    const cols = [], beams = [], slabs = [], facs = [];
-    for (let f = 0; f < floors; f++) {
-      for (let ix = 0; ix <= bx; ix++) for (let iz = 0; iz <= bz; iz++) {
-        const m = new THREE.MeshStandardMaterial({ color: 0x8fa3bd, roughness: .5, metalness: .35 });
-        const c = new THREE.Mesh(new THREE.BoxGeometry(.7, sh, .7), m);
-        c.position.set(-BW / 2 + ix * bay, sh / 2 + f * sh, -BD / 2 + iz * bay);
-        g.add(c);
-        cols.push({ mesh: c, f: f, mat: m, bx0: c.position.x });
-      }
-    }
-    const beamMat = new THREE.MeshStandardMaterial({ color: 0xc9d2de, roughness: .5, metalness: .3 });
-    for (let f = 1; f <= floors; f++) {
-      const y = f * sh;
-      for (let iz = 0; iz <= bz; iz++) {
-        const b = new THREE.Mesh(new THREE.BoxGeometry(BW + .8, .55, .55), beamMat);
-        b.position.set(0, y, -BD / 2 + iz * bay);
-        g.add(b); beams.push({ mesh: b, f: f, bx0: b.position.x });
-      }
-      for (let ix = 0; ix <= bx; ix++) {
-        const b = new THREE.Mesh(new THREE.BoxGeometry(.55, .55, BD + .8), beamMat);
-        b.position.set(-BW / 2 + ix * bay, y, 0);
-        g.add(b); beams.push({ mesh: b, f: f, bx0: b.position.x });
-      }
-      const slab = new THREE.Mesh(new THREE.BoxGeometry(BW + 2.2, .3, BD + 2.2), new THREE.MeshStandardMaterial({ color: 0xe6eaf1, roughness: .85 }));
-      slab.position.set(0, y + .42, 0);
-      g.add(slab); slabs.push({ mesh: slab, f: f, bx0: 0 });
-    }
-    const roof = new THREE.Mesh(new THREE.BoxGeometry(5, 1.8, 3.4), new THREE.MeshStandardMaterial({ color: 0x38465c, roughness: .7 }));
-    roof.position.set(-BW / 6, floors * sh + 1.35, 0); g.add(roof);
-    slabs.push({ mesh: roof, f: floors, bx0: -BW / 6 });
-    const facMat = new THREE.MeshStandardMaterial({ color: 0x9fc3d8, transparent: true, opacity: .16, roughness: .15, metalness: .6 });
-    for (let f = 0; f < floors; f++) {
-      [-(BD / 2 + 1.05), BD / 2 + 1.05].forEach(z => {
-        const p = new THREE.Mesh(new THREE.BoxGeometry(BW + 1.6, sh - 0.9, 0.12), facMat);
-        p.position.set(0, sh / 2 + f * sh + 0.2, z);
-        g.add(p); facs.push({ mesh: p, f: f, bx0: 0 });
-      });
-    }
-    const ripples = [];
-    for (let i = 0; i < 3; i++) {
-      const rm = new THREE.Mesh(new THREE.RingGeometry(1, 1.06, 48), new THREE.MeshBasicMaterial({ color: 0x00d4aa, transparent: true, opacity: .3, side: THREE.DoubleSide }));
-      rm.rotation.x = -Math.PI / 2; rm.position.y = 0.04; g.add(rm); ripples.push(rm);
-    }
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), new THREE.MeshStandardMaterial({ color: 0x0e1420, roughness: 1 }));
-    ground.rotation.x = -Math.PI / 2; ground.position.y = -0.02; scene.add(ground);
-    const tc = new THREE.Color();
-    return { update: t => {
-      const ug = Math.sin(t * 2) * 1.1 + Math.sin(t * 4.7) * 0.5 + Math.sin(t * 7.3) * 0.25;
-      const u = [];
-      for (let f = 0; f <= floors; f++) u.push(ug + 2.4 * Math.sin(t * 1.5 + 0.5) * Math.pow(f / floors, 1.4));
-      // colonne: base su u[f], testa su u[f+1]
-      cols.forEach(c => {
-        const f = c.f;
-        const ub = u[f], ut = u[f + 1];
-        const du = ut - ub;
-        c.mesh.position.x = c.bx0 + (ub + ut) / 2;
-        c.mesh.rotation.z = -Math.atan2(du, sh);
-        const c3 = heatRGB(Math.min(1, Math.abs(du) / 2.6));
-        tc.setRGB(c3[0] / 255, c3[1] / 255, c3[2] / 255);
-        c.mat.color.copy(tc);
-      });
-      // travi: traslano con il proprio piano (mantenendo la posizione base)
-      beams.forEach(b => { b.mesh.position.x = b.bx0 + u[b.f]; });
-      // impalcati + copertura
-      slabs.forEach(s => { s.mesh.position.x = s.bx0 + u[s.f]; });
-      // facciate: piano medio tra f e f+1
-      facs.forEach(fc => { fc.mesh.position.x = fc.bx0 + (u[fc.f] + u[fc.f + 1]) / 2; });
-      // onde sismiche
-      ripples.forEach((rm, i) => {
-        const s = ((t * 5 + i * 11) % 33);
-        rm.scale.set(s, s, 1);
-        rm.material.opacity = Math.max(0, .32 * (1 - s / 33));
-      });
-    }};
-  }
-
-  function buildPlate3D(scene) {
-    const LX = 30, LZ = 18;
-    const geo = new THREE.PlaneGeometry(LX, LZ, 56, 34);
-    geo.rotateX(-Math.PI / 2);
-    const count = geo.attributes.position.count;
-    geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(count * 3), 3));
-    const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .5, metalness: .2, side: THREE.DoubleSide }));
-    mesh.position.y = 4; scene.add(mesh);
-    const wire = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ wireframe: true, color: 0xffffff, transparent: true, opacity: .12 }));
-    wire.position.y = 4.03; scene.add(wire);
-    const ebMat = new THREE.MeshStandardMaterial({ color: 0x2b3950, roughness: .6, metalness: .4 });
-    [-LZ / 2, LZ / 2].forEach(z => {
-      const b = new THREE.Mesh(new THREE.BoxGeometry(LX + 1, 0.5, 0.5), ebMat);
-      b.position.set(0, 3.75, z); scene.add(b);
-    });
-    [-LX / 2, LX / 2].forEach(x => {
-      const b = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, LZ + 1), ebMat);
-      b.position.set(x, 3.75, 0); scene.add(b);
-    });
-    const legMat = new THREE.MeshStandardMaterial({ color: 0x263244, roughness: .85 });
-    [[-LX / 2 + 1, -LZ / 2 + 1], [LX / 2 - 1, -LZ / 2 + 1], [-LX / 2 + 1, LZ / 2 - 1], [LX / 2 - 1, LZ / 2 - 1]].forEach(p => {
-      const l = new THREE.Mesh(new THREE.BoxGeometry(.8, 4, .8), legMat);
-      l.position.set(p[0], 2, p[1]); scene.add(l);
-    });
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), new THREE.MeshStandardMaterial({ color: 0x0e1420, roughness: 1 }));
-    ground.rotation.x = -Math.PI / 2; ground.position.y = -0.02; scene.add(ground);
-    const wheel = new THREE.Group();
-    const tire = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, .9, 24), new THREE.MeshStandardMaterial({ color: 0x14181f, roughness: .9 }));
-    tire.rotation.x = Math.PI / 2; wheel.add(tire);
-    const hub = new THREE.Mesh(new THREE.CylinderGeometry(.45, .45, .95, 16), new THREE.MeshStandardMaterial({ color: 0xfbbf24, roughness: .4 }));
-    hub.rotation.x = Math.PI / 2; wheel.add(hub);
-    scene.add(wheel);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.05, 8, 36), new THREE.MeshBasicMaterial({ color: 0xef4444, transparent: true, opacity: .55 }));
-    ring.rotation.x = Math.PI / 2; scene.add(ring);
-    const pos = geo.attributes.position, col = geo.attributes.color;
-    return { update: t => {
-      const lx = LX * (0.5 + 0.42 * Math.sin(t * 0.5)) - LX / 2;
-      const lz = LZ * (0.5 + 0.27 * Math.sin(t * 0.21 + 1.2)) - LZ / 2;
-      const r0 = 4.6;
-      for (let i = 0; i < count; i++) {
-        const x = pos.getX(i), z = pos.getZ(i);
-        const v = Math.exp(-((x - lx) * (x - lx) + (z - lz) * (z - lz)) / (2 * r0 * r0));
-        const ripple = 0.05 * Math.sin(x * 0.7 + t * 2.1) * Math.sin(z * 0.8 + t * 1.6);
-        pos.setY(i, -1.7 * v + ripple);
-        const c = heatRGB(v);
-        col.setXYZ(i, c[0] / 255, c[1] / 255, c[2] / 255);
-      }
-      pos.needsUpdate = true; col.needsUpdate = true;
-      geo.computeVertexNormals();
-      wheel.position.set(lx, 4 - 1.7 + 1.12, lz);
-      ring.position.set(lx, 4 - 1.7 + 0.16, lz);
-      const rs = 1 + 0.12 * Math.sin(t * 3);
-      ring.scale.set(rs, rs, 1);
-    }};
-  }
-
-  function createGL(stage) {
-    const glCanvas = document.getElementById(stage.glId);
-    if (!glCanvas || !hasTHREE) return null;
-    try {
-      const renderer = new THREE.WebGLRenderer({ canvas: glCanvas, antialias: true });
-      renderer.setPixelRatio(Math.min(1.75, window.devicePixelRatio || 1));
-      renderer.setClearColor(0x0d1117, 1);
-      const scene = new THREE.Scene();
-      scene.fog = new THREE.Fog(0x0d1117, 70, 200);
-      const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 500);
-      scene.add(new THREE.AmbientLight(0x8899bb, 0.55));
-      const dir = new THREE.DirectionalLight(0xffffff, 0.9);
-      dir.position.set(18, 34, 14); scene.add(dir);
-      const acc = new THREE.PointLight(0x00d4aa, 0.75, 140);
-      acc.position.set(-16, 12, -8); scene.add(acc);
-      const grid = new THREE.GridHelper(150, 48, 0x1d2a3a, 0x141d2b);
-      grid.position.y = 0.01; scene.add(grid);
-      const state = stage.build(scene);
-      let sw = 0, sh = 0;
-      return {
-        canvas: glCanvas,
-        render: (t) => {
-          const cw = glCanvas.clientWidth, ch = glCanvas.clientHeight;
-          if (!cw || !ch) return;
-          if (cw !== sw || ch !== sh) {
-            sw = cw; sh = ch;
-            renderer.setSize(cw, ch, false);
-            camera.aspect = cw / ch; camera.updateProjectionMatrix();
-          }
-          const c = stage.cam, a = t * c.sp;
-          camera.position.set(c.r * Math.cos(a), c.h + Math.sin(t * 0.4) * 1.6, c.r * Math.sin(a));
-          camera.lookAt(0, c.ty, 0);
-          state.update(t);
-          renderer.render(scene, camera);
-        }
-      };
-    } catch (e) { return null; }
-  }
-
-  /* ============================================================
-     MANAGER 2D+3D
-     ============================================================ */
-  const stages = [
-    { cvId: 'stage1', glId: 'gl1', draw: drawBridgeStage, speed2: 19 / 12, vwId: 'vw1', build: buildBridge3D, cam: { r: 56, h: 21, ty: 4, sp: 0.11 } },
-    { cvId: 'stage2', glId: 'gl2', draw: drawBuildingStage, speed2: 1, vwId: 'vw2', build: buildBuilding3D, cam: { r: 46, h: 26, ty: 12, sp: 0.15 } },
-    { cvId: 'stage3', glId: 'gl3', draw: drawPlateStage, speed2: 15 / 12, vwId: 'vw3', build: buildPlate3D, cam: { r: 34, h: 23, ty: 3, sp: 0.13 } }
-  ];
-  stages.forEach(s => {
-    s.cv = document.getElementById(s.cvId);
-    s.ctx = s.cv.getContext('2d');
-    s.dpr = Math.min(2, window.devicePixelRatio || 1);
-    s.st = { t0: null, visible: false, hud: 0, mode: '2d' };
-    s.gl = null; s.glTried = false;
-    new IntersectionObserver(es => es.forEach(e => s.st.visible = e.isIntersecting), { threshold: 0.03 }).observe(s.cv);
-  });
-  const Tm = 26;
-  const gT0 = performance.now();
-  (function loop(now) {
-    const t = ((now || performance.now()) - gT0) / 1000;
-    for (const s of stages) {
-      if (!s.st.visible) continue;
-      try {
-        if (s.st.t0 === null) s.st.t0 = t;
-        let local = t - s.st.t0;
-        if (local >= Tm) { s.st.t0 += Tm * Math.floor(local / Tm); local = t - s.st.t0; }
-        let o2 = 1, o3 = 0;
-        if (local < 0.9) o2 = local / 0.9;
-        if (local > 12 && local <= 13.2) { const f = (local - 12) / 1.2; o2 = 1 - f; o3 = f; }
-        else if (local > 13.2) { o2 = 0; o3 = 1; }
-        s.cv.style.opacity = o2.toFixed(2);
-        if (o2 > 0.02) {
-          const cw = s.cv.clientWidth, ch = s.cv.clientHeight;
-          if (cw && ch) {
-            const bw = Math.round(cw * s.dpr), bh = Math.round(ch * s.dpr);
-            if (s.cv.width !== bw || s.cv.height !== bh) { s.cv.width = bw; s.cv.height = bh; }
-            s.ctx.setTransform(s.dpr, 0, 0, s.dpr, 0, 0);
-            s.draw(s.ctx, cw, ch, local * s.speed2, t, s.st);
-          }
-        }
-        if (!s.gl && !s.glTried && o3 > 0.01) { s.glTried = true; s.gl = createGL(s); }
-        if (s.gl) {
-          s.gl.canvas.style.opacity = o3.toFixed(2);
-          if (o3 > 0.02) s.gl.render(t);
-        }
-        const mode = o3 > 0.5 ? '3d' : '2d';
-        if (mode !== s.st.mode) {
-          s.st.mode = mode;
-          const el = document.getElementById(s.vwId);
-          if (el) el.textContent = mode === '3d' ? 'VISTA 3D · ORBIT' : 'VISTA 2D · ANALISI';
-        }
-      } catch (e) { /* continua */ }
-    }
-    requestAnimationFrame(loop);
-  })(performance.now());
-
-  /* ============================================================
-     TYPING + REVEAL
-     ============================================================ */
-  async function typeInto(el, text, speed) {
-    el.textContent = '';
-    for (const ch of text) { el.textContent += ch; await sleep(speed); }
-  }
-  function showOut(id, txt) {
-    const el = document.getElementById(id);
-    if (txt) el.textContent = txt;
-    el.style.opacity = 1;
-  }
-  const termDone = { demo1: false, demo2: false, demo3: false };
-  async function runTerm1() {
-    if (termDone.demo1) return; termDone.demo1 = true;
-    await typeInto(document.getElementById('t1cmd'), 'feagent ai-generate "ponte ad arco, luce 60 m"', 42);
-    await sleep(500); showOut('t1out1', '✓ Parsing prompt... geometria arco');
-    await sleep(1200); showOut('t1out2', '✓ Deck + arco + pendini generati');
-    await sleep(1400); showOut('t1out3', '✓ Mesh: 124 nodes, 240 elements');
-  }
-  async function runTerm2() {
-    if (termDone.demo2) return; termDone.demo2 = true;
-    await typeInto(document.getElementById('t2cmd'), 'feagent solve --seismic --timehistory', 42);
-    await sleep(500); showOut('t2out1', '✓ Assembling stiffness matrix...');
-    await sleep(1200); showOut('t2out2', '✓ Time-history: Newmark β 0.25');
-    await sleep(1400); showOut('t2out3', '✓ Max drift: 14.2mm @ Floor 3');
-  }
-  async function runTerm3() {
-    if (termDone.demo3) return; termDone.demo3 = true;
-    await typeInto(document.getElementById('t3cmd'), 'feagent post --stress --vtk', 42);
-    await sleep(500); showOut('t3out1', '✓ Calculating von Mises...');
-    await sleep(1300); showOut('t3out2', '✓ Contour + colorbar renderizzati');
-    await sleep(1200); showOut('t3out3', '✓ Export: results/plate.vtk');
-  }
+  /* ============ REVEAL (i mini-terminali sono statici: comandi reali) ============ */
   const demoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.querySelector('.demo-text').classList.add('in-view');
-        if (entry.target.id === 'demo1') runTerm1();
-        if (entry.target.id === 'demo2') runTerm2();
-        if (entry.target.id === 'demo3') runTerm3();
       }
     });
   }, { threshold: 0.35 });
