@@ -436,13 +436,13 @@
   </div>
 </section>
 
-<!-- DEMO 1 -->
-<section class="scroll-demo-section" id="demo1">
+<!-- DEMO 0 · ESEGUIBILE -->
+<section class="scroll-demo-section" id="demo0">
   <div class="container demo-head-zone">
     <div class="demo-head">
       <div class="demo-text">
-        <span class="demo-label reveal-up d1">CASE STUDY 01 · ESEGUIBILE</span>
-        <h2 class="demo-title reveal-up d2">L'Eseguibile: il FEM in Finestra</h2>
+        <span class="demo-label reveal-up d1">L'ESEGUIBILE</span>
+        <h2 class="demo-title reveal-up d2">feagent-gui: il FEM in Finestra</h2>
         <p class="demo-desc reveal-up d3">
           feagent-gui &egrave; l'interfaccia desktop del solver: albero del modello, viste 3D, analisi statiche e modali con un clic. La finestra &egrave; pilotabile anche dall'AI in tempo reale, tramite le API live. Nel video: graticcio di un impalcato, statica SLU e modale.
         </p>
@@ -466,10 +466,10 @@
     </div>
   </div>
   <div class="demo-stage-wrap">
-    <video class="demo-video" src="assets/case01.mp4" poster="assets/case01.jpg" autoplay muted loop playsinline preload="metadata"></video>
+    <video class="demo-video" src="assets/case00.mp4" poster="assets/case00.jpg" autoplay muted loop playsinline preload="metadata"></video>
     <div class="stage-vignette"></div>
     <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
-    <div class="hud hud-tl"><span class="rec"></span> CASE 01 · GUI · IMPALCATO (GRATICCIO)</div>
+    <div class="hud hud-tl"><span class="rec"></span> ESEGUIBILE · GRATICCIO IMPALCATO</div>
     <div class="hud hud-tc">REGISTRAZIONE REALE · FULLSCREEN</div>
     <div class="hud hud-tr">00:50</div>
     <div class="hud hud-bl">14 nodi · 19 elementi · statica + modale</div>
@@ -477,56 +477,15 @@
   </div>
 </section>
 
-<!-- DEMO 2 -->
-<section class="scroll-demo-section alt-bg" id="demo2">
+<!-- DEMO 1 -->
+<section class="scroll-demo-section alt-bg" id="demo1">
   <div class="container demo-head-zone">
     <div class="demo-head">
       <div class="demo-text">
-        <span class="demo-label reveal-up d1">CASE STUDY 02 · SOLVER</span>
-        <h2 class="demo-title reveal-up d2">Solver Sismico su Edifici Multipiano</h2>
+        <span class="demo-label reveal-up d1">CASE STUDY 01 · PONTE AD ARCO</span>
+        <h2 class="demo-title reveal-up d2">Impalcato ad Arco con Carico Mobile</h2>
         <p class="demo-desc reveal-up d3">
-          Analisi modale e spettro di risposta elastico EC8/NTC con combinazione CQC: periodi, masse partecipanti, taglio alla base e controllo degli interpiano drift. Nel video un telaio a 6 piani, risolto da terminale.
-        </p>
-      </div>
-      <div class="demo-terminal reveal-up d3">
-        <div class="demo-terminal-header">
-          <div class="dots">
-            <span style="background:#ff5f57"></span>
-            <span style="background:#febc2e"></span>
-            <span style="background:#28c840"></span>
-          </div>
-          <span>feagent — CLI / Python API</span>
-        </div>
-        <div class="demo-terminal-body">
-          <div><span class="dt-prompt">➜</span> <span class="dt-cmd">python case02_seismic.py</span></div>
-          <div class="dt-out" style="opacity:1">✓ 10 modi propri · massa partecipante X 100 %</div>
-          <div class="dt-out" style="opacity:1">✓ Taglio alla base CQC: 635 kN</div>
-          <div class="dt-out good" style="opacity:1">✓ Drift max 0.60 %h (piano 2)</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="demo-stage-wrap">
-    <video class="demo-video" src="assets/case02.mp4" poster="assets/case02.jpg" autoplay muted loop playsinline preload="metadata"></video>
-    <div class="stage-vignette"></div>
-    <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
-    <div class="hud hud-tl"><span class="rec"></span> CASE 02 · SOLVER · TELAIO 6 PIANI</div>
-    <div class="hud hud-tc">REGISTRAZIONE REALE · TERMINALE</div>
-    <div class="hud hud-tr">00:29</div>
-    <div class="hud hud-bl">drift max 0.60 %h · piano 2 · T1 2.26 s</div>
-    <div class="hud hud-br">feagent · Python API</div>
-  </div>
-</section>
-
-<!-- DEMO 3 -->
-<section class="scroll-demo-section" id="demo3">
-  <div class="container demo-head-zone">
-    <div class="demo-head">
-      <div class="demo-text">
-        <span class="demo-label reveal-up d1">CASE STUDY 03 · POST-PROCESSING</span>
-        <h2 class="demo-title reveal-up d2">Post-Processing &amp; Mappe di Tensione</h2>
-        <p class="demo-desc reveal-up d3">
-          Tensioni di von Mises e deformata di una piastra in acciaio da 1&times;1 m, modellata con 1152 elementi solidi Hex8 sotto 250 kPa di pressione. Equilibrio globale verificato; risultati in grafici 3D interattivi.
+          Ponte ad arco da 60 m modellato in feagent: 84 nodi, 139 elementi, doppia arcata parabolica e 38 pendini. Un convoglio da 440 kN l'attraversa in 61 posizioni e il solver calcola a ogni passo deformata e momento flettente — poi la vista passa in 3D.
         </p>
       </div>
       <div class="demo-terminal reveal-up d3">
@@ -539,10 +498,92 @@
           <span>feagent — Python API</span>
         </div>
         <div class="demo-terminal-body">
-          <div><span class="dt-prompt">➜</span> <span class="dt-cmd">python case03_plate.py</span></div>
-          <div class="dt-out" style="opacity:1">✓ 1152 Hex8 · equilibrio ΣR = 250 kN</div>
-          <div class="dt-out" style="opacity:1">✓ σvm max 15.9 MPa · freccia −0.26 mm</div>
-          <div class="dt-out good" style="opacity:1">✓ Mappa + deformata 3D (Plotly)</div>
+          <div><span class="dt-prompt">➜</span> <span class="dt-cmd">python ponte_arco.py</span></div>
+          <div class="dt-out" style="opacity:1">✓ 84 nodi · 139 elementi · 38 pendini</div>
+          <div class="dt-out" style="opacity:1">✓ convoglio 440 kN · 61 posizioni</div>
+          <div class="dt-out good" style="opacity:1">✓ |u| max 12.0 mm · σ 23 MPa</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="demo-stage-wrap">
+    <video class="demo-video" src="assets/case01.mp4" poster="assets/case01.jpg" autoplay muted loop playsinline preload="metadata"></video>
+    <div class="stage-vignette"></div>
+    <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
+    <div class="hud hud-tl"><span class="rec"></span> CASE 01 · PONTE AD ARCO · CARICO MOBILE</div>
+    <div class="hud hud-tc">REGISTRAZIONE REALE · SOLVER</div>
+    <div class="hud hud-tr">00:28</div>
+    <div class="hud hud-bl">84 nodi · 139 elementi · convoglio 440 kN</div>
+    <div class="hud hud-br">feagent v1.0.0 · API Python</div>
+  </div>
+</section>
+
+<!-- DEMO 2 -->
+<section class="scroll-demo-section" id="demo2">
+  <div class="container demo-head-zone">
+    <div class="demo-head">
+      <div class="demo-text">
+        <span class="demo-label reveal-up d1">CASE STUDY 02 · SOLVER</span>
+        <h2 class="demo-title reveal-up d2">Solver Sismico su Edifici Multipiano</h2>
+        <p class="demo-desc reveal-up d3">
+          Time-history lineare di un telaio a 6 piani sotto un accelerogramma artificiale compatibile con lo spettro EC8/NTC (PGA 0.25g): drift di piano, taglio alla base e spostamento della sommit&agrave; si aggiornano a ogni istante. In progetto, con q=4, il drift massimo scende a 0.18 %h.
+        </p>
+      </div>
+      <div class="demo-terminal reveal-up d3">
+        <div class="demo-terminal-header">
+          <div class="dots">
+            <span style="background:#ff5f57"></span>
+            <span style="background:#febc2e"></span>
+            <span style="background:#28c840"></span>
+          </div>
+          <span>feagent — Python API</span>
+        </div>
+        <div class="demo-terminal-body">
+          <div><span class="dt-prompt">➜</span> <span class="dt-cmd">python telaio_sisma.py</span></div>
+          <div class="dt-out" style="opacity:1">✓ T1 0.73 s · 8 modi · massa X 100 %</div>
+          <div class="dt-out" style="opacity:1">✓ record compatibile EC8 · PGA 0.25g</div>
+          <div class="dt-out good" style="opacity:1">✓ drift max 0.55 %h · V base 1264 kN</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="demo-stage-wrap">
+    <video class="demo-video" src="assets/case02.mp4" poster="assets/case02.jpg" autoplay muted loop playsinline preload="metadata"></video>
+    <div class="stage-vignette"></div>
+    <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
+    <div class="hud hud-tl"><span class="rec"></span> CASE 02 · SOLVER SISMICO · TELAIO 6 PIANI</div>
+    <div class="hud hud-tc">REGISTRAZIONE REALE · SOLVER</div>
+    <div class="hud hud-tr">00:28</div>
+    <div class="hud hud-bl">drift max 0.55 %h · T1 0.73 s · PGA 0.25g</div>
+    <div class="hud hud-br">feagent v1.0.0 · time-history</div>
+  </div>
+</section>
+
+<!-- DEMO 3 -->
+<section class="scroll-demo-section alt-bg" id="demo3">
+  <div class="container demo-head-zone">
+    <div class="demo-head">
+      <div class="demo-text">
+        <span class="demo-label reveal-up d1">CASE STUDY 03 · POST-PROCESSING</span>
+        <h2 class="demo-title reveal-up d2">Post-Processing &amp; Mappe di Tensione</h2>
+        <p class="demo-desc reveal-up d3">
+          Piastra 6&times;6 m modellata con 400 gusci Q4: una forza mobile da 250 kN la attraversa e la mappa di von Mises &egrave; ricalcolata dal solver a ogni passo — fino a 28 MPa con una freccia di 24 mm. Nessun rendering preconfezionato: solo risultati FEM.
+        </p>
+      </div>
+      <div class="demo-terminal reveal-up d3">
+        <div class="demo-terminal-header">
+          <div class="dots">
+            <span style="background:#ff5f57"></span>
+            <span style="background:#febc2e"></span>
+            <span style="background:#28c840"></span>
+          </div>
+          <span>feagent — Python API</span>
+        </div>
+        <div class="demo-terminal-body">
+          <div><span class="dt-prompt">➜</span> <span class="dt-cmd">python piastra_vm.py</span></div>
+          <div class="dt-out" style="opacity:1">✓ 400 gusci Q4 · appoggio ai 4 lati</div>
+          <div class="dt-out" style="opacity:1">✓ forza mobile 250 kN · 17 posizioni</div>
+          <div class="dt-out good" style="opacity:1">✓ σvm max 28.3 MPa · freccia 23.8 mm</div>
         </div>
       </div>
     </div>
@@ -552,10 +593,10 @@
     <div class="stage-vignette"></div>
     <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
     <div class="hud hud-tl"><span class="rec"></span> CASE 03 · POST · VON MISES</div>
-    <div class="hud hud-tc">REGISTRAZIONE REALE · TERMINALE</div>
-    <div class="hud hud-tr">00:29</div>
-    <div class="hud hud-bl">σvm max 15.9 MPa · freccia 0.26 mm</div>
-    <div class="hud hud-br">feagent · Python API</div>
+    <div class="hud hud-tc">REGISTRAZIONE REALE · SOLVER</div>
+    <div class="hud hud-tr">00:28</div>
+    <div class="hud hud-bl">σvm max 28.3 MPa · 400 Q4 · scala ×100</div>
+    <div class="hud hud-br">feagent v1.0.0 · API Python</div>
   </div>
 </section>
 
