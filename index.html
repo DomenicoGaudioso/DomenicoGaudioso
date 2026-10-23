@@ -448,6 +448,19 @@ footer.site{background:rgba(255,255,255,.9)}
 .band-card{background:rgba(255,255,255,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .hero-draw .draw-card,.lvl-shell,.ct-card,.mail-card{background:rgba(255,255,255,.97)}
 .about-draw .draw-card{background:rgba(255,255,255,.97)}
+
+/* icone di CivilBox e feagent */
+.ic{display:inline-block;height:1em;width:auto;vertical-align:-.16em;margin-right:.4em}
+.ic-fe{height:.95em}
+h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
+.btn .ic{height:20px;width:auto;margin-right:2px;vertical-align:middle}
+.btn .ic-fe{height:18px}
+.ft-grid a .ic{height:16px;width:auto;margin-right:8px;vertical-align:-3px}
+.ft-grid a .ic-fe{height:14px}
+.tool-ico img{width:30px;height:30px;object-fit:contain}
+.tool-ico-fe img{width:40px;height:auto}
+.tool-ico{width:60px;height:60px}
+.band-head p .ic{height:1.1em;vertical-align:-.22em}
 </style>
 </head>
 <body>
@@ -495,8 +508,8 @@ footer.site{background:rgba(255,255,255,.9)}
       <div class="hero-ctas">
         <a class="btn btn-primary" href="#servizi" data-anchor="servizi">Scopri i servizi <span class="arr">→</span></a>
         <a class="btn btn-ghost" href="#chi-sono" data-anchor="chi-sono">Chi sono</a>
-        <a class="btn btn-ghost" href="https://civilbox.xyz" target="_blank" rel="noopener">CivilBox ⌁</a>
-        <a class="btn btn-ghost" href="feagent/">feagent →</a>
+        <a class="btn btn-ghost" href="https://civilbox.xyz" target="_blank" rel="noopener"><img class="ic" src="assets/civilbox.svg" alt="" width="20" height="20">CivilBox <span class="arr">↗</span></a>
+        <a class="btn btn-ghost" href="feagent/"><img class="ic ic-fe" src="assets/feagent.png" alt="" width="26" height="20">feagent <span class="arr">→</span></a>
       </div>
       <div class="hero-tags">
         <span>NTC 2018</span><span>DM 204/2022 · LL.GG. PONTI</span><span>EN 1994-2</span><span>RHINO · GRASSHOPPER</span><span>BIM SPECIALIST</span><span>OPENBIM</span><span>PYTHON</span>
@@ -754,13 +767,13 @@ footer.site{background:rgba(255,255,255,.9)}
     <div class="band-card" data-reveal>
       <div class="band-head">
         <span class="pill-band">Strumenti</span>
-        <h2>CivilBox e feagent.</h2>
-        <p>CivilBox per i calcoli rapidi nel browser, feagent per l'analisi agli elementi finiti dal terminale: gli strumenti che uso ogni giorno al lavoro e in sopralluogo.</p>
+        <h2><img class="ic" src="assets/civilbox.svg" alt="" width="20" height="20">CivilBox e <img class="ic ic-fe" src="assets/feagent.png" alt="" width="26" height="20">feagent.</h2>
+        <p><img class="ic" src="assets/civilbox.svg" alt="" width="20" height="20">CivilBox per i calcoli rapidi nel browser, <img class="ic ic-fe" src="assets/feagent.png" alt="" width="26" height="20">feagent per l'analisi agli elementi finiti dal terminale: gli strumenti che uso ogni giorno al lavoro e in sopralluogo.</p>
       </div>
       <div class="tools-row">
         <article class="tool-card">
           <div class="tool-head">
-            <div class="tool-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v3.4h-5v9.2h5V20H5v-3.4h5V7.4H5z" stroke="#33506b" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="5.6" r="1.3" fill="#ffd43b" stroke="#33506b"/></svg></div>
+            <div class="tool-ico"><img src="assets/civilbox.svg" alt="CivilBox" width="30" height="30"></div>
             <div><h3>CivilBox</h3><span class="tool-url">CIVILBOX.XYZ · WEB · GRATUITA</span></div>
           </div>
           <p>La suite di calcolo nel browser: travi, pilastri, verifiche di sezione e azioni su ponti secondo NTC 2018, con formule a vista e input guidati. Nessuna installazione: apri il browser e calcoli.</p>
@@ -768,7 +781,7 @@ footer.site{background:rgba(255,255,255,.9)}
         </article>
         <article class="tool-card">
           <div class="tool-head">
-            <div class="tool-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6l5 2 6-2 7 2-2 8-7 2-6-2-3-8z" stroke="#2f8f9d" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8" cy="8" r="1" fill="#ffd43b"/><circle cx="14" cy="6" r="1" fill="#ffd43b"/><circle cx="9" cy="16" r="1" fill="#ffd43b"/></svg></div>
+            <div class="tool-ico tool-ico-fe"><img src="assets/feagent.png" alt="feagent" width="38" height="30"></div>
             <div><h3>feagent</h3><span class="tool-url">FEM · CLI · AI-READY</span></div>
           </div>
           <p>Il framework FEM da terminale con AI: genera mesh da prompt in linguaggio naturale, risolvi analisi statiche, dinamiche e sismiche e post-processa con esportazione VTK per Paraview.</p>
@@ -863,8 +876,8 @@ footer.site{background:rgba(255,255,255,.9)}
       </div>
       <div>
         <h5>Strumenti &amp; riferimenti</h5>
-        <a href="https://civilbox.xyz" target="_blank" rel="noopener">civilbox.xyz ↗</a>
-        <a href="feagent/">feagent — FEM CLI</a>
+        <a href="https://civilbox.xyz" target="_blank" rel="noopener"><img class="ic" src="assets/civilbox.svg" alt="" width="20" height="20">civilbox.xyz ↗</a>
+        <a href="feagent/"><img class="ic ic-fe" src="assets/feagent.png" alt="" width="26" height="20">feagent — FEM CLI</a>
         <a href="mailto:domenicogaudioso@outlook.it">domenicogaudioso@outlook.it</a>
         <a href="mailto:domenico.gaudioso@ingpec.eu">domenico.gaudioso@ingpec.eu</a>
       </div>
