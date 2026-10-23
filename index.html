@@ -2,6 +2,8 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0d1117">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ing. Domenico Gaudioso — Ingegneria Strutturale · Ponti misti · FEM · BIM · Monitoraggio</title>
 <meta name="description" content="Ingegnere civile strutturista: progettazione di ponti a struttura mista acciaio-calcestruzzo, modellazione FEM e BIM, sistemi di monitoraggio strutturale e analisi dei dati. Strumenti: civilbox.xyz.">
@@ -304,7 +306,7 @@ footer.site{background:var(--card);border-top:1px solid var(--ring);padding:56px
 }
 
 /* ══════ ritocco moderno ══════ */
-:root{--hard:#1f2937;--ring:#e8ebef;--r-lg:22px}
+:root{color-scheme:dark;--hard:#1f2937;--ring:#e8ebef;--r-lg:22px}
 body{font-feature-settings:"ss01","cv11";-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 h1,h2,h3{letter-spacing:-.035em}
 .hero h1{font-weight:700;line-height:1.04}
@@ -330,8 +332,8 @@ header.site{backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:sat
   -webkit-mask-image:radial-gradient(ellipse at 70% 30%,#000,transparent 70%);mask-image:radial-gradient(ellipse at 70% 30%,#000,transparent 70%)}
 .hero>*{position:relative}
 
-/* ══════ tema scuro automatico ══════ */
-@media(prefers-color-scheme:dark){
+/* ══════ tema scuro (unico tema) ══════ */
+@media all{
   :root{--bg:#0d1117;--hdr:rgba(13,17,23,.72);--card:#161b22;--ink:#f0f3f6;--sub:#a9b4c2;--muted:#7d8898;
     --ring:#262d37;--ring2:#323b48;--hard:#3a4452;--slate:#9fb8d1;
     --brand:#3ba3b2;--brand7:#6cc7d4;--brand5:#4db3c1;--brand1:rgba(59,163,178,.18);--brand0:rgba(59,163,178,.08);
