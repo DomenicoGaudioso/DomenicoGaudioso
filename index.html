@@ -1029,27 +1029,31 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
 </script>
 <script src="assets/vendor/d3-delaunay.min.js"></script>
 <script>
-/* Sfondo interattivo: celle di Voronoi. Ogni tocco del cursore e' un carico che, come una goccia
-   nell'acqua, genera un'onda di colore (rosso al centro, poi arancio, giallo, verde, azzurro, blu)
-   che si allarga, si attenua e si dissolve. */
+/* Sfondo interattivo: celle di Voronoi a maglia variabile (fitte in alcune zone, larghe altrove).
+   Il clic e' un carico: i punti vicini si stringono verso il clic, si aggiungono punti che infittiscono
+   la maglia e un'onda di colore (rosso, arancio, giallo, verde, azzurro, blu) si propaga e si smorza. */
 (function(){
   var cv = document.getElementById('meshBg');
   if(!cv || !cv.getContext || !window.d3 || !d3.Delaunay) return;
   var ctx = cv.getContext('2d');
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W=0, H=0, dpr=1, spacing=64, n=0;
-  var ox, oy, pts, val, delaunay, voronoi;
-  var ripples=[], moved=false, lastX=-9999, lastY=-9999, lastT=0, running=true, last=0, ghostT=0.7, now=0;
+  var W=0, H=0, dpr=1, rmin=26, rmax=86;
+  var nb=0, ox, oy, bx, by;            // punti di base: posizione di riposo e posizione corrente
+  var refs=[], pulls=[], ripples=[];
+  var cur=null, val=null, delaunay=null, voronoi=null, nTot=0;
+  var moved=false, lastX=-9999, lastY=-9999, lastT=0, running=true, last=0, ghostT=0.9, now=0, lastDrop=0;
+
+  var zones = [[.15,.34,.30,1.0],[.82,.20,.26,.95],[.58,.84,.30,.85]];   // x, y, raggio (frazione del lato minore), intensita'
 
   // scala colore 0..1, sempre semitrasparente
   var stops = [
     [0.00,  59,130,246, 0.00],
-    [0.12,  59,130,246, 0.13],
-    [0.32,  34,190,200, 0.24],
-    [0.50, 110,200, 90, 0.32],
-    [0.68, 250,200, 40, 0.40],
-    [0.84, 245,130, 30, 0.48],
-    [1.00, 220, 38, 38, 0.56]
+    [0.12,  59,130,246, 0.14],
+    [0.32,  34,190,200, 0.25],
+    [0.50, 110,200, 90, 0.33],
+    [0.68, 250,200, 40, 0.41],
+    [0.84, 245,130, 30, 0.49],
+    [1.00, 220, 38, 38, 0.58]
   ];
   function color(s){
     if(s<=0.01) return null;
@@ -1063,11 +1067,36 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
     return null;
   }
 
-  function rnd(i){ var x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
+  function mk(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; var t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
 
-  function drop(x, y, amp, speed, age){
-    ripples.push({x:x, y:y, amp:amp, speed:speed, age:age||0});
-    if(ripples.length > 16) ripples.shift();
+  function radiusAt(x,y){
+    var f=0, m=Math.min(W,H);
+    for(var k=0;k<zones.length;k++){
+      var z=zones[k], dx=(x-z[0]*W)/(z[2]*m), dy=(y-z[1]*H)/(z[2]*m), g=Math.exp(-(dx*dx+dy*dy))*z[3];
+      if(g>f) f=g;
+    }
+    return rmax-(rmax-rmin)*f;
+  }
+
+  // punti con raggio locale variabile (campionamento a dardi): maglia fitta vicino alle zone, larga altrove
+  function buildBase(){
+    var rnd = mk(7), pad = rmax*0.6, cell = rmin*0.7;
+    var gw = Math.ceil((W+2*pad)/cell)+2, gh = Math.ceil((H+2*pad)/cell)+2;
+    var grid = new Int32Array(gw*gh).fill(-1), X=[], Y=[], R=[];
+    for(var tries=0; tries<45000; tries++){
+      var x = -pad + rnd()*(W+2*pad), y = -pad + rnd()*(H+2*pad), r = radiusAt(x,y);
+      var gx = Math.floor((x+pad)/cell), gy = Math.floor((y+pad)/cell), k = Math.ceil(((r+rmax)/2)/cell), ok = true;
+      for(var j=Math.max(0,gy-k); ok && j<=Math.min(gh-1,gy+k); j++){
+        for(var i=Math.max(0,gx-k); i<=Math.min(gw-1,gx+k); i++){
+          var q = grid[j*gw+i]; if(q<0) continue;
+          var dx=x-X[q], dy=y-Y[q], rr=(r+R[q])/2;
+          if(dx*dx+dy*dy < rr*rr){ ok=false; break; }
+        }
+      }
+      if(ok){ grid[gy*gw+gx] = X.length; X.push(x); Y.push(y); R.push(r); }
+    }
+    nb = X.length;
+    ox = Float64Array.from(X); oy = Float64Array.from(Y); bx = Float64Array.from(X); by = Float64Array.from(Y);
   }
 
   function build(){
@@ -1076,50 +1105,96 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
     cv.width = W*dpr; cv.height = H*dpr;
     cv.style.width = W+'px'; cv.style.height = H+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    spacing = W < 700 ? 46 : 62;
-    var cols = Math.ceil(W/spacing)+1, rows = Math.ceil(H/spacing)+1;
-    n = cols*rows;
-    ox = new Float64Array(n); oy = new Float64Array(n); val = new Float64Array(n);
-    pts = new Float64Array(n*2);
-    var k=0;
-    for(var j=0;j<rows;j++) for(var i=0;i<cols;i++){
-      ox[k] = i*spacing + (rnd(k*2)-0.5)*spacing*0.78;
-      oy[k] = j*spacing + (rnd(k*2+1)-0.5)*spacing*0.78;
-      pts[2*k]=ox[k]; pts[2*k+1]=oy[k]; k++;
+    rmin = W < 700 ? 20 : 22; rmax = W < 700 ? 70 : 100;
+    refs = []; pulls = []; ripples = []; cur = null; nTot = 0;
+    buildBase();
+    if(reduce){
+      click(W*0.7, H*0.42, true);
+      for(var i=0;i<60;i++) step(0);
+      draw();
     }
-    delaunay = new d3.Delaunay(pts);
-    voronoi = delaunay.voronoi([0,0,W,H]);
-    if(reduce){ ripples=[]; drop(W*0.7, H*0.4, 1, 300, 0.45); step(0); draw(); }
+  }
+
+  function drop(x, y, amp, speed, age){
+    ripples.push({x:x, y:y, amp:amp, speed:speed, age:age||0});
+    if(ripples.length > 18) ripples.shift();
+  }
+
+  // clic: carico concentrato. Stringe la maglia, aggiunge punti e lancia l'onda di colore
+  function click(x, y, still){
+    var rnd = mk((x*73856093) ^ (y*19349663) ^ (now*1000|0)), K = 46, Rr = 150, tries = 0, pl = [];
+    while(pl.length < K && tries < 400){
+      tries++;
+      var a = rnd()*6.2832, r = Rr*Math.pow(rnd(), 1.7), tx = x + Math.cos(a)*r, ty = y + Math.sin(a)*r, ok = true;
+      for(var i=0;i<pl.length;i++){ var dx=tx-pl[i].tx, dy=ty-pl[i].ty; if(dx*dx+dy*dy < 8*8){ ok=false; break; } }
+      if(ok) pl.push({tx:tx, ty:ty, x0:x, y0:y, px:x+(tx-x)*1.7, py:y+(ty-y)*1.7, age:0, near:-1});
+    }
+    for(var j=0;j<pl.length;j++){      // base piu' vicino: dove il punto si riassorbe a fine vita
+      var best=1e12, bi=0;
+      for(var q=0;q<nb;q++){ var ddx=ox[q]-pl[j].tx, ddy=oy[q]-pl[j].ty, d2=ddx*ddx+ddy*ddy; if(d2<best){ best=d2; bi=q; } }
+      pl[j].near = bi;
+      if(refs.length < 160) refs.push(pl[j]);
+    }
+    pulls.push({x:x, y:y, age:still?0.45:0});
+    if(pulls.length > 6) pulls.shift();
+    drop(x, y, 1, 400, still?0.4:0);
   }
 
   function step(dt){
-    var i, k, R, d, dx, dy, a, r, w, amp, g1, g2, s, tx, ty, nx, ny, q;
-    for(k=ripples.length-1;k>=0;k--){
-      ripples[k].age += dt;
-      if(ripples[k].age > 2.7) ripples.splice(k,1);
+    var i, k, R, d, dx, dy, a, r, w, amp, g1, g2, s, tx, ty, nx, ny, q, v;
+    for(k=ripples.length-1;k>=0;k--){ ripples[k].age += dt; if(ripples[k].age > 3.5) ripples.splice(k,1); }
+    for(k=pulls.length-1;k>=0;k--){ pulls[k].age += dt; if(pulls[k].age > 4.2) pulls.splice(k,1); }
+    for(k=refs.length-1;k>=0;k--){ refs[k].age += dt; if(refs[k].age > 3.8) refs.splice(k,1); }
+
+    var n = nb + refs.length;
+    if(!cur || nTot !== n){
+      nTot = n; cur = new Float64Array(2*n); val = new Float64Array(n);
+      for(i=0;i<nb;i++){ cur[2*i]=bx[i]; cur[2*i+1]=by[i]; }
+      for(k=0;k<refs.length;k++){ cur[2*(nb+k)]=refs[k].px; cur[2*(nb+k)+1]=refs[k].py; }
+      delaunay = new d3.Delaunay(cur); voronoi = delaunay.voronoi([0,0,W,H]);
     }
+
     for(i=0;i<n;i++){
+      var rx, ry, baseP = i < nb, ref = baseP ? null : refs[i-nb];
+      if(baseP){ rx = ox[i]; ry = oy[i]; }
+      else {
+        a = ref.age;
+        // arrivo: i punti convergono verso il carico; fine vita: rientrano nel punto di base piu' vicino
+        var f1 = Math.min(1, a/0.55); f1 = 1-Math.pow(1-f1,3);
+        var f2 = a > 2.6 ? Math.min(1, (a-2.6)/1.1) : 0; f2 = f2*f2*(3-2*f2);
+        var sx = ref.x0 + (ref.tx - ref.x0)*(1.7 - 0.7*f1), sy = ref.y0 + (ref.ty - ref.y0)*(1.7 - 0.7*f1);
+        rx = sx + (ox[ref.near]-sx)*f2; ry = sy + (oy[ref.near]-sy)*f2;
+      }
       s = 0; nx = 0; ny = 0;
-      var x = pts[2*i], y = pts[2*i+1];
       for(k=0;k<ripples.length;k++){
         R = ripples[k]; a = R.age;
-        dx = ox[i]-R.x; dy = oy[i]-R.y; d = Math.sqrt(dx*dx+dy*dy)||1;
+        dx = rx-R.x; dy = ry-R.y; d = Math.sqrt(dx*dx+dy*dy)||1;
         r = R.speed*a; w = 46+34*a;
-        amp = R.amp*Math.exp(-a/0.8)/(1+0.45*a);
-        if(a < 0.9) amp *= 1;
+        amp = R.amp*Math.exp(-a/1.05)/(1+0.4*a);
         if(d > r+3*w) continue;
         q = (d-r)/w; g1 = Math.exp(-q*q);
-        q = (d-(r-1.5*w))/(w*0.9); g2 = Math.exp(-q*q);      // onda di ritorno, piu' debole
-        var core = a < 0.5 ? Math.exp(-(d*d)/(70*70+a*a*14000))*(1-a/0.5) : 0; // impatto: rosso intenso nel punto di contatto
-        var v = Math.max(amp*g1, amp*0.45*g2, R.amp*core);
+        q = (d-(r-1.5*w))/(w*0.9); g2 = Math.exp(-q*q);
+        var core = a < 0.6 ? Math.exp(-(d*d)/(80*80+a*a*16000))*(1-a/0.6) : 0;
+        v = Math.max(amp*g1, amp*0.45*g2, R.amp*core);
         if(v > s) s = v;
-        var p = amp*(g1 - 0.5*g2)*8;
+        var p = amp*(g1 - 0.5*g2)*(R.amp>0.9 ? 9 : 6);
         nx += dx/d*p; ny += dy/d*p;
       }
       val[i] = s;
-      tx = ox[i] + nx; ty = oy[i] + ny;
-      pts[2*i]   = x + (tx-x)*0.35;
-      pts[2*i+1] = y + (ty-y)*0.35;
+      tx = rx + nx; ty = ry + ny;
+      if(baseP){                                   // la maglia si stringe verso il punto del clic
+        for(k=0;k<pulls.length;k++){
+          var P = pulls[k], pa = P.age, ps = pa < 0.12 ? pa/0.12 : Math.exp(-(pa-0.12)/1.5);
+          dx = P.x-rx; dy = P.y-ry; d = Math.sqrt(dx*dx+dy*dy)||1;
+          var pf = Math.exp(-(d/175)*(d/175))*ps*0.34;
+          tx += dx*pf; ty += dy*pf;
+        }
+        bx[i] += (tx-bx[i])*0.32; by[i] += (ty-by[i])*0.32;
+        cur[2*i] = bx[i]; cur[2*i+1] = by[i];
+      } else {
+        ref.px += (tx-ref.px)*0.45; ref.py += (ty-ref.py)*0.45;
+        cur[2*i] = ref.px; cur[2*i+1] = ref.py;
+      }
     }
     delaunay.update(); voronoi.update();
   }
@@ -1127,7 +1202,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
   function draw(){
     ctx.clearRect(0,0,W,H);
     var i, c;
-    for(i=0;i<n;i++){
+    for(i=0;i<nTot;i++){
       if(val[i] > 0.012){
         c = color(val[i]);
         if(c){ ctx.beginPath(); voronoi.renderCell(i, ctx); ctx.fillStyle = c; ctx.fill(); }
@@ -1137,7 +1212,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
     ctx.strokeStyle = 'rgba(20,24,29,.09)';
     ctx.beginPath(); voronoi.render(ctx); ctx.stroke();
     ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 1.1;
-    for(i=0;i<n;i++){
+    for(i=0;i<nTot;i++){
       if(val[i] > 0.4){ ctx.beginPath(); voronoi.renderCell(i, ctx); ctx.stroke(); }
     }
   }
@@ -1148,8 +1223,9 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
     if(!moved){                                   // gocce spontanee finche' non si usa il mouse
       ghostT -= dt;
       if(ghostT <= 0){
-        drop(W*(0.45+0.45*Math.random()), H*(0.2+0.6*Math.random()), 0.9, 280, 0);
-        ghostT = 2.6 + Math.random()*1.6;
+        var gx = W*(0.45+0.45*Math.random()), gy = H*(0.2+0.6*Math.random());
+        click(gx, gy, false);
+        ghostT = 4.5 + Math.random()*2.5;
       }
     }
     step(dt); draw();
@@ -1159,14 +1235,14 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
   window.addEventListener('pointermove', function(e){
     moved = true;
     var dx = e.clientX-lastX, dy = e.clientY-lastY;
-    if(dx*dx+dy*dy > 70*70 || (now-lastT > 0.22 && dx*dx+dy*dy > 14*14)){
-      drop(e.clientX, e.clientY, 0.8, 250, 0);
+    if(dx*dx+dy*dy > 110*110 || (now-lastT > 0.3 && dx*dx+dy*dy > 24*24)){
+      drop(e.clientX, e.clientY, 0.45, 230, 0);
       lastX = e.clientX; lastY = e.clientY; lastT = now;
     }
   }, {passive:true});
   window.addEventListener('pointerdown', function(e){
     moved = true; lastX = e.clientX; lastY = e.clientY; lastT = now;
-    drop(e.clientX, e.clientY, 1, 360, 0);
+    click(e.clientX, e.clientY, false);
   }, {passive:true});
   window.addEventListener('resize', build);
   document.addEventListener('visibilitychange', function(){
