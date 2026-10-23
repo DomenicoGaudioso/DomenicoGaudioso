@@ -1026,17 +1026,43 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
   setLevel(0);
 })();
 </script>
+<script src="assets/vendor/d3-delaunay.min.js"></script>
 <script>
-/* Sfondo interattivo: rete di elementi finiti che si deforma al passaggio del cursore */
+/* Sfondo interattivo: celle di Voronoi. Il cursore e' un carico: le celle vicine si
+   colorano come in una mappa di tensioni (rosso sotto il carico, poi giallo, verde, azzurro, blu). */
 (function(){
   var cv = document.getElementById('meshBg');
-  if(!cv || !cv.getContext) return;
+  if(!cv || !cv.getContext || !window.d3 || !d3.Delaunay) return;
   var ctx = cv.getContext('2d');
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var coarse = window.matchMedia && matchMedia('(pointer: coarse)').matches;
-  var W=0, H=0, dpr=1, step=46, cols=0, rows=0, nodes=[];
-  var mx=-9999, my=-9999, pmx=-9999, pmy=-9999, moved=false, t=0, last=0, running=true;
-  var R=170, push=26;
+  var W=0, H=0, dpr=1, spacing=64, n=0;
+  var ox, oy, pts, vx, vy, val, delaunay, voronoi;
+  var mx=-9999, my=-9999, moved=false, down=false, t=0, last=0, running=true, load=0, rad=0;
+  var R0=190;
+
+  // scala colore da tensione 0..1: trasparente, blu, azzurro, verde, giallo, arancio, rosso
+  var stops = [
+    [0.00,  59,130,246, 0.00],
+    [0.14,  59,130,246, 0.22],
+    [0.34,  34,190,200, 0.38],
+    [0.52, 110,200, 90, 0.50],
+    [0.70, 250,200, 40, 0.62],
+    [0.86, 245,130, 30, 0.74],
+    [1.00, 220, 38, 38, 0.86]
+  ];
+  function color(s){
+    if(s<=0) return null;
+    if(s>1) s=1;
+    for(var k=1;k<stops.length;k++){
+      if(s<=stops[k][0]){
+        var a=stops[k-1], b=stops[k], f=(s-a[0])/(b[0]-a[0]);
+        return 'rgba('+Math.round(a[1]+(b[1]-a[1])*f)+','+Math.round(a[2]+(b[2]-a[2])*f)+','+Math.round(a[3]+(b[3]-a[3])*f)+','+(a[4]+(b[4]-a[4])*f).toFixed(3)+')';
+      }
+    }
+    return null;
+  }
+
+  function rnd(i){ var x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
 
   function build(){
     dpr = Math.min(window.devicePixelRatio||1, 2);
@@ -1044,96 +1070,97 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
     cv.width = W*dpr; cv.height = H*dpr;
     cv.style.width = W+'px'; cv.style.height = H+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    step = W < 700 ? 38 : 46;
-    var h = step*0.866;
-    cols = Math.ceil(W/step)+2; rows = Math.ceil(H/h)+2;
-    nodes = [];
-    for(var j=0;j<rows;j++){
-      for(var i=0;i<cols;i++){
-        var x=(i-1)*step+(j%2?step/2:0), y=(j-1)*h;
-        nodes.push({ox:x,oy:y,x:x,y:y,vx:0,vy:0,e:0});
-      }
+    spacing = W < 700 ? 48 : 66;
+    var cols = Math.ceil(W/spacing)+1, rows = Math.ceil(H/spacing)+1;
+    n = cols*rows;
+    ox = new Float64Array(n); oy = new Float64Array(n);
+    vx = new Float64Array(n); vy = new Float64Array(n);
+    val = new Float64Array(n);
+    pts = new Float64Array(n*2);
+    var k=0;
+    for(var j=0;j<rows;j++) for(var i=0;i<cols;i++){
+      ox[k] = i*spacing + (rnd(k*2)-0.5)*spacing*0.78;
+      oy[k] = j*spacing + (rnd(k*2+1)-0.5)*spacing*0.78;
+      pts[2*k]=ox[k]; pts[2*k+1]=oy[k]; k++;
     }
-    if(reduce) frame(0);
+    delaunay = new d3.Delaunay(pts);
+    voronoi = delaunay.voronoi([0,0,W,H]);
+    if(reduce){ mx=W*0.7; my=H*0.45; step(1,true); draw(); }
   }
 
-  function idx(i,j){ return j*cols+i; }
-
-  function frame(ts){
-    var dt = Math.min((ts-last)/16.67||1, 3); last = ts; t += 0.004*dt;
-    var gx = mx, gy = my;
-    if(!moved && !reduce){                      // cursore "fantasma" finche' non si muove il mouse
-      gx = W*(0.62+0.26*Math.sin(t*1.7)); gy = H*(0.42+0.24*Math.sin(t*1.1+1));
-    }
-    var n = nodes.length, i, nd;
-    for(i=0;i<n;i++){
-      nd = nodes[i];
-      var tx = nd.ox + Math.sin(t*2+nd.oy*0.012)*1.6;
-      var ty = nd.oy + Math.cos(t*2+nd.ox*0.012)*1.6;
-      var dx = nd.x-gx, dy = nd.y-gy, d2 = dx*dx+dy*dy;
-      if(d2 < R*R){
-        var d = Math.sqrt(d2)||1, f = (1-d/R); f = f*f*(3-2*f);
-        nd.vx += dx/d*f*push*0.05*dt; nd.vy += dy/d*f*push*0.05*dt;
+  function step(dt, still){
+    t += 0.004*dt;
+    var gx=mx, gy=my, ghost=false;
+    if(!moved){ ghost=true; gx = W*(0.64+0.22*Math.sin(t*1.5)); gy = H*(0.44+0.2*Math.sin(t*1.05+1)); }
+    var target = ghost ? 0.82 : (down ? 1.25 : 1.0);
+    load += (target-load)*0.08*dt;
+    rad += ((down?1.35:1)*R0-rad)*0.1*dt;
+    if(rad<1) rad=R0;
+    var R=rad, R2=R*R;
+    for(var i=0;i<n;i++){
+      var tx = ox[i] + (still?0:Math.sin(t*2+oy[i]*0.01)*2.5);
+      var ty = oy[i] + (still?0:Math.cos(t*2+ox[i]*0.01)*2.5);
+      var x = pts[2*i], y = pts[2*i+1];
+      var dx = x-gx, dy = y-gy, d2 = dx*dx+dy*dy, tg = 0;
+      if(d2 < R2*2.6){
+        var d = Math.sqrt(d2)||1;
+        var q = d/R;
+        var dc = Math.max(0, d-spacing*0.55)/R; tg = Math.exp(-dc*dc*3.4)*load;           // intensita' di tensione con campana gaussiana
+        if(d<R){                                // leggera deformazione: le celle si allontanano dal carico
+          var f = 1-q; f=f*f*(3-2*f);
+          vx[i] += dx/d*f*1.3*dt; vy[i] += dy/d*f*1.3*dt;
+        }
       }
-      nd.vx += (tx-nd.x)*0.045*dt; nd.vy += (ty-nd.y)*0.045*dt;
-      var damp = Math.pow(0.86, dt);
-      nd.vx *= damp; nd.vy *= damp;
-      nd.x += nd.vx*dt; nd.y += nd.vy*dt;
-      var ex = nd.x-nd.ox, ey = nd.y-nd.oy;
-      nd.e = Math.min(1, Math.sqrt(ex*ex+ey*ey)/22);
+      vx[i] += (tx-x)*0.05*dt; vy[i] += (ty-y)*0.05*dt;
+      var damp = Math.pow(0.85, dt); vx[i]*=damp; vy[i]*=damp;
+      pts[2*i] = x + vx[i]*dt; pts[2*i+1] = y + vy[i]*dt;
+      // il valore sale in fretta e scende piano: lascia una scia mentre il carico si sposta
+      var rate = tg > val[i] ? 0.34 : 0.045;
+      val[i] += (tg-val[i])*Math.min(1, rate*dt);
     }
-    draw(gx,gy);
+    delaunay.update(); voronoi.update();
+    if(gx>-999 && gx<W+1 && gy>-1 && gy<H+1){ var h = delaunay.find(gx,gy); if(val[h] < load) val[h] += (load-val[h])*0.5; }
   }
 
-  function draw(gx,gy){
+  function draw(){
     ctx.clearRect(0,0,W,H);
-    // alone morbido sul cursore
-    if(gx>-999){
-      var g = ctx.createRadialGradient(gx,gy,0,gx,gy,R*1.5);
-      g.addColorStop(0,'rgba(31,102,114,.07)'); g.addColorStop(1,'rgba(31,102,114,0)');
-      ctx.fillStyle = g; ctx.fillRect(gx-R*1.5,gy-R*1.5,R*3,R*3);
-    }
-    var hot = [], i, j, a, b, c;
-    ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(20,24,29,.055)';
-    ctx.beginPath();
-    for(j=0;j<rows;j++){
-      for(i=0;i<cols;i++){
-        a = nodes[idx(i,j)];
-        var nb = [];
-        if(i+1<cols) nb.push(nodes[idx(i+1,j)]);
-        if(j+1<rows){
-          nb.push(nodes[idx(i,j+1)]);
-          var k = (j%2) ? i+1 : i-1;
-          if(k>=0 && k<cols) nb.push(nodes[idx(k,j+1)]);
-        }
-        for(var q=0;q<nb.length;q++){
-          b = nb[q]; c = (a.e+b.e)/2;
-          if(c>0.04){ hot.push(a,b,c); }
-          else { ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); }
-        }
+    var i, c;
+    for(i=0;i<n;i++){
+      if(val[i] > 0.02){
+        c = color(val[i]);
+        if(c){ ctx.beginPath(); voronoi.renderCell(i, ctx); ctx.fillStyle = c; ctx.fill(); }
       }
     }
-    ctx.stroke();
-    for(i=0;i<hot.length;i+=3){
-      a=hot[i]; b=hot[i+1]; c=hot[i+2];
-      ctx.strokeStyle = 'rgba(31,102,114,'+(0.10+0.55*c).toFixed(3)+')';
-      ctx.lineWidth = 1+c*0.8;
-      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    ctx.lineWidth = 1; ctx.lineJoin = 'round';
+    ctx.strokeStyle = 'rgba(20,24,29,.10)';
+    ctx.beginPath(); voronoi.render(ctx); ctx.stroke();
+    // bordi piu' netti sulle celle sotto carico
+    ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 1.2;
+    for(i=0;i<n;i++){
+      if(val[i] > 0.35){ ctx.beginPath(); voronoi.renderCell(i, ctx); ctx.stroke(); }
     }
-    for(i=0;i<nodes.length;i++){
-      a = nodes[i];
-      if(a.e>0.12){
-        ctx.fillStyle = 'rgba(31,102,114,'+(0.25+0.6*a.e).toFixed(3)+')';
-        ctx.beginPath(); ctx.arc(a.x,a.y,1.4+a.e*1.6,0,6.2832); ctx.fill();
+    // punto di applicazione del carico
+    if(moved || !reduce){
+      var px = moved ? mx : W*(0.64+0.22*Math.sin(t*1.5)), py = moved ? my : H*(0.44+0.2*Math.sin(t*1.05+1));
+      if(px>-999){
+        ctx.fillStyle = 'rgba(160,20,20,.9)'; ctx.beginPath(); ctx.arc(px,py,2.6,0,6.2832); ctx.fill();
+        ctx.strokeStyle = 'rgba(160,20,20,.35)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(px,py,9+ (down?4:0),0,6.2832); ctx.stroke();
       }
     }
   }
 
-  function loop(ts){ if(running){ frame(ts); requestAnimationFrame(loop); } }
+  function loop(ts){
+    if(!running) return;
+    var dt = Math.min((ts-last)/16.67||1, 3); last = ts;
+    step(dt,false); draw();
+    requestAnimationFrame(loop);
+  }
 
   window.addEventListener('pointermove', function(e){ mx=e.clientX; my=e.clientY; moved=true; }, {passive:true});
-  window.addEventListener('pointerdown', function(e){ mx=e.clientX; my=e.clientY; moved=true; }, {passive:true});
-  document.addEventListener('mouseleave', function(){ mx=-9999; my=-9999; });
+  window.addEventListener('pointerdown', function(e){ mx=e.clientX; my=e.clientY; moved=true; down=true; }, {passive:true});
+  window.addEventListener('pointerup', function(){ down=false; }, {passive:true});
+  window.addEventListener('pointercancel', function(){ down=false; }, {passive:true});
+  document.addEventListener('mouseleave', function(){ mx=-9999; my=-9999; down=false; });
   window.addEventListener('resize', build);
   document.addEventListener('visibilitychange', function(){
     if(document.hidden){ running=false; }
