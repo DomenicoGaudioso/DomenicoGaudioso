@@ -107,11 +107,11 @@ if(window.d3){
     .force("collide", d3.forceCollide(function(d){return rad(d)+2.5;}))
     .force("x", d3.forceX(0).strength(0.028))
     .force("y", d3.forceY(0).strength(0.028))
-    .alphaDecay(0.012)
-    .velocityDecay(0.32)
-    .alpha(0.6)
+    .alphaDecay(0.02)
+    .velocityDecay(0.4)
+    .alpha(0.1)
     .on("tick", function(){})
-    .alphaTarget(0.018); /* respirazione continua, stile Obsidian */
+    .alphaTarget(0.005); /* respiro leggero: la forma resta quella cotta */
 }else{
   NODES.forEach(function(n){n.x=n.x; n.y=n.y;});
 }
@@ -139,7 +139,7 @@ function nearest(mx,my){
 cv.addEventListener("pointerdown",function(e){
   cv.setPointerCapture(e.pointerId);moved=0;
   var i=nearest(e.clientX,e.clientY);
-  if(i>=0){drag=i;heat(0.22);}
+  if(i>=0){drag=i;heat(0.12);}
   else{panning=true;}
   lastX=e.clientX;lastY=e.clientY;cv.classList.add("grabbing");
 });
@@ -148,7 +148,7 @@ cv.addEventListener("pointermove",function(e){
     var nx=(e.clientX-tx)/sc, ny=(e.clientY-ty)/sc;
     NODES[drag].x=nx;NODES[drag].y=ny;
     NODES[drag].vx=0;NODES[drag].vy=0;moved++;
-    heat(0.18);
+    heat(0.1);
   }else if(panning){
     tx+=e.clientX-lastX;ty+=e.clientY-lastY;
     txT=tx;tyT=ty;moved++;
@@ -166,7 +166,7 @@ cv.addEventListener("pointermove",function(e){
 });
 cv.addEventListener("pointerup",function(){
   if(drag>=0&&moved<3){ focus=(ADJ[drag].length)?drag:-1; }
-  if(drag>=0)heat(0.018);
+  if(drag>=0)heat(0.005);
   drag=-1;panning=false;cv.classList.remove("grabbing");
   document.getElementById("tip").classList.remove("on");
 });
