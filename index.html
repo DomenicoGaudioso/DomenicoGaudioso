@@ -1095,7 +1095,6 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
   setLevel(0);
 })();
 </script>
-<script src="assets/kb-palette.js"></script>
 <script src="assets/kb-preview.js"></script>
 <script>
 /* anteprima grafo knowledge */
@@ -1103,7 +1102,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
   var cv=document.getElementById("kbPrev");
   if(!cv||!window.KBPREVIEW)return;
   var D=window.KBPREVIEW,ctx=cv.getContext("2d");
-  var PAL=window.KBPALETTE||{};
+  var COL={article:"#2f8f9d",entity:"#e8b50c",claim:"#3b74a8",topic:"#33506b"};
   var n=D.nodes.length,maxD=1,i;
   for(i=0;i<n;i++)if(D.nodes[i].d>maxD)maxD=D.nodes[i].d;
   var bx=[],by=[],ph=[];
@@ -1128,7 +1127,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
     }
     for(i=0;i<n;i++){
       var nd=D.nodes[i],rr=(1.6+3.6*Math.sqrt(nd.d/maxD))*Math.min(sc*3,1.7);
-      ctx.beginPath();ctx.arc(X(i),Y(i),rr,0,6.2832);ctx.fillStyle=PAL[nd.c]||"#7d8590";ctx.fill();
+      ctx.beginPath();ctx.arc(X(i),Y(i),rr,0,6.2832);ctx.fillStyle=COL[nd.t];ctx.fill();
     }
     requestAnimationFrame(fr);
   }
