@@ -536,11 +536,11 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
 
       <!-- tavola tecnica -->
       <div class="draw-card">
-        <div class="draw-head"><span>TAVOLA · PROSPETTO</span><span>SCHEMA</span></div>
+        <div class="draw-head"><span>ELAB. S-01 · PROSPETTO</span><span>SCALA 1:200</span></div>
         <svg class="bridge" viewBox="0 0 960 440" role="img" aria-label="Prospetto schematico di viadotto continuo a struttura mista acciaio-calcestruzzo con carico mobile">
           <!-- quote -->
           <path class="blue draw d3" d="M60 132 H900 M60 126 V138 M240 126 V138 M480 126 V138 M720 126 V138 M900 126 V138"/>
-          
+          <text x="134" y="120">18,00</text><text x="344" y="120">24,00</text><text x="584" y="120">24,00</text><text x="794" y="120">18,00</text>
           <!-- terreno -->
           <path class="thin draw d2" d="M20 400 H940 M40 400 l8 10 M88 400 l8 10 M136 400 l8 10 M184 400 l8 10 M232 400 l8 10 M280 400 l8 10 M328 400 l8 10 M376 400 l8 10 M424 400 l8 10 M472 400 l8 10 M520 400 l8 10 M568 400 l8 10 M616 400 l8 10 M664 400 l8 10 M712 400 l8 10 M760 400 l8 10 M808 400 l8 10 M856 400 l8 10 M904 400 l8 10"/>
           <!-- spalle e pile -->
@@ -567,10 +567,10 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
             <circle cx="52" cy="165" r="5" fill="none" stroke="#33506b" stroke-width="2"/>
             <path d="M23 130 V143 M17 137 l6 6 l6 -6" fill="none" stroke="#33506b" stroke-width="1.5"/>
           </g>
-          <text x="760" y="62">Q</text>
-          <text x="24" y="428">IMPALCATO CONTINUO A PIÙ CAMPI — SISTEMA MISTO ACCIAIO-CLS</text>
+          <text x="760" y="62">Q = 400 kN</text>
+          <text x="24" y="428">IMPALCATO CONTINUO A 4 CAMPI — SISTEMA MISTO ACCIAIO-CLS</text>
         </svg>
-        <div class="draw-foot"><span>EMESSO PER PUBBLICAZIONE</span><span class="rev" id="heroDate"></span></div>
+        <div class="draw-foot"><span>REV. 01 — EMESSO PER PUBBLICAZIONE</span><span class="rev" id="heroDate"></span></div>
       </div>
     </div>
   </div>
@@ -581,7 +581,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
   <div class="wrap about-grid">
     <div class="about-draw" data-reveal>
       <div class="draw-card">
-        <div class="draw-head"><span>SEZ. TIPO · IMPALCATO MISTO</span><span>SCHEMA</span></div>
+        <div class="draw-head"><span>SEZ. TIPO · IMPALCATO MISTO</span><span>SCALA 1:50</span></div>
         <svg class="bridge" viewBox="0 0 520 340" role="img" aria-label="Sezione trasversale schematica di impalcato misto acciaio-calcestruzzo a doppia trave">
           <!-- soletta -->
           <rect x="60" y="70" width="400" height="14" fill="none" stroke="#33506b" stroke-width="2.4"/>
@@ -605,12 +605,12 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
           <path class="acc" d="M164 158 H356"/>
           <!-- quote orizzontali -->
           <path class="blue" d="M60 252 H460 M60 246 V258 M460 246 V258"/>
-          <text x="260" y="244" text-anchor="middle">L</text>
+          <text x="260" y="244" text-anchor="middle">L = 8,00 m</text>
           <path class="blue" d="M160 286 H360 M160 280 V292 M360 280 V292"/>
-          <text x="260" y="278" text-anchor="middle">i</text>
+          <text x="260" y="278" text-anchor="middle">i = 4,00 m</text>
           <!-- quota verticale -->
           <path class="blue" d="M492 98 V182 M486 98 H498 M486 182 H498"/>
-          <text x="500" y="146">h</text>
+          <text x="500" y="146">h = 1,80 m</text>
         </svg>
         <div class="draw-foot"><span>SISTEMA MISTO ACCIAIO-CALCESTRUZZO</span><span class="rev">EN 1994-2</span></div>
       </div>
@@ -757,7 +757,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
         <div class="stepper-fill" id="stepFill"></div>
       </div>
       <div class="lvl-panel" id="lvlPanel"></div>
-      <div class="lvl-meter"><span>APPROFONDIMENTO</span><div class="meter-bar"><div class="meter-fill" id="meterFill"></div></div><span id="meterPct"></span></div>
+      <div class="lvl-meter"><span>APPROFONDIMENTO</span><div class="meter-bar"><div class="meter-fill" id="meterFill"></div></div><span id="meterPct">20%</span></div>
     </div>
   </div>
 </section>
@@ -922,7 +922,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
   mqBand.innerHTML = mqTop.innerHTML;
 
   document.getElementById("yearNow").textContent = new Date().getFullYear();
-  
+  document.getElementById("heroDate").textContent = "AGG. " + new Date().toLocaleDateString("it-IT");
 
   /* toast */
   var toastEl = document.getElementById("toast"), toastTimer = null;
@@ -1026,7 +1026,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
     stepFill.style.width = (i/4*82) + "%";
     lvlCur.textContent = "L"+i;
     meterFill.style.width = ((i+1)/5*100) + "%";
-    
+    meterPct.textContent = ((i+1)*20) + "%";
     var lv = lvlData[i];
     lvlPanel.innerHTML =
       '<div class="lvl-left"><h3><span class="tag">LIVELLO '+i+'</span> — '+lv.t+'</h3><p>'+lv.d+'</p>'+

@@ -544,7 +544,7 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
   <div class="container hero-content">
     <div class="badge">
       <span class="badge-dot"></span>
-      FEM Strutturale CLI
+      v1.0.0 — FEM Strutturale CLI
     </div>
     <h1><img class="h1-ic" src="../assets/feagent.png" alt="" width="110" height="86">feagent</h1>
     <p class="subtitle">Il framework FEM da CLI per l'analisi strutturale agli elementi finiti. Genera mesh, risolvi e post-processa — anche con l'aiuto dell'AI.</p>
@@ -600,7 +600,7 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
           <div><span class="dt-prompt">➜</span> <span class="dt-cmd" id="t1cmd"></span><span class="dt-cursor"></span></div>
           <div class="dt-out" id="t1out1" style="opacity:0">✓ Parsing prompt...</div>
           <div class="dt-out" id="t1out2" style="opacity:0">✓ Deck + arco + pendini generati</div>
-          <div class="dt-out good" id="t1out3" style="opacity:0">✓ Mesh generata</div>
+          <div class="dt-out good" id="t1out3" style="opacity:0">✓ Mesh: 124 nodes, 240 elements</div>
         </div>
       </div>
     </div>
@@ -613,8 +613,8 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
     <div class="hud hud-tl"><span class="rec"></span> CASE 01 · AI-GEN · IMPALCATO AD ARCO</div>
     <div class="hud hud-tc" id="vw1">VISTA 2D · ANALISI</div>
-    <div class="hud hud-tr" id="tc1">LIVE</div>
-    <div class="hud hud-bl" id="ro1">nodi · elementi</div>
+    <div class="hud hud-tr" id="tc1">00:00</div>
+    <div class="hud hud-bl" id="ro1">nodi 0 · elementi 0</div>
     <div class="hud hud-br">feagent · live simulation</div>
   </div>
 </section>
@@ -642,8 +642,8 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
         <div class="demo-terminal-body">
           <div><span class="dt-prompt">➜</span> <span class="dt-cmd" id="t2cmd"></span><span class="dt-cursor"></span></div>
           <div class="dt-out" id="t2out1" style="opacity:0">✓ Assembling stiffness matrix...</div>
-          <div class="dt-out" id="t2out2" style="opacity:0">✓ Time-history: Newmark</div>
-          <div class="dt-out good" id="t2out3" style="opacity:0">✓ Drift massimo di piano calcolato</div>
+          <div class="dt-out" id="t2out2" style="opacity:0">✓ Time-history: Newmark β 0.25</div>
+          <div class="dt-out good" id="t2out3" style="opacity:0">✓ Max drift: 14.2mm @ Floor 3</div>
         </div>
       </div>
     </div>
@@ -654,10 +654,10 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     <div class="scanlines"></div>
     <div class="stage-vignette"></div>
     <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
-    <div class="hud hud-tl"><span class="rec"></span> CASE 02 · SOLVER · TELAIO A PIÙ PIANI</div>
+    <div class="hud hud-tl"><span class="rec"></span> CASE 02 · SOLVER · TELAIO 6 PIANI</div>
     <div class="hud hud-tc" id="vw2">VISTA 2D · ANALISI</div>
-    <div class="hud hud-tr" id="tc2">LIVE</div>
-    <div class="hud hud-bl" id="ro2">drift max · piano</div>
+    <div class="hud hud-tr" id="tc2">00:00</div>
+    <div class="hud hud-bl" id="ro2">drift max — mm · piano —</div>
     <div class="hud hud-br">feagent · live simulation</div>
   </div>
 </section>
@@ -699,8 +699,8 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     <span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>
     <div class="hud hud-tl"><span class="rec"></span> CASE 03 · POST · VON MISES</div>
     <div class="hud hud-tc" id="vw3">VISTA 2D · ANALISI</div>
-    <div class="hud hud-tr" id="tc3">LIVE</div>
-    <div class="hud hud-bl" id="ro3">σmax</div>
+    <div class="hud hud-tr" id="tc3">00:00</div>
+    <div class="hud hud-bl" id="ro3">σmax — MPa</div>
     <div class="hud hud-br">feagent · live simulation</div>
   </div>
 </section>
@@ -769,12 +769,12 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
 <span class="code-command">feagent init bridge-analysis</span>
 
 <span class="code-comment"># Genera geometria con AI</span>
-<span class="code-command">feagent ai-generate --prompt "trave a campata singola, carico distribuito"</span>
+<span class="code-command">feagent ai-generate --prompt "trave a campata singola 30m, carico 50kN"</span>
 
 <span class="code-comment"># Mesh, materiali e solve</span>
 <span class="code-command">feagent mesh --resolution fine</span>
-<span class="code-command">feagent material --type steel</span>
-<span class="code-command">feagent solve --boundary fixed</span>
+<span class="code-command">feagent material --type steel --young 210e9</span>
+<span class="code-command">feagent solve --load 50000 --boundary fixed</span>
 
 <span class="code-comment"># Post-processa ed esporta</span>
 <span class="code-command">feagent post --stress --deformation</span>
@@ -949,22 +949,22 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     { type: 'input', text: 'feagent init bridge-analysis' },
     { type: 'output', text: '✓ progetto FEM inizializzato' },
     { type: 'output', text: '✓ template: structural-static' },
-    { type: 'input', text: 'feagent ai-generate --prompt "trave a campata singola, carico distribuito"' },
+    { type: 'input', text: 'feagent ai-generate --prompt "trave 30m, carico 50kN"' },
     { type: 'output', text: '✓ geometria generata da AI:' },
-    { type: 'output', text: '  ├─ geometria: campata singola' },
-    { type: 'output', text: '  ├─ sezione: profilo IPE' },
-    { type: 'output', text: '  └─ carico: distribuito' },
+    { type: 'output', text: '  ├─ length: 30.00 m' },
+    { type: 'output', text: '  ├─ cross-section: IPE 400' },
+    { type: 'output', text: '  └─ load: 50 kN (distributed)' },
     { type: 'input', text: 'feagent mesh --resolution fine' },
-    { type: 'output', text: '✓ mesh generata' },
-    { type: 'output', text: '✓ qualità della mesh verificata' },
+    { type: 'output', text: '✓ mesh: 12,480 elements, 8,220 nodes' },
+    { type: 'output', text: '✓ quality: min Jacobian 0.87' },
     { type: 'input', text: 'feagent solve --boundary fixed' },
     { type: 'output', text: 'Solver: direct (sparse LU)' },
-    { type: 'output', text: '  ├─ gradi di libertà assemblati' },
-    { type: 'output', text: '  ├─ analisi lineare' },
-    { type: 'output-accent', text: '  └─ tensioni calcolate  ✓' },
+    { type: 'output', text: '  ├─ DOFs: 24,660' },
+    { type: 'output', text: '  ├─ iterations: 1 (linear)' },
+    { type: 'output-accent', text: '  └─ max stress: 187.4 MPa  ✓' },
     { type: 'input', text: 'feagent post --stress --deformation' },
     { type: 'output', text: '✓ von Mises stress map generated' },
-    { type: 'output', text: '✓ deformazione massima calcolata' },
+    { type: 'output', text: '✓ max deformation: 12.3 mm @ midspan' },
     { type: 'input', text: 'feagent export --format vtk' },
     { type: 'output', text: '✓ exported to ./results/bridge.vtk' },
     { type: 'output', text: '✓ ready for Paraview' },
@@ -1038,7 +1038,7 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
   }
   function timecode(lt) {
     const m = Math.floor(lt / 60), s = Math.floor(lt % 60);
-    return 'LIVE';
+    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
   }
 
   /* ============================================================
@@ -1118,7 +1118,7 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
       ctx2.fillRect(x0 - W * 0.022, deckY, W * 0.026, H * 0.2);
       if (dp > 0.95) ctx2.fillRect(x1 - W * 0.004, deckY, W * 0.026, H * 0.2);
       ctx2.fillStyle = 'rgba(160,170,190,.75)'; ctx2.font = '11px ' + MONO; ctx2.textAlign = 'center';
-      ctx2.fillText('luce', (x0 + x1) / 2, H * 0.9);
+      ctx2.fillText('luce 60.0 m', (x0 + x1) / 2, H * 0.9);
       ctx2.textAlign = 'left';
     }
     const ap = Math.min(1, Math.max(0, (cyc - 5) / 3.2));
@@ -1214,8 +1214,8 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
       st.hud = gt;
       const nNodi = cyc < 2.2 ? Math.round(cyc / 2.2 * 40) : cyc < 9.2 ? 40 + Math.round(Math.min(1, (cyc - 2) / 7) * 62) : 124;
       const nElem = cyc < 9.2 ? Math.round(Math.min(1, Math.max(0, (cyc - 2) / 7)) * 180) : 240;
-      let txt = 'nodi · elementi';
-      if (cyc > 10.2) txt += ' · σmax';
+      let txt = 'nodi ' + nNodi + ' · elementi ' + nElem;
+      if (cyc > 10.2) txt += ' · σmax ' + Math.round(hudSigma) + ' MPa · x ' + hudX.toFixed(1) + ' m';
       document.getElementById('ro1').textContent = txt;
       document.getElementById('tc1').textContent = timecode(lt);
     }
@@ -1264,7 +1264,7 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
       ctx2.closePath(); ctx2.fill();
     }
     ctx2.font = '11px ' + MONO;
-    ctx2.fillText('azione sismica', cx + bw / 2 + 36, baseY + 16);
+    ctx2.fillText('azione sismica · PGA 0.30g', cx + bw / 2 + 36, baseY + 16);
     let dmax = 0, dfl = 1;
     for (let i = 1; i <= floors; i++) {
       const d = Math.abs(u[i] - u[i - 1]);
@@ -1297,7 +1297,7 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     }
     const dy = baseY - storyH * (dfl - 0.5);
     ctx2.fillStyle = 'rgba(239,68,68,.95)'; ctx2.font = 'bold 12px ' + MONO;
-    ctx2.fillText('drift max', cx + bw / 2 + 20, dy + 4);
+    ctx2.fillText('drift max → piano ' + dfl, cx + bw / 2 + 20, dy + 4);
     const panX = 24, panY = H * 0.2, panW = Math.min(120, W * 0.13), panH = H * 0.52;
     ctx2.fillStyle = 'rgba(8,10,16,.72)'; ctx2.fillRect(panX, panY, panW, panH);
     ctx2.strokeStyle = 'rgba(0,212,170,.4)'; ctx2.lineWidth = 1; ctx2.strokeRect(panX, panY, panW, panH);
@@ -1338,7 +1338,10 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     ctx2.fillText('ACCELERAZIONE — teal · SOMMITÀ — viola', px + 8, py + 12);
     if (gt - st.hud > 0.18) {
       st.hud = gt;
-      document.getElementById('ro2').textContent = 'drift max · piano · sommità · V base';
+      document.getElementById('ro2').textContent =
+        'drift max ' + (dmax * 3.1).toFixed(1) + ' mm · piano ' + dfl +
+        ' · sommità ' + Math.abs(u[floors] * 3.1).toFixed(0) + ' mm' +
+        ' · V base ' + Math.round(860 + 620 * Math.abs(Math.sin(gt * om))) + ' kN';
       document.getElementById('tc2').textContent = timecode(lt);
     }
   }
@@ -1400,7 +1403,7 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
       ctx2.strokeStyle = 'rgba(0,212,170,.85)'; ctx2.lineWidth = 2;
       ctx2.beginPath(); ctx2.moveTo(sx, m); ctx2.lineTo(sx, m + ph); ctx2.stroke();
       ctx2.fillStyle = 'rgba(0,212,170,.95)'; ctx2.font = '11px ' + MONO;
-      ctx2.fillText('calcolo von Mises…', sx + 10, m + 16);
+      ctx2.fillText('calcolo von Mises… ' + Math.round(sweep * 100) + '%', sx + 10, m + 16);
     }
     for (let i = 1; i < st.trail.length; i++) {
       ctx2.strokeStyle = 'rgba(240,242,248,' + (i / st.trail.length * 0.3).toFixed(2) + ')';
@@ -1416,7 +1419,7 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     ctx2.moveTo(lx, ly - 14); ctx2.lineTo(lx - 6, ly - 24); ctx2.lineTo(lx + 6, ly - 24);
     ctx2.closePath(); ctx2.fill();
     ctx2.fillStyle = 'rgba(255,255,255,.92)'; ctx2.font = '10px ' + MONO;
-    ctx2.fillText('carico mobile', lx + 10, ly - 32);
+    ctx2.fillText('225 kN', lx + 10, ly - 32);
     ctx2.strokeStyle = 'rgba(255,255,255,.55)'; ctx2.lineWidth = 1;
     ctx2.beginPath(); ctx2.moveTo(lx - 24, ly); ctx2.lineTo(lx + 24, ly); ctx2.moveTo(lx, ly - 24); ctx2.lineTo(lx, ly + 24); ctx2.stroke();
     const pr = 10 + 3 * Math.sin(gt * 3);
@@ -1426,7 +1429,7 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     ctx2.strokeStyle = 'rgba(239,68,68,.4)'; ctx2.stroke();
     ctx2.fillStyle = '#fff'; ctx2.beginPath(); ctx2.arc(lx, ly, 3.5, 0, 7); ctx2.fill();
     ctx2.fillStyle = 'rgba(255,255,255,.95)'; ctx2.font = 'bold 12px ' + MONO;
-    ctx2.fillText('σmax', lx + 18, ly - 16);
+    ctx2.fillText('σmax ' + Math.round(60 + vmax * 195) + ' MPa', lx + 18, ly - 16);
     const cbW = 14, cbH = ph * 0.66, cbX = m + pw - cbW - 14, cbY = m + (ph - cbH) / 2;
     for (let i = 0; i < 60; i++) {
       ctx2.fillStyle = heatCSS(1 - i / 59);
@@ -1435,8 +1438,8 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     ctx2.strokeStyle = 'rgba(240,242,248,.4)'; ctx2.lineWidth = 1;
     ctx2.strokeRect(cbX, cbY, cbW, cbH);
     ctx2.fillStyle = 'rgba(235,240,245,.8)'; ctx2.font = '9px ' + MONO; ctx2.textAlign = 'right';
-    ctx2.fillText('max', cbX - 6, cbY + 8);
-    ctx2.fillText('min', cbX - 6, cbY + cbH);
+    ctx2.fillText('245 MPa', cbX - 6, cbY + 8);
+    ctx2.fillText('0 MPa', cbX - 6, cbY + cbH);
     ctx2.textAlign = 'left';
     if (!st.vmH) st.vmH = [];
     st.vmH.push(60 + vmax * 195); if (st.vmH.length > 240) st.vmH.shift();
@@ -1455,7 +1458,10 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     if (gt - st.hud > 0.18) {
       st.hud = gt;
       const exp = Math.min(100, Math.round(cyc / T * 130));
-      document.getElementById('ro3').textContent = 'σmax · carico mobile · export VTK';
+      document.getElementById('ro3').textContent =
+        'σmax ' + Math.round(60 + vmax * 195) + ' MPa · ruota 225 kN' +
+        ' · x ' + ((lx - m) / pw * 30).toFixed(1) + ' m' +
+        ' · VTK export ' + Math.min(100, exp) + '%';
       document.getElementById('tc3').textContent = timecode(lt);
     }
   }
@@ -1803,14 +1809,14 @@ header.site{position:sticky;top:0;z-index:50;background:var(--hdr);backdrop-filt
     await typeInto(document.getElementById('t1cmd'), 'feagent ai-generate "ponte ad arco, luce 60 m"', 42);
     await sleep(500); showOut('t1out1', '✓ Parsing prompt... geometria arco');
     await sleep(1200); showOut('t1out2', '✓ Deck + arco + pendini generati');
-    await sleep(1400); showOut('t1out3', '✓ Mesh generata');
+    await sleep(1400); showOut('t1out3', '✓ Mesh: 124 nodes, 240 elements');
   }
   async function runTerm2() {
     if (termDone.demo2) return; termDone.demo2 = true;
     await typeInto(document.getElementById('t2cmd'), 'feagent solve --seismic --timehistory', 42);
     await sleep(500); showOut('t2out1', '✓ Assembling stiffness matrix...');
-    await sleep(1200); showOut('t2out2', '✓ Time-history: Newmark');
-    await sleep(1400); showOut('t2out3', '✓ Drift massimo di piano calcolato');
+    await sleep(1200); showOut('t2out2', '✓ Time-history: Newmark β 0.25');
+    await sleep(1400); showOut('t2out3', '✓ Max drift: 14.2mm @ Floor 3');
   }
   async function runTerm3() {
     if (termDone.demo3) return; termDone.demo3 = true;
