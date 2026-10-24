@@ -490,6 +490,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
       <a href="#servizi" data-anchor="servizi">Servizi</a>
       <a href="#livelli" data-anchor="livelli">Livelli 0–4</a>
       <a href="#strumenti" data-anchor="strumenti">Strumenti</a>
+      <a href="grafo/" data-anchor="grafo">Grafo</a>
       <a href="#contatti" data-anchor="contatti">Contatti</a>
     </nav>
     <a class="nav-cta" href="mailto:domenicogaudioso@outlook.it">Scrivimi</a>
@@ -948,6 +949,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
   /* ancoraggio smooth */
   document.querySelectorAll("[data-anchor]").forEach(function(a){
     a.addEventListener("click", function(e){
+      if(a.getAttribute("href").charAt(0) !== "#") return;
       e.preventDefault();
       navBar.classList.remove("open");
       var el = document.getElementById(a.getAttribute("data-anchor"));
