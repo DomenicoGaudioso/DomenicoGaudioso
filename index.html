@@ -260,6 +260,23 @@ svg.bridge text{font-family:"IBM Plex Mono",monospace;font-size:10px;fill:var(--
 
 /* ══════ contatti ══════ */
 #contatti{padding:0 0 96px}
+
+/* ══════ knowledge (AI) ══════ */
+#knowledge{padding:0 0 96px}
+.kn-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:46px;align-items:center}
+.kn-txt p{color:var(--sub);font-size:15.5px;margin-bottom:16px}
+.kn-card{position:relative;display:block;background:var(--card);border:1px solid var(--ring);border-radius:var(--r-lg);box-shadow:var(--sh-card);overflow:hidden;transition:.35s var(--ease)}
+.kn-card:hover{transform:translateY(-5px);box-shadow:var(--sh-hover)}
+.kn-card canvas{display:block;width:100%;height:430px}
+.kn-badge{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.86);backdrop-filter:blur(6px);border:1px solid var(--ring);border-radius:var(--r-pill);padding:5px 13px;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.14em;color:var(--sub)}
+.kn-open{position:absolute;bottom:14px;right:14px;background:var(--ink);color:#fff;border-radius:var(--r-pill);padding:8px 18px;font-size:12.5px;font-weight:600;opacity:0;transform:translateY(6px);transition:.3s var(--ease)}
+.kn-card:hover .kn-open{opacity:1;transform:none}
+.kn-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 26px}
+.kn-stats div{background:var(--card);border:1px solid var(--ring);border-radius:var(--r-md);padding:13px 6px;text-align:center}
+.kn-stats b{display:block;font-size:19px;font-weight:800;color:var(--brand7);letter-spacing:-.02em}
+.kn-stats span{font-size:9.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+@media(max-width:980px){.kn-grid{grid-template-columns:1fr}.kn-card canvas{height:340px}}
+@media(max-width:560px){.kn-stats{grid-template-columns:repeat(2,1fr)}}
 .ct-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
 .ct-card,.mail-card{background:var(--card);border:1px solid var(--ring);border-radius:22px;box-shadow:var(--sh-card);padding:36px}
 .ct-card h2{font-size:clamp(24px,2.8vw,32px);font-weight:800;margin-bottom:12px}
@@ -490,7 +507,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
       <a href="#servizi" data-anchor="servizi">Servizi</a>
       <a href="#livelli" data-anchor="livelli">Livelli 0–4</a>
       <a href="#strumenti" data-anchor="strumenti">Strumenti</a>
-      <a href="grafo/" data-anchor="grafo">Grafo</a>
+      <a href="knowledge/">Knowledge</a>
       <a href="#contatti" data-anchor="contatti">Contatti</a>
     </nav>
     <a class="nav-cta" href="mailto:domenicogaudioso@outlook.it">Scrivimi</a>
@@ -817,6 +834,36 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
   </div>
 </section>
 
+<!-- ══════════════════════ KNOWLEDGE · AI ══════════════════════ -->
+<section id="knowledge">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="pill">AI workflow · Claude · Kimi · GLM</span>
+      <h2>Knowledge: la conoscenza di lavoro, in un grafo vivo.</h2>
+      <p>Ogni progetto, convenzione e lezione imparata finisce in una knowledge base condivisa con gli agenti di IA. La mappa qui sotto è quella conoscenza.</p>
+    </div>
+    <div class="kn-grid">
+      <div class="kn-txt" data-reveal>
+        <p>Il calcolo strutturale oggi si fa anche scrivendo software. Lavoro ogni giorno con agenti di intelligenza artificiale — Claude Code, Kimi e GLM — come con una squadra: sviluppo app di calcolo per le verifiche, motori FEM, strumenti BIM e relazioni automatiche, con oltre 45 progetti pubblicati su GitHub.</p>
+        <p>Ogni incarico arricchisce una memoria condivisa: 573 note su progetti, norme, strumenti e convenzioni, collegate in un grafo di <b>1.282 nodi e 2.058 collegamenti</b> che gli agenti consultano prima di ogni calcolo.</p>
+        <div class="chips"><span class="chip">Claude Code</span><span class="chip">Kimi</span><span class="chip">GLM</span><span class="chip">Python</span><span class="chip">FEM</span><span class="chip">BIM</span><span class="chip">GitHub</span></div>
+        <div class="kn-stats">
+          <div><b>1282</b><span>nodi</span></div>
+          <div><b>2058</b><span>collegamenti</span></div>
+          <div><b>573</b><span>memorie</span></div>
+          <div><b>45+</b><span>app su GitHub</span></div>
+        </div>
+        <a class="btn btn-primary" href="knowledge/">Esplora il grafo <span class="arr">→</span></a>
+      </div>
+      <a class="kn-card" href="knowledge/" data-reveal style="--d:.1s" title="Apri il grafo della conoscenza">
+        <canvas id="kbPrev" aria-label="Anteprima del grafo della conoscenza"></canvas>
+        <span class="kn-badge">1282 NODI · 2058 COLLEGAMENTI · LIVE</span>
+        <span class="kn-open">Apri il grafo →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════════════════ CONTATTI ══════════════════════ -->
 <section id="contatti">
   <div class="wrap">
@@ -891,6 +938,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
         <a href="#servizi" data-anchor="servizi">Servizi</a>
         <a href="#livelli" data-anchor="livelli">Valutazioni livello 0–4</a>
         <a href="#contatti" data-anchor="contatti">Contatti</a>
+        <a href="knowledge/">Knowledge</a>
       </div>
       <div>
         <h5>Strumenti &amp; riferimenti</h5>
@@ -1045,6 +1093,50 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
     if(e.key==="ArrowLeft"){ setLevel(Math.max(0, lvlIndex-1)); e.preventDefault(); }
   });
   setLevel(0);
+})();
+</script>
+<script src="assets/kb-preview.js"></script>
+<script>
+/* anteprima grafo knowledge */
+(function(){
+  var cv=document.getElementById("kbPrev");
+  if(!cv||!window.KBPREVIEW)return;
+  var D=window.KBPREVIEW,ctx=cv.getContext("2d");
+  var COL={article:"#2f8f9d",entity:"#e8b50c",claim:"#3b74a8",topic:"#33506b"};
+  var n=D.nodes.length,maxD=1,i;
+  for(i=0;i<n;i++)if(D.nodes[i].d>maxD)maxD=D.nodes[i].d;
+  var bx=[],by=[],ph=[];
+  for(i=0;i<n;i++){bx[i]=D.nodes[i].x;by[i]=D.nodes[i].y;ph[i]=[Math.random()*6.28,Math.random()*6.28,.5+Math.random(),.5+Math.random(),1+Math.random()*2.5];}
+  var W,H,dpr=Math.min(window.devicePixelRatio||1,2),sc=1,ox=0,oy=0,T=0,run=false;
+  function size(){
+    var r=cv.getBoundingClientRect();W=r.width;H=r.height;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    sc=Math.min(W,H)*.94/1000;ox=W/2;oy=H/2;
+  }
+  size();window.addEventListener("resize",size);
+  function X(i){return bx[i]*sc+ox+Math.sin(T*ph[i][2]+ph[i][0])*2.2*ph[i][4];}
+  function Y(i){return by[i]*sc+oy+Math.cos(T*ph[i][3]+ph[i][1])*2.2*ph[i][4];}
+  function fr(){
+    if(!run)return;
+    T+=.016;ctx.clearRect(0,0,W,H);
+    ctx.lineWidth=1;
+    for(var e=0;e<D.edges.length;e++){
+      var a=D.edges[e][0],b=D.edges[e][1];
+      ctx.strokeStyle="rgba(51,80,107,.13)";
+      ctx.beginPath();ctx.moveTo(X(a),Y(a));ctx.lineTo(X(b),Y(b));ctx.stroke();
+    }
+    for(i=0;i<n;i++){
+      var nd=D.nodes[i],rr=(1.6+3.6*Math.sqrt(nd.d/maxD))*Math.min(sc*3,1.7);
+      ctx.beginPath();ctx.arc(X(i),Y(i),rr,0,6.2832);ctx.fillStyle=COL[nd.t];ctx.fill();
+    }
+    requestAnimationFrame(fr);
+  }
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      var was=run;run=e.isIntersecting;
+      if(run&&!was)requestAnimationFrame(fr);
+    });
+  },{threshold:.05}).observe(cv);
 })();
 </script>
 <script src="assets/vendor/d3-delaunay.min.js"></script>
