@@ -44,13 +44,6 @@ a{color:inherit;text-decoration:none}
 .legend .dot{width:11px;height:11px;border-radius:50%;flex:none}
 .legend .k{font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--muted);margin-left:auto;padding-left:14px}
 
-/* ── tooltip ── */
-#tip{position:fixed;z-index:20;pointer-events:none;max-width:300px;background:#0f1013;color:#fff;
-  border:1px solid var(--ring);border-radius:10px;padding:9px 13px;font-size:12px;line-height:1.45;
-  box-shadow:0 12px 30px -10px rgba(0,0,0,.7);opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s}
-#tip.on{opacity:1;transform:none}
-#tip b{display:block;font-size:12.5px;font-weight:600;letter-spacing:.01em}
-#tip span{display:block;color:#9aa1ab;font-size:10.5px;margin-top:2px;font-family:"IBM Plex Mono",monospace}
 
 .hint{position:fixed;right:22px;bottom:22px;z-index:10;font-size:11px;color:var(--muted);font-weight:500;
   background:rgba(36,38,43,.85);border:1px solid var(--ring);border-radius:999px;padding:7px 15px;backdrop-filter:blur(8px)}
@@ -69,7 +62,6 @@ a{color:inherit;text-decoration:none}
 
 <div class="legend" id="legend"></div>
 <div class="hint">trascina i nodi · rotella = zoom · doppio click = ricentra</div>
-<div id="tip"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="graph-data.js"></script>
@@ -156,19 +148,12 @@ cv.addEventListener("pointermove",function(e){
   }else{
     hovered=nearest(e.clientX,e.clientY);
     cv.classList.toggle("hover",hovered>=0);
-    var tip=document.getElementById("tip");
-    if(hovered>=0){var n=NODES[hovered];
-      tip.innerHTML="<b>"+n.n.replace(/</g,"&lt;")+"</b><span>"+TYPES[n.t].l.toUpperCase()+" · "+n.d+" collegamenti</span>";
-      tip.style.left=Math.min(e.clientX+16,W-310)+"px";tip.style.top=Math.min(e.clientY+16,H-80)+"px";
-      tip.classList.add("on");
-    }else tip.classList.remove("on");
   }
 });
 cv.addEventListener("pointerup",function(){
   if(drag>=0&&moved<3){ focus=(ADJ[drag].length)?drag:-1; }
   if(drag>=0)heat(0.005);
   drag=-1;panning=false;cv.classList.remove("grabbing");
-  document.getElementById("tip").classList.remove("on");
 });
 cv.addEventListener("dblclick",function(){fit();focus=-1;});
 cv.addEventListener("wheel",function(e){
