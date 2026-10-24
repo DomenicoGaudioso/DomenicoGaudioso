@@ -77,7 +77,7 @@ a{color:inherit;text-decoration:none}
 (function(){
 "use strict";
 var DATA=window.GRAPH, NODES=DATA.nodes, EDGES=DATA.edges;
-var TYPES={article:{c:"#4fb3bf",l:"Progetti e memorie"},entity:{c:"#ecc94b",l:"Strumenti e norme"},claim:{c:"#7ea8d8",l:"Convenzioni e lezioni"},topic:{c:"#8b93a1",l:"Argomenti"}};
+var TYPES={article:{c:"#c9cdd3",l:"Progetti e memorie"},entity:{c:"#c9cdd3",l:"Strumenti e norme"},claim:{c:"#c9cdd3",l:"Convenzioni e lezioni"},topic:{c:"#c9cdd3",l:"Argomenti"}};
 var vis={article:true,entity:true,claim:true,topic:true};
 var ADJ=[]; for(var i=0;i<NODES.length;i++)ADJ.push([]);
 EDGES.forEach(function(e){ADJ[e[0]].push(e[1]);ADJ[e[1]].push(e[0]);});
@@ -211,7 +211,7 @@ function frame(){
     if(!vis[ta]||!vis[tb])continue;
     var pa=toScreen(NODES[a]),pb=toScreen(NODES[b]);
     if((pa[0]<0&&pb[0]<0)||(pa[0]>W&&pb[0]>W)||(pa[1]<0&&pb[1]<0)||(pa[1]>H&&pb[1]>H))continue;
-    ctx.strokeStyle=(inGlow&&!(inGlow[a]&&inGlow[b]))?"rgba(139,147,161,.05)":"rgba(139,147,161,.22)";
+    ctx.strokeStyle=(inGlow&&!(inGlow[a]&&inGlow[b]))?"rgba(201,205,211,.035)":(inGlow?"rgba(224,116,124,.6)":"rgba(201,205,211,.13)");
     ctx.beginPath();ctx.moveTo(pa[0],pa[1]);ctx.lineTo(pb[0],pb[1]);ctx.stroke();
   }
   /* nodes */
@@ -220,10 +220,10 @@ function frame(){
     var p=toScreen(n);
     if(p[0]<-12||p[0]>W+12||p[1]<-12||p[1]>H+12)continue;
     var rr=rad(n)*Math.min(Math.max(sc,0.6),2.4)*(i===hi?1.5:1);
-    if(inGlow){ctx.globalAlpha=(i===hi)?1:(inGlow[i]?0.95:0.13);}
+    if(inGlow){ctx.globalAlpha=(i===hi)?1:(inGlow[i]?0.95:0.08);}
     ctx.beginPath();ctx.arc(p[0],p[1],rr,0,6.2832);
-    ctx.fillStyle=TYPES[n.t].c;ctx.fill();
-    if(i===hi){ctx.globalAlpha=1;ctx.lineWidth=2;ctx.strokeStyle="rgba(232,234,237,.85)";ctx.stroke();}
+    ctx.fillStyle=(inGlow&&i===hi)?"#ffffff":((inGlow&&inGlow[i])?"#e0747c":"#c9cdd3");ctx.fill();
+    if(i===hi){ctx.globalAlpha=1;ctx.lineWidth=2;ctx.strokeStyle="rgba(255,255,255,.9)";ctx.stroke();}
     ctx.globalAlpha=1;
   }
   requestAnimationFrame(frame);

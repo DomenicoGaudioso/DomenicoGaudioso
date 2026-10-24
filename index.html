@@ -1102,7 +1102,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
   var cv=document.getElementById("kbPrev");
   if(!cv||!window.KBPREVIEW)return;
   var D=window.KBPREVIEW,ctx=cv.getContext("2d");
-  var COL={article:"#2f8f9d",entity:"#e8b50c",claim:"#3b74a8",topic:"#33506b"};
+  var COL={article:"#7d8590",entity:"#7d8590",claim:"#7d8590",topic:"#7d8590"};
   var n=D.nodes.length,maxD=1,i;
   for(i=0;i<n;i++)if(D.nodes[i].d>maxD)maxD=D.nodes[i].d;
   var bx=[],by=[],ph=[];
@@ -1122,7 +1122,7 @@ h2 .ic{height:.9em;margin:0 .15em 0 0;vertical-align:-.08em}
     ctx.lineWidth=1;
     for(var e=0;e<D.edges.length;e++){
       var a=D.edges[e][0],b=D.edges[e][1];
-      ctx.strokeStyle="rgba(51,80,107,.13)";
+      ctx.strokeStyle="rgba(51,80,107,.12)";
       ctx.beginPath();ctx.moveTo(X(a),Y(a));ctx.lineTo(X(b),Y(b));ctx.stroke();
     }
     for(i=0;i<n;i++){
